@@ -72,7 +72,7 @@ def fmt_p(p) -> str:
     return f"{p:.3f}"
 
 
-def pending(msg="Not yet computed , the pipeline is still running.") -> str:
+def pending(msg="Not worked out yet. The pipeline is still running.") -> str:
     return f'<p class="pending">{e(msg)}</p>'
 
 
