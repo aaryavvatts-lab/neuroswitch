@@ -164,3 +164,18 @@ footer.site a { color: var(--fg-mut); }
 @media print {
   header.site { position: static; } nav.site { display: none; }
 }
+
+/* skip link and footer legal row */
+.skip { position: absolute; left: -9999px; top: 0; background: var(--bg);
+        color: var(--fg); padding: .6rem 1rem; z-index: 100;
+        border: 2px solid var(--accent); border-radius: 0 0 6px 0; }
+.skip:focus { left: 0; }
+footer.site .legal { margin-top: .9rem; font-size: .83rem; }
+footer.site .legal a { color: var(--fg-mut); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent);
+                                        outline-offset: 2px; border-radius: 3px; }
+.refs { list-style: none; padding: 0; }
+.refs li { border-bottom: 1px solid var(--rule); padding: .9rem 0; max-width: 44rem; }
+.refs li:last-child { border-bottom: 0; }
+.refs .why { color: var(--fg-mut); font-size: .9rem; margin-top: .3rem; }
+.refs .meta { font-size: .86rem; color: var(--fg-faint); }

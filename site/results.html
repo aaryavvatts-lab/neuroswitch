@@ -4,57 +4,66 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Results · neuroswitch</title>
-<meta name="description" content="Model-by-model results with permutation tests and control models.">
+<meta name="description" content="Model by model results with shuffled-label tests and control models.">
+<meta name="robots" content="index, follow">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🧠</text></svg>">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body>
+<a class="skip" href="#main">Skip to main content</a>
 <header class="site"><div class="wrap">
 <a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
-<nav class="site" aria-label="Sections"><a href="index.html">Overview</a><a href="data.html">The data</a><a href="methods.html">How it works</a><a href="results.html" aria-current="page">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
+<nav class="site" aria-label="Main"><a href="index.html">Overview</a><a href="data.html">The data</a><a href="methods.html">How it works</a><a href="results.html" aria-current="page">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
 </div></header>
-<main class="wrap">
+<main class="wrap" id="main">
 
 <h1>Does the graph network beat the simple method?</h1>
-<p class="lede">Every model, including the ones built to fail, scored the same way:
-10 repeats of 5-fold cross-validation grouped by person, with shuffled-label
-permutation tests on the headline numbers.</p>
+<p class="lede">Every model was scored the same way. 10 repeats of five-fold
+cross-validation, grouped by person, with shuffled-label tests on the headline
+numbers.</p>
 
 <section>
 <h2>The answer</h2>
-<div class="measure"><p class="pending">Not yet computed — the pipeline is still running.</p></div>
+<div class="measure"><p class="pending">Not yet computed , the pipeline is still running.</p></div>
 </section>
 
 <section>
-<h2>Every model, side by side</h2>
-<p class="pending">Not yet computed — the pipeline is still running.</p>
-<p class="small">Rows in grey are control models. They use no brain data and exist to
-be compared against — if one of them matched the brain models, the brain result would
-need reinterpreting, not celebrating. Sample:
-— patients, — controls,
-— regions.</p>
+<h2>Every model side by side</h2>
+<p class="pending">Not yet computed , the pipeline is still running.</p>
+<p class="small">Grey rows are control models. They use no brain data and are there
+to be compared against. If one of them matched the brain models, the brain result
+would need rethinking rather than celebrating. Sample:
+n/a patients and n/a controls,
+n/a regions.</p>
 </section>
 
 <section>
-<h2>How to read a permutation test</h2>
+<h2>Why every number has a p-value next to it</h2>
 <div class="measure">
-<p>Cross-validated accuracy on a small sample is a noisy quantity, and a model given
-random labels rarely scores exactly 0.50. So each headline model was re-fit hundreds of
-times with group labels shuffled between people, building the distribution of scores
-obtainable from data with no real group difference. The reported p-value is the fraction
-of shuffles that matched or beat the real score.</p>
-<p>A shuffled-label distribution that does not centre near 0.50 is itself a red flag —
-it would mean the cross-validation is leaking. That check is part of the output.</p>
+<p>Accuracy from a small sample bounces around, and a model given random labels
+rarely lands exactly on 0.50. So each headline model was fitted again hundreds of
+times with the group labels shuffled between people. That builds up the range of
+scores you can get from data with no real group difference in it. The p-value is
+the share of those shuffles that matched or beat the real score.</p>
+<p>If the shuffled scores do not sit near 0.50, that is a warning in itself. It
+would mean the cross-validation is leaking. That check runs as part of the output.</p>
+<p><a href="https://doi.org/10.1038/s41586-022-04492-9">Marek and others, 2022</a> looked at roughly 50,000 scans and found that brain to
+behaviour effects are smaller than people had assumed, and that small studies
+produce inflated numbers that later fail to replicate. <a href="https://doi.org/10.1038/s42003-018-0073-z">Turner and others, 2018</a> found
+the same for task studies. 66 people is a small study by that standard, which is
+why nothing here is presented as settled.</p>
 </div>
 </section>
 
 </main>
 <footer class="site"><div class="wrap">
-<p>Analysis of <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a> (CC0) — Kapil, Kim, McAvoy &amp; Philip,
-Washington University in St. Louis. This site is an independent reanalysis and is
-not affiliated with or endorsed by the dataset authors.
-Built 2026-08-24.</p>
-<p>Not medical advice. No clinical claims.</p>
+<p>Built from <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a>, released under CC0 by
+Kapil, Kim, McAvoy and Philip at Washington University in St. Louis. This is a
+student reanalysis. It is not connected to that group and they have not reviewed it.
+Page built 2026-08-24.</p>
+<p>This site is for education. It is not medical advice, and it does not diagnose
+anything. If you have a hand or nerve problem, talk to a doctor.</p>
+<p class="legal"><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="cookies.html">Cookies</a> · <a href="accessibility.html">Accessibility</a></p>
 </div></footer>
 </body>
 </html>

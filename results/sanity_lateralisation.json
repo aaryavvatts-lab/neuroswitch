@@ -1,8 +1,15 @@
 {
  "n_sensorimotor_left": 16,
  "n_sensorimotor_right": 18,
- "n_subjects": 2,
+ "n_subjects": 3,
  "per_subject": [
+  {
+   "sub": "sub-1001",
+   "left_sensorimotor": -0.13347840358411991,
+   "right_sensorimotor": 0.16717171786773122,
+   "interaction": 0.3006501214518511,
+   "correct": true
+  },
   {
    "sub": "sub-2001",
    "left_sensorimotor": -0.23529085149173454,
@@ -22,76 +29,76 @@
   {
    "label": "Left-hand drawing",
    "expected_side": "right",
-   "lh_mean": -0.17887080838929825,
-   "rh_mean": 0.006606562514660311,
+   "lh_mean": -0.16374000678757214,
+   "rh_mean": 0.06012828096568395,
    "verdict": "yes"
   }
  ],
- "interaction_mean": 0.18547737090395858,
- "interaction_sd": 0.061517013058917935,
- "subjects_correct": 2,
+ "interaction_mean": 0.2238682877532561,
+ "interaction_sd": 0.07396364145209051,
+ "subjects_correct": 3,
  "pct_subjects_correct": 100.0,
- "wilcoxon_p": 0.25,
+ "wilcoxon_p": 0.125,
  "top_left_hand": [
   {
    "name": "17Networks_RH_SomMotA_4",
    "network": "SomMotA",
    "hemi": "RH",
-   "value": 0.3178363524758282
+   "value": 0.320206079295085
   },
   {
    "name": "17Networks_RH_SomMotA_6",
    "network": "SomMotA",
    "hemi": "RH",
-   "value": 0.25749082331341727
+   "value": 0.3144533122744514
   },
   {
    "name": "17Networks_RH_SomMotA_1",
    "network": "SomMotA",
    "hemi": "RH",
-   "value": 0.18716070026901366
-  },
-  {
-   "name": "17Networks_RH_SomMotA_5",
-   "network": "SomMotA",
-   "hemi": "RH",
-   "value": 0.17994927860041202
-  },
-  {
-   "name": "17Networks_RH_DorsAttnB_PostC_4",
-   "network": "DorsAttnB",
-   "hemi": "RH",
-   "value": 0.16860605233474635
-  },
-  {
-   "name": "17Networks_RH_SomMotA_3",
-   "network": "SomMotA",
-   "hemi": "RH",
-   "value": 0.11431024204599345
+   "value": 0.17416321913314925
   },
   {
    "name": "17Networks_RH_SomMotA_11",
    "network": "SomMotA",
    "hemi": "RH",
-   "value": 0.11178113759784512
+   "value": 0.14212840398507506
   },
   {
-   "name": "17Networks_RH_SomMotA_7",
+   "name": "17Networks_RH_SomMotA_2",
    "network": "SomMotA",
    "hemi": "RH",
-   "value": 0.08833438653649889
+   "value": 0.11945890109047562
   },
   {
-   "name": "17Networks_LH_SomMotA_8",
+   "name": "17Networks_RH_SomMotA_5",
    "network": "SomMotA",
-   "hemi": "LH",
-   "value": 0.06948025729710797
+   "hemi": "RH",
+   "value": 0.1014190033750248
   },
   {
-   "name": "17Networks_RH_SalVentAttnA_FrMed_1",
+   "name": "17Networks_RH_DorsAttnB_FEF_1",
+   "network": "DorsAttnB",
+   "hemi": "RH",
+   "value": 0.09558822482281926
+  },
+  {
+   "name": "17Networks_RH_SomMotA_3",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "value": 0.07956129949913031
+  },
+  {
+   "name": "17Networks_RH_SalVentAttnA_ParMed_1",
    "network": "SalVentAttnA",
    "hemi": "RH",
-   "value": 0.04589853158785864
+   "value": 0.07530412140458906
+  },
+  {
+   "name": "17Networks_RH_DorsAttnB_PostC_4",
+   "network": "DorsAttnB",
+   "hemi": "RH",
+   "value": 0.07462752072329301
   }
  ],
  "top_right_hand": [
@@ -99,64 +106,64 @@
    "name": "17Networks_LH_SomMotA_3",
    "network": "SomMotA",
    "hemi": "LH",
-   "value": -0.3899889675787749
-  },
-  {
-   "name": "17Networks_RH_ContB_Temp_2",
-   "network": "ContB",
-   "hemi": "RH",
-   "value": -0.3171590162249129
-  },
-  {
-   "name": "17Networks_LH_VisCent_Striate_1",
-   "network": "VisCent",
-   "hemi": "LH",
-   "value": -0.3102620907609287
-  },
-  {
-   "name": "17Networks_RH_VisPeri_StriCal_1",
-   "network": "VisPeri",
-   "hemi": "RH",
-   "value": -0.2953553626495302
-  },
-  {
-   "name": "17Networks_LH_SalVentAttnB_IPL_1",
-   "network": "SalVentAttnB",
-   "hemi": "LH",
-   "value": -0.2826592395097407
-  },
-  {
-   "name": "17Networks_RH_VisCent_ExStr_1",
-   "network": "VisCent",
-   "hemi": "RH",
-   "value": -0.27791905581131615
-  },
-  {
-   "name": "17Networks_RH_DorsAttnA_TempOcc_1",
-   "network": "DorsAttnA",
-   "hemi": "RH",
-   "value": -0.27367573713712623
-  },
-  {
-   "name": "17Networks_RH_ContB_PFCld_2",
-   "network": "ContB",
-   "hemi": "RH",
-   "value": -0.26878198625714733
-  },
-  {
-   "name": "17Networks_LH_LimbicA_TempPole_1",
-   "network": "LimbicA",
-   "hemi": "LH",
-   "value": -0.266987006355226
+   "value": -0.4616178193769191
   },
   {
    "name": "17Networks_LH_SomMotA_2",
    "network": "SomMotA",
    "hemi": "LH",
-   "value": -0.2662006924705865
+   "value": -0.32616120647722985
+  },
+  {
+   "name": "17Networks_LH_SomMotA_4",
+   "network": "SomMotA",
+   "hemi": "LH",
+   "value": -0.3158025826468062
+  },
+  {
+   "name": "17Networks_LH_DorsAttnB_FEF_1",
+   "network": "DorsAttnB",
+   "hemi": "LH",
+   "value": -0.30473197087469583
+  },
+  {
+   "name": "17Networks_LH_SomMotB_Cent_2",
+   "network": "SomMotB",
+   "hemi": "LH",
+   "value": -0.2912851056997423
+  },
+  {
+   "name": "17Networks_LH_VisCent_Striate_1",
+   "network": "VisCent",
+   "hemi": "LH",
+   "value": -0.28047464299095265
+  },
+  {
+   "name": "17Networks_LH_SomMotA_6",
+   "network": "SomMotA",
+   "hemi": "LH",
+   "value": -0.2644294858315757
+  },
+  {
+   "name": "Cerebellum_4_5_R",
+   "network": "Cerebellum",
+   "hemi": "RH",
+   "value": -0.2605268709582032
+  },
+  {
+   "name": "17Networks_RH_ContB_PFCld_2",
+   "network": "ContB",
+   "hemi": "RH",
+   "value": -0.22103827471707962
+  },
+  {
+   "name": "17Networks_RH_SalVentAttnB_PFCl_1",
+   "network": "SalVentAttnB",
+   "hemi": "RH",
+   "value": -0.21318969306555938
   }
  ],
- "top10_left_hand_in_right_hemisphere": 9,
- "top10_right_hand_in_left_hemisphere": 5,
+ "top10_left_hand_in_right_hemisphere": 10,
+ "top10_right_hand_in_left_hemisphere": 7,
  "all_pass": true
 }

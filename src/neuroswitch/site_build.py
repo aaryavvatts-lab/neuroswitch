@@ -30,6 +30,14 @@ PAGES = [
     ("refs.html", "References"),
 ]
 
+# Linked from the footer rather than the main nav.
+LEGAL_PAGES = [
+    ("privacy.html", "Privacy"),
+    ("terms.html", "Terms"),
+    ("cookies.html", "Cookies"),
+    ("accessibility.html", "Accessibility"),
+]
+
 
 # ------------------------------------------------------------------ helpers
 def e(s) -> str:
@@ -47,24 +55,24 @@ def load(name: str):
 
 
 def fmt_auc(v) -> str:
-    return "—" if v is None else f"{v:.3f}"
+    return "n/a" if v is None else f"{v:.3f}"
 
 
 def fmt_ci(ci) -> str:
     if not ci or ci[0] is None or (isinstance(ci[0], float) and ci[0] != ci[0]):
         return ""
-    return f"{ci[0]:.2f}–{ci[1]:.2f}"
+    return f"{ci[0]:.2f}-{ci[1]:.2f}"
 
 
 def fmt_p(p) -> str:
     if p is None:
-        return "—"
+        return "n/a"
     if p < 0.001:
         return "&lt;0.001"
     return f"{p:.3f}"
 
 
-def pending(msg="Not yet computed — the pipeline is still running.") -> str:
+def pending(msg="Not yet computed , the pipeline is still running.") -> str:
     return f'<p class="pending">{e(msg)}</p>'
 
 
@@ -91,7 +99,7 @@ def bars(rows, lo=0.4, hi=1.0) -> str:
             f'<div class="track"><div class="fill" style="width:{pct:.1f}%"></div>'
             f'<div class="chance" style="left:{chance:.1f}%"></div></div>'
             f'<div class="val">{val:.3f}</div></div>')
-    out.append('</div><p class="small">Bars span AUC 0.40–1.00; '
+    out.append('</div><p class="small">Bars span AUC 0.40-1.00; '
                'the vertical line is chance (0.50). Grey bars are control models '
                'that <em>should</em> stay near chance.</p>')
     return "".join(out)
@@ -101,6 +109,9 @@ def page(fname: str, title: str, body: str, lede: str = "") -> str:
     nav = "".join(
         f'<a href="{h}"{" aria-current=\"page\"" if h == fname else ""}>{e(t)}</a>'
         for h, t in PAGES)
+    legal = " · ".join(
+        f'<a href="{h}"{" aria-current=\"page\"" if h == fname else ""}>{e(t)}</a>'
+        for h, t in LEGAL_PAGES)
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -108,23 +119,27 @@ def page(fname: str, title: str, body: str, lede: str = "") -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{e(title)} · neuroswitch</title>
 <meta name="description" content="{e(lede[:180] if lede else title)}">
+<meta name="robots" content="index, follow">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🧠</text></svg>">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body>
+<a class="skip" href="#main">Skip to main content</a>
 <header class="site"><div class="wrap">
 <a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
-<nav class="site" aria-label="Sections">{nav}</nav>
+<nav class="site" aria-label="Main">{nav}</nav>
 </div></header>
-<main class="wrap">
+<main class="wrap" id="main">
 {body}
 </main>
 <footer class="site"><div class="wrap">
-<p>Analysis of <a href="{DS_DOI}">OpenNeuro ds008162</a> (CC0) — Kapil, Kim, McAvoy &amp; Philip,
-Washington University in St. Louis. This site is an independent reanalysis and is
-not affiliated with or endorsed by the dataset authors.
-Built {date.today().isoformat()}.</p>
-<p>Not medical advice. No clinical claims.</p>
+<p>Built from <a href="{DS_DOI}">OpenNeuro ds008162</a>, released under CC0 by
+Kapil, Kim, McAvoy and Philip at Washington University in St. Louis. This is a
+student reanalysis. It is not connected to that group and they have not reviewed it.
+Page built {date.today().isoformat()}.</p>
+<p>This site is for education. It is not medical advice, and it does not diagnose
+anything. If you have a hand or nerve problem, talk to a doctor.</p>
+<p class="legal">{legal}</p>
 </div></footer>
 </body>
 </html>
@@ -143,11 +158,15 @@ def build_all() -> None:
         build_data_json()
     except Exception as exc:            # site must still build before results exist
         print(f"  (brain data export skipped: {exc!r})")
+    from . import legal
     for fn in (pages.build_index, pages.build_data, pages.build_methods,
                pages.build_results, pages.build_brain, pages.build_controls,
-               pages.build_reproduce, pages.build_refs):
+               pages.build_reproduce, pages.build_refs,
+               legal.build_privacy, legal.build_terms, legal.build_cookies,
+               legal.build_accessibility):
         fn()
-    print(f"built {len(PAGES)} pages -> {SITE}")
+    n = len(PAGES) + len(LEGAL_PAGES)
+    print(f"built {n} pages -> {SITE}")
 
 
 if __name__ == "__main__":

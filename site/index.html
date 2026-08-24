@@ -4,83 +4,93 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Does the brain rewire after hand injury? · neuroswitch</title>
-<meta name="description" content="An independent reanalysis of fMRI data from adults with chronic right-hand nerve injury drawing with their left hand.">
+<meta name="description" content="A student reanalysis of fMRI data from adults with long-term right hand nerve injury drawing with their left hand.">
+<meta name="robots" content="index, follow">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🧠</text></svg>">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body>
+<a class="skip" href="#main">Skip to main content</a>
 <header class="site"><div class="wrap">
 <a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
-<nav class="site" aria-label="Sections"><a href="index.html" aria-current="page">Overview</a><a href="data.html">The data</a><a href="methods.html">How it works</a><a href="results.html">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
+<nav class="site" aria-label="Main"><a href="index.html" aria-current="page">Overview</a><a href="data.html">The data</a><a href="methods.html">How it works</a><a href="results.html">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
 </div></header>
-<main class="wrap">
+<main class="wrap" id="main">
 
-<h1>Does the brain rewire itself after a hand injury?</h1>
-<p class="lede">People with chronic nerve damage to the right hand have to do everything
-with the left. This is a reanalysis of brain scans taken while they drew — asking
-whether their brain networks look measurably different, and, more carefully than
-usual, whether that difference means what it appears to mean.</p>
+<h1>Does the brain rewire after a hand injury?</h1>
+<p class="lede">When nerve damage takes your right hand out of action, you start
+doing everything with the left. This project looks at brain scans taken while
+people were drawing, and asks whether their brain networks really look different.
+Then it spends most of its effort asking whether that difference means what it
+looks like it means.</p>
 
-<div class="stats"><div class="stat"><div class="n">2</div><div class="k">participants analysed</div></div><div class="stat"><div class="n">0/2</div><div class="k">patients / controls</div></div><div class="stat"><div class="n">241</div><div class="k">brain regions per graph</div></div><div class="stat"><div class="n">6</div><div class="k">fMRI runs per person</div></div><div class="stat"><div class="n">0.66 s</div><div class="k">sampling rate (TR)</div></div></div>
+<div class="stats"><div class="stat"><div class="n">3</div><div class="k">people in the analysis</div></div><div class="stat"><div class="n">1/2</div><div class="k">patients / controls</div></div><div class="stat"><div class="n">241</div><div class="k">brain regions per graph</div></div><div class="stat"><div class="n">6</div><div class="k">scans per person</div></div><div class="stat"><div class="n">0.66 s</div><div class="k">time per brain image</div></div></div>
 
 <section>
-<h2>What this is, and what it is not</h2>
+<h2>What this is</h2>
 <div class="measure">
-<p><strong>It is</strong> an independent reanalysis of a public dataset from Washington
-University in St. Louis: 46 healthy adults and 25 people with chronic peripheral nerve
-injury to the right hand, all drawing precision shapes inside an MRI scanner with each
-hand. After the original authors' exclusions and quality control,
-a subset entered the models.
-Blood-oxygen signals were extracted from 241 brain regions, turned into connectivity
-graphs, and fed to a classifier.</p>
-<p><strong>It is not</strong> evidence that anyone's brain "rewired". Every person was
-scanned once, so nothing here observes change over time. Group differences in a
-cross-sectional dataset are compatible with reorganisation, but also with differences
-that predate the injury, with how hard the task was for each person, and with how
-still they lay in the scanner. Most of the work below is spent trying to tell those
-apart.</p>
-<p>It is also not a medical device, a diagnostic, or advice. The sample is 66 people
-from one scanner.</p>
+<p>A student reanalysis of a public dataset from Washington University in St. Louis.
+46 healthy adults and 25 people with long-term nerve injury to the right hand each
+lay in a scanner and traced shapes on a tablet, three runs with one hand and three
+with the other. I pulled blood flow signals out of 241 brain regions, turned them
+into a network for each person, and trained models to tell the two groups apart.</p>
 </div>
 </section>
 
 <section>
-<h2>How well does it actually work?</h2>
-<p class="pending">Not yet computed — the pipeline is still running.</p>
-<p class="small">AUC is the chance that a randomly chosen patient is scored as more
-patient-like than a randomly chosen control. 0.50 is a coin flip; 1.00 is perfect.</p>
+<h2>What this is not</h2>
+<div class="measure">
+<p>It is not proof that anyone's brain rewired. Each person was scanned one time.
+Nothing here watches a brain change. A difference between two groups in a
+single snapshot can come from reorganisation, but it can also come from things
+that were true before the injury, from the task being harder for one group, or
+from one group moving more in the scanner.</p>
+<p>That last point is the whole reason this project has a controls page.
+<a href="https://doi.org/10.1093/brain/awv161">Makin and others, 2015</a> looked at a similar claim in arm amputees and found the link
+between remapping and pain did not survive once other factors were measured. That
+is a good reason to be careful here too.</p>
+<p>It is also not a medical device and not advice. 66 people, one scanner.</p>
+</div>
 </section>
 
 <section>
-<h2>The things worth knowing</h2>
-<p class="pending">Findings appear once the analysis has run.</p>
+<h2>How well does it work</h2>
+<p class="pending">Not yet computed , the pipeline is still running.</p>
+<p class="small">AUC is the chance that a randomly picked patient scores higher
+than a randomly picked control. 0.50 is a coin flip. 1.00 is perfect.</p>
 </section>
 
 <section>
-<h2>Start anywhere</h2>
+<h2>Things worth knowing</h2>
+<div class="cards"><p class="pending">Findings show up here once the analysis has run.</p></div>
+</section>
+
+<section>
+<h2>Where to go next</h2>
 <div class="cards">
 <div class="card"><h3><a href="data.html">The data</a></h3>
-<p>Where the scans came from, what the drawing task was, and the three problems
-that had to be solved before any of it could be analysed.</p></div>
+<p>Where the scans came from, what people actually did in the scanner, and the
+three problems I ran into before any of it would run.</p></div>
 <div class="card"><h3><a href="methods.html">How it works</a></h3>
-<p>Turning raw scans into brain graphs without the standard neuroimaging toolchain
-— and the one test that proves the pipeline is not producing nonsense.</p></div>
+<p>Getting from raw scans to brain networks without the usual software, and the
+one test that shows the pipeline is not making things up.</p></div>
 <div class="card"><h3><a href="controls.html">Could this be wrong?</a></h3>
-<p>Four ways the headline could be an artefact, each one tested rather than
-waved away.</p></div>
+<p>Four ways the headline could be an artefact. Each one is tested rather than
+listed as a caveat at the end.</p></div>
 <div class="card"><h3><a href="brain.html">Explore the brain</a></h3>
-<p>Which regions and networks the model leaned on, and how left- and right-hand
-drawing differ.</p></div>
+<p>Which regions the model leaned on, and how left and right hand drawing differ.</p></div>
 </div>
 </section>
 
 </main>
 <footer class="site"><div class="wrap">
-<p>Analysis of <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a> (CC0) — Kapil, Kim, McAvoy &amp; Philip,
-Washington University in St. Louis. This site is an independent reanalysis and is
-not affiliated with or endorsed by the dataset authors.
-Built 2026-08-24.</p>
-<p>Not medical advice. No clinical claims.</p>
+<p>Built from <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a>, released under CC0 by
+Kapil, Kim, McAvoy and Philip at Washington University in St. Louis. This is a
+student reanalysis. It is not connected to that group and they have not reviewed it.
+Page built 2026-08-24.</p>
+<p>This site is for education. It is not medical advice, and it does not diagnose
+anything. If you have a hand or nerve problem, talk to a doctor.</p>
+<p class="legal"><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="cookies.html">Cookies</a> · <a href="accessibility.html">Accessibility</a></p>
 </div></footer>
 </body>
 </html>

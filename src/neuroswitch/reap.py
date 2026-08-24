@@ -77,6 +77,32 @@ def _manifest_index() -> dict[str, int]:
     return {e["rel"]: e["bytes"] for e in json.loads(f.read_text())["files"]}
 
 
+def _remote_size(rel: str, timeout: int = 30) -> int | None:
+    """Byte size of this file on OpenNeuro, or None if it is not there.
+
+    The local manifest only covers files that were on disk when it was written,
+    so subjects fetched later are absent from it.  Rather than trust a local
+    record, confirm against the public bucket at deletion time: if the object is
+    there and the size matches, the file can always be pulled back.
+    """
+    import subprocess
+    url = f"https://s3.amazonaws.com/openneuro.org/ds008162/{rel}"
+    try:
+        r = subprocess.run(["curl", "-sIL", "--max-time", str(timeout), url],
+                           capture_output=True, text=True)
+    except Exception:
+        return None
+    if " 200" not in r.stdout.split("\n")[0] and "200 OK" not in r.stdout:
+        if "HTTP/2 200" not in r.stdout and "HTTP/1.1 200" not in r.stdout:
+            return None
+    sizes = [ln.split(":", 1)[1].strip() for ln in r.stdout.splitlines()
+             if ln.lower().startswith("content-length")]
+    try:
+        return int(sizes[-1]) if sizes else None
+    except ValueError:
+        return None
+
+
 def reap(sub: str, dry_run: bool = True, expect_nodes: int | None = None,
          tasks: tuple[str, ...] = TASKS) -> dict:
     ok, reasons = verify(sub, expect_nodes, tasks)
@@ -87,15 +113,22 @@ def reap(sub: str, dry_run: bool = True, expect_nodes: int | None = None,
     targets, freed, unrecoverable = [], 0, []
     for f in sorted((BIDS / sub).rglob("*.nii.gz")):
         rel = str(f.relative_to(BIDS))
-        if rel not in manifest:
-            unrecoverable.append(rel)          # never delete what we cannot restore
+        size = f.stat().st_size
+        if manifest.get(rel) == size:
+            ok = True
+        else:
+            remote = _remote_size(rel)          # confirm against the public bucket
+            ok = remote == size
+        if not ok:
+            unrecoverable.append(rel)           # never delete what we cannot restore
             continue
         targets.append(f)
-        freed += f.stat().st_size
+        freed += size
 
     if unrecoverable:
         return {"sub": sub, "reaped": False, "freed_bytes": 0,
-                "reasons": [f"{len(unrecoverable)} files absent from MANIFEST"],
+                "reasons": [f"{len(unrecoverable)} files not confirmed "
+                            f"recoverable from OpenNeuro"],
                 "unrecoverable": unrecoverable[:5]}
 
     if not dry_run:
