@@ -1,12 +1,12 @@
 {
  "summary": {
   "n_total": 71,
-  "n_included": 3,
+  "n_included": 4,
   "n_patients": 1,
-  "n_controls": 2,
-  "n_excluded": 68,
+  "n_controls": 3,
+  "n_excluded": 67,
   "exclusion_counts": {
-   "not preprocessed": 63,
+   "not preprocessed": 62,
    "author-flagged; not preprocessed": 5
   }
  },
@@ -830,18 +830,18 @@
    "posAcc_RH": -39.344,
    "spd_RH": 503.159,
    "edinburgh_shift": NaN,
-   "n_drawLH": 0,
-   "fd_drawLH": NaN,
-   "n_drawRH": 0,
-   "fd_drawRH": NaN,
+   "n_drawLH": 3,
+   "fd_drawLH": 0.12828553355048247,
+   "n_drawRH": 3,
+   "fd_drawRH": 0.12463437914887295,
    "n_restingstate": 0,
    "fd_restingstate": NaN,
-   "n_preprocessed_drawLH": 0,
-   "preprocessed": false,
-   "mean_fd": NaN,
-   "max_fd": NaN,
-   "exclude_reason": "not preprocessed",
-   "included": false
+   "n_preprocessed_drawLH": 3,
+   "preprocessed": true,
+   "mean_fd": 0.12645995634967772,
+   "max_fd": 0.5658837556838989,
+   "exclude_reason": "",
+   "included": true
   },
   {
    "sub": "sub-2001",
