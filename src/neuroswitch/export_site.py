@@ -60,8 +60,11 @@ def build(importance_file: str = "importance_LH") -> dict:
     if p.is_file():
         imp = json.loads(p.read_text())
 
+    # Ship only the fields the page actually reads. "name" is the raw atlas
+    # label and is never displayed; "label" is the tidied version.
+    slim = [{k: v for k, v in n.items() if k != "name"} for n in nodes]
     payload = {
-        "nodes": nodes,
+        "nodes": slim,
         "networks": sorted({n["network"] for n in nodes}),
         "importance": imp.get("node_importance"),
         "importance_meta": {k: v for k, v in imp.items() if k != "node_importance"},

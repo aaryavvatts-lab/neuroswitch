@@ -108,6 +108,13 @@ def permutation_test(make_model, b: Bundle, n_perm: int = 1000, n_splits: int = 
     null = np.array(null, dtype=float)
     # +1 correction: an observed value can never yield p = 0
     p = float((np.sum(null >= observed) + 1) / (len(null) + 1))
+    # A compact histogram travels to the site instead of every draw, so a
+    # reader can see where the real score sits against chance.
+    edges = np.linspace(0.0, 1.0, 41)
+    counts, _ = np.histogram(null[np.isfinite(null)], bins=edges)
     return {"observed_auc": float(observed), "p_value": p, "n_perm": int(n_perm),
             "null_mean": float(np.nanmean(null)), "null_sd": float(np.nanstd(null)),
-            "null_q95": float(np.nanpercentile(null, 95)), "null": null.tolist()}
+            "null_q95": float(np.nanpercentile(null, 95)),
+            "null_hist": {"edges": [round(x, 4) for x in edges.tolist()],
+                          "counts": [int(c) for c in counts.tolist()]},
+            "null": null.tolist()}

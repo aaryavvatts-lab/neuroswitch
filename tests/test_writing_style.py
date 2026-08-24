@@ -128,3 +128,19 @@ def test_no_emoji_in_body_text(path):
     text = visible_text(path)
     emoji = re.findall(r"[\U0001F300-\U0001FAFF☀-➿]", text)
     assert not emoji, f"{path.name}: emoji {emoji[:3]}"
+
+
+def test_stylesheet_is_plain_ascii_and_has_no_gradients():
+    """Stray characters break a declaration silently; gradients are off-brief."""
+    css = (SITE / "style.css").read_text()
+    bad = sorted({c for c in css if ord(c) > 127})
+    assert not bad, f"non-ascii characters in style.css: {bad}"
+    lowered = css.lower()
+    for banned in ("linear-gradient", "radial-gradient", "conic-gradient"):
+        assert banned not in lowered, f"style.css uses {banned}"
+    # no purple / violet hues, which read as generated-template colour
+    import re as _re
+    for hexcode in _re.findall(r"#([0-9a-fA-F]{6})", css):
+        r, g, b = (int(hexcode[i:i + 2], 16) for i in (0, 2, 4))
+        if b > r > g and (b - g) > 60 and (r - g) > 25:
+            raise AssertionError(f"purple-ish colour #{hexcode} in style.css")

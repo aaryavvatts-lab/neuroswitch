@@ -91,3 +91,26 @@ def test_pages_declare_language_and_viewport():
         assert '<html lang="en">' in html, f"{path.name} missing lang attribute"
         assert 'name="viewport"' in html, f"{path.name} missing viewport meta"
         assert '<a class="skip"' in html, f"{path.name} missing skip link"
+
+
+def test_no_preview_or_synthetic_results_are_published():
+    """Guard against a rehearsal file reaching the live site.
+
+    While building the interactive chart a synthetic results file was written so
+    the layout could be checked before real numbers existed. Publishing that
+    would put invented figures on a page about real people's brain scans.
+    """
+    import json
+    results = Path(__file__).resolve().parents[1] / "results"
+    for p in results.glob("*.json"):
+        try:
+            d = json.loads(p.read_text())
+        except json.JSONDecodeError:
+            continue
+        if isinstance(d, dict):
+            assert not d.get("_preview"), f"{p.name} is a preview file"
+            assert not d.get("synthetic"), f"{p.name} is marked synthetic"
+            for sub in d.get("subjects", []) or []:
+                s = str(sub.get("sub", ""))
+                assert not s.startswith(("sub-9", "sub-8")), \
+                    f"{p.name} contains test subject {s}"

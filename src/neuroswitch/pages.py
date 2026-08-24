@@ -5,6 +5,8 @@ time, so nothing on a page can drift away from what the analysis produced.
 """
 from __future__ import annotations
 
+import json
+
 from .references import REFERENCES, cite
 from .site_build import (DS_DOI, PREPRINT, bars, e, fmt_auc, fmt_ci, fmt_p, load,
                          pending, stats, write)
@@ -100,8 +102,9 @@ def build_index() -> None:
             f"separated the groups at {fmt_auc(d.get('auc_mean'))} "
             f"(p = {fmt_p((d.get('permutation') or {}).get('p_value'))})."))
 
-    card_html = "".join(f'<div class="card"><h3>{e(t)}</h3><p>{b}</p></div>'
-                        for t, b in cards) or pending(
+    card_html = ('<div class="points">' + "".join(
+        f'<div class="point"><h3>{e(t)}</h3><p>{b}</p></div>' for t, b in cards)
+        + "</div>") if cards else pending(
         "Findings show up here once the analysis has run.")
 
     body = f"""
@@ -155,20 +158,21 @@ than a randomly picked control. 0.50 is a coin flip. 1.00 is perfect.</p>
 </section>
 
 <section>
-<h2>Where to go next</h2>
-<div class="cards">
-<div class="card"><h3><a href="data.html">The data</a></h3>
-<p>Where the scans came from, what people actually did in the scanner, and the
-three problems I ran into before any of it would run.</p></div>
-<div class="card"><h3><a href="methods.html">How it works</a></h3>
-<p>Getting from raw scans to brain networks without the usual software, and the
-one test that shows the pipeline is not making things up.</p></div>
-<div class="card"><h3><a href="controls.html">Could this be wrong?</a></h3>
-<p>Four ways the headline could be an artefact. Each one is tested rather than
-listed as a caveat at the end.</p></div>
-<div class="card"><h3><a href="brain.html">Explore the brain</a></h3>
-<p>Which regions the model leaned on, and how left and right hand drawing differ.</p></div>
-</div>
+<h2>Read on</h2>
+<dl class="toc">
+<dt><a href="data.html">The data</a></dt>
+<dd>Where the scans came from, what people did in the scanner, and the three
+problems I ran into before any of it would run.</dd>
+<dt><a href="methods.html">How it works</a></dt>
+<dd>Raw scans to brain networks without the usual software, and the one test
+that shows the pipeline is not making things up.</dd>
+<dt><a href="controls.html">Could this be wrong?</a></dt>
+<dd>Four ways the headline could be an artefact, each one tested rather than
+listed as a caveat at the end.</dd>
+<dt><a href="brain.html">Explore the brain</a></dt>
+<dd>Which regions the model leaned on, and how left and right hand drawing
+differ.</dd>
+</dl>
 </section>
 """
     write("index.html", "Does the brain rewire after hand injury?", body,
@@ -226,21 +230,21 @@ fast, and gives 488 images per run.</p>
 
 <section>
 <h2>Three things I did not expect</h2>
-<div class="cards">
-<div class="card"><h3>One whole group was missing</h3>
+<div class="points">
+<div class="point"><h3>One whole group was missing</h3>
 <p>The copy of the data I started with had 45 of the 46 healthy adults in it and
 none of the 25 patients. You cannot train a model to tell two groups apart when
 only one group is there. The patient scans had to be pulled down from OpenNeuro
 first.</p></div>
 
-<div class="card"><h3>There was no disk space</h3>
+<div class="point"><h3>There was no disk space</h3>
 <p>The data is 83 GB and the laptop had 2.5 GB free. So the pipeline works through
 one person at a time and deletes their raw scans as soon as their signals have been
 pulled out and checked. Free space goes up as the analysis runs instead of down.
 Every deleted file is written to a log with the address it came from, so nothing is
 lost for good.</p></div>
 
-<div class="card"><h3>The gap in drawing quality is big</h3>
+<div class="point"><h3>The gap in drawing quality is big</h3>
 <p>The dataset comes with drawing quality measured 30 times a second from the
 tablet. Patients score much worse with the left hand. That makes sense given the
 injury, and it is a problem for the analysis, because a brain model can do well by
@@ -464,6 +468,102 @@ def _model_table(models: dict) -> str:
 <tbody>{''.join(rows)}</tbody></table></div>"""
 
 
+NULLS_JS = r"""
+(function () {
+  const host = document.getElementById('nullchart');
+  if (!host) return;
+  const raw = document.getElementById('nulldata');
+  if (!raw) return;
+  let D;
+  try { D = JSON.parse(raw.textContent); } catch (e) { return; }
+  const names = Object.keys(D);
+  if (!names.length) { host.innerHTML = ''; return; }
+
+  let current = names[0];
+
+  function draw(name) {
+    const d = D[name];
+    const w = 640, h = 210, padL = 44, padR = 16, padT = 16, padB = 40;
+    const counts = d.counts, edges = d.edges;
+    const maxC = Math.max(...counts, 1);
+    const x0 = 0.30, x1 = 1.0;                       // AUC range worth showing
+    const sx = v => padL + ((v - x0) / (x1 - x0)) * (w - padL - padR);
+    const sy = c => h - padB - (c / maxC) * (h - padT - padB);
+
+    let s = `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img"
+      aria-label="Scores from ${d.n_perm} runs with the group labels shuffled. The real score is marked.">`;
+    // bars for the shuffled scores
+    for (let i = 0; i < counts.length; i++) {
+      if (!counts[i]) continue;
+      const a = sx(edges[i]), b = sx(edges[i + 1]);
+      if (b < padL) continue;
+      s += `<rect x="${Math.max(a, padL).toFixed(1)}" y="${sy(counts[i]).toFixed(1)}"
+             width="${Math.max(1, b - a - 0.8).toFixed(1)}"
+             height="${(h - padB - sy(counts[i])).toFixed(1)}"
+             fill="var(--paper-3)" stroke="var(--rule-2)" stroke-width="0.5"/>`;
+    }
+    // chance line
+    s += `<line x1="${sx(0.5)}" y1="${padT - 4}" x2="${sx(0.5)}" y2="${h - padB}"
+           stroke="var(--ink-3)" stroke-dasharray="3 3"/>`;
+    s += `<text x="${sx(0.5)}" y="${padT - 7}" font-size="10.5" text-anchor="middle"
+           fill="var(--ink-3)" font-family="var(--sans)">chance</text>`;
+    // the real score
+    const ox = sx(d.observed_auc);
+    s += `<line x1="${ox.toFixed(1)}" y1="${padT - 4}" x2="${ox.toFixed(1)}" y2="${h - padB}"
+           stroke="var(--right)" stroke-width="2"/>`;
+    s += `<text x="${ox.toFixed(1)}" y="${padT - 7}" font-size="10.5" text-anchor="middle"
+           fill="var(--right)" font-family="var(--sans)" font-weight="600">real score</text>`;
+    // axis
+    s += `<line x1="${padL}" y1="${h - padB}" x2="${w - padR}" y2="${h - padB}" stroke="var(--ink)"/>`;
+    for (const t of [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]) {
+      s += `<line x1="${sx(t)}" y1="${h - padB}" x2="${sx(t)}" y2="${h - padB + 4}" stroke="var(--ink)"/>`;
+      s += `<text x="${sx(t)}" y="${h - padB + 16}" font-size="10.5" text-anchor="middle"
+             fill="var(--ink-2)" font-family="var(--sans)">${t.toFixed(1)}</text>`;
+    }
+    s += `<text x="${(padL + w - padR) / 2}" y="${h - 6}" font-size="10.5" text-anchor="middle"
+           fill="var(--ink-2)" font-family="var(--sans)">AUC</text>`;
+    s += `<text x="4" y="${padT + 4}" font-size="10.5" fill="var(--ink-2)"
+           font-family="var(--sans)">runs</text>`;
+    s += `</svg>`;
+
+    const beat = d.p_value;
+    const verdict = beat <= 0.05
+      ? `Only ${(beat * 100).toFixed(1)}% of shuffled runs did this well or better, so the real score is unlikely to be luck.`
+      : `${(beat * 100).toFixed(0)}% of shuffled runs did this well or better, so this score is within what chance produces here.`;
+    host.querySelector('.nc-chart').innerHTML = s;
+    host.querySelector('.nc-say').innerHTML =
+      `<p class="small">${d.n_perm} runs with the group labels shuffled between people, ` +
+      `each one refitted from scratch. Their scores make the grey pile. ${verdict}</p>`;
+    host.querySelectorAll('.nc-pick button').forEach(b =>
+      b.setAttribute('aria-pressed', String(b.dataset.k === name)));
+  }
+
+  host.innerHTML =
+    `<div class="nc-pick">` +
+    names.map(n => `<button data-k="${n}" aria-pressed="false">${n.replace('NULL ', '')}</button>`).join('') +
+    `</div><div class="nc-chart"></div><div class="nc-say"></div>`;
+  host.querySelectorAll('.nc-pick button').forEach(b =>
+    b.addEventListener('click', () => { current = b.dataset.k; draw(current); }));
+  draw(current);
+})();
+"""
+
+NULLS_CSS = """
+#nullchart { margin: 1.6rem 0; max-width: var(--bleed); }
+.nc-pick { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1rem; }
+.nc-pick button {
+  font-family: var(--sans); font-size: .78rem; padding: .28rem .6rem;
+  border: 1px solid var(--rule-2); background: var(--paper); color: var(--ink-2);
+  cursor: pointer; border-radius: 2px;
+}
+.nc-pick button[aria-pressed="true"] {
+  background: var(--ink); color: var(--paper); border-color: var(--ink);
+}
+.nc-chart svg { max-width: 100%; height: auto; }
+.nc-say { margin-top: .4rem; }
+"""
+
+
 def build_results() -> None:
     res = load("models_LH") or {}
     models, b = res.get("models", {}), res.get("bundle", {})
@@ -489,6 +589,24 @@ def build_results() -> None:
                   f"{fmt_auc(lin)} for the simple one. The extra machinery buys "
                   f"nothing here.</p>")
 
+    # data for the interactive null chart
+    nulls = {}
+    for name, m in models.items():
+        perm = (m or {}).get("permutation") or {}
+        hist = perm.get("null_hist")
+        if hist and hist.get("counts"):
+            nulls[name] = {"counts": hist["counts"], "edges": hist["edges"],
+                           "observed_auc": perm.get("observed_auc"),
+                           "p_value": perm.get("p_value"),
+                           "n_perm": perm.get("n_perm")}
+    if nulls:
+        null_block = (f'<div id="nullchart"></div>'
+                      f'<script type="application/json" id="nulldata">'
+                      f'{json.dumps(nulls)}</script>')
+    else:
+        null_block = pending("The shuffled-label runs appear here once the models "
+                             "have been fitted.")
+
     body = f"""
 <h1>Does the graph network beat the simple method?</h1>
 {progress_banner()}
@@ -512,15 +630,20 @@ would need rethinking rather than celebrating. Sample:
 </section>
 
 <section>
-<h2>Why every number has a p-value next to it</h2>
+<h2>Check the statistics yourself</h2>
 <div class="measure">
 <p>Accuracy from a small sample bounces around, and a model given random labels
 rarely lands exactly on 0.50. So each headline model was fitted again hundreds of
 times with the group labels shuffled between people. That builds up the range of
-scores you can get from data with no real group difference in it. The p-value is
-the share of those shuffles that matched or beat the real score.</p>
-<p>If the shuffled scores do not sit near 0.50, that is a warning in itself. It
-would mean the cross-validation is leaking. That check runs as part of the output.</p>
+scores you can get from data with no real group difference in it.</p>
+<p>Pick a model below to see that range. The grey pile is what shuffled labels
+produced. The blue line is what the model actually scored. If the line sits inside
+the pile, the score is what chance looks like here.</p>
+</div>
+{null_block}
+<div class="measure">
+<p>If the grey pile does not sit near 0.50, that is a warning in itself. It would
+mean the cross-validation is leaking. That check runs as part of the output.</p>
 <p>{cite('marek2022')} looked at roughly 50,000 scans and found that brain to
 behaviour effects are smaller than people had assumed, and that small studies
 produce inflated numbers that later fail to replicate. {cite('turner2018')} found
@@ -529,6 +652,7 @@ why nothing here is presented as settled.</p>
 </div>
 </section>
 """
+    body += f"<style>{NULLS_CSS}</style><script>{NULLS_JS}</script>"
     write("results.html", "Results", body,
           "Model by model results with shuffled-label tests and control models.")
 
@@ -544,10 +668,23 @@ BRAIN_JS = r"""
   const imp = D.importance || null;
   const nets = D.networks;
 
+  // A fixed, muted palette rather than evenly spaced hues. Sensorimotor gets
+  // the two colours used everywhere else on the site, because those are the
+  // regions the whole question is about. Everything else stays quiet.
+  const PALETTE = {
+    SomMotA:      '#b0521c', SomMotB:      '#d08340',
+    Cerebellum:   '#4a6741', Subcortex:    '#7a6a4f',
+    VisCent:      '#3f6d7a', VisPeri:      '#5f8f99',
+    DorsAttnA:    '#6b7f5c', DorsAttnB:    '#8a9a76',
+    SalVentAttnA: '#8a6a17', SalVentAttnB: '#a98c47',
+    ContA:        '#1a5570', ContB:        '#3d7591', ContC:        '#6997ad',
+    DefaultA:     '#7d5a52', DefaultB:     '#9c7a70', DefaultC:     '#b59a92',
+    LimbicA:      '#6f5f7a', LimbicB:      '#8f8199',
+    TempPar:      '#556b7d'
+  };
+  const FALLBACK = '#7c7a70';
   const palette = {};
-  nets.forEach((n, i) => { palette[n] = `hsl(${Math.round((i * 360) / nets.length)} 52% 48%)`; });
-  palette['SomMotA'] = '#c2410c'; palette['SomMotB'] = '#ea7317';
-  palette['Cerebellum'] = '#3f6212'; palette['Subcortex'] = '#6d28d9';
+  nets.forEach(n => { palette[n] = PALETTE[n] || FALLBACK; });
 
   let active = new Set(nets), selected = null;
   const impOf = n => (imp ? (imp[n.id - 1] ?? 0) : null);
@@ -590,7 +727,7 @@ BRAIN_JS = r"""
     if (!selected) return `<p class="small">Pick a region, or use the buttons above to show one network at a time.${imp ? ' Bigger and more solid dots are regions the model used more.' : ''}</p>`;
     const n = selected;
     const side = n.hemi === 'LH' ? 'left' : n.hemi === 'RH' ? 'right' : 'middle';
-    return `<div class="card"><h3>${n.label}</h3><p class="small">${n.network}, ${side} side, from ${n.source}, ${n.n_voxels} voxels<br>Position ${n.x}, ${n.y}, ${n.z}${imp ? `<br><strong>importance ${impOf(n).toFixed(4)}</strong>` : ''}</p></div>`;
+    return `<div class="bpick"><h3>${n.label}</h3><p class="small">${n.network}, ${side} side, from ${n.source}, ${n.n_voxels} voxels<br>Position ${n.x}, ${n.y}, ${n.z}${imp ? `<br><strong>importance ${impOf(n).toFixed(4)}</strong>` : ''}</p></div>`;
   }
 
   function table() {
@@ -623,20 +760,26 @@ BRAIN_JS = r"""
 """
 
 BRAIN_CSS = """
-.bgrid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); margin: 1.2rem 0; }
-.bview { margin: 0; border: 1px solid var(--rule); border-radius: 8px; padding: .6rem; }
-.bviewhead { font-size: .84rem; color: var(--fg-mut); margin-bottom: .3rem; font-weight: 600; }
+.bgrid { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+         margin: 1.3rem 0; max-width: var(--bleed); }
+.bview { margin: 0; border-top: 1px solid var(--ink); padding-top: .55rem; }
+.bviewhead { font-family: var(--sans); font-size: .74rem; color: var(--ink-2);
+             margin-bottom: .45rem; text-transform: uppercase; letter-spacing: .06em; }
+.bviewhead span { text-transform: none; letter-spacing: 0; color: var(--ink-3); }
 .bnode { cursor: pointer; }
-.bnode:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.legend { display: flex; flex-wrap: wrap; gap: .35rem; margin: 1rem 0; }
-.lg { display: inline-flex; align-items: center; gap: .35rem; font: inherit; font-size: .78rem;
-      padding: .22rem .55rem; border-radius: 999px; border: 1px solid var(--rule);
-      background: var(--bg); color: var(--fg-mut); cursor: pointer; }
-.lg.on { color: var(--fg); border-color: var(--fg-faint); }
-.lg .sw { width: .62rem; height: .62rem; border-radius: 50%; opacity: .35; }
+.legend { display: flex; flex-wrap: wrap; gap: .3rem; margin: 1.2rem 0;
+          max-width: var(--bleed); }
+.lg { display: inline-flex; align-items: center; gap: .35rem; font-family: var(--sans);
+      font-size: .74rem; padding: .2rem .5rem; border: 1px solid var(--rule);
+      background: var(--paper); color: var(--ink-3); cursor: pointer; border-radius: 2px; }
+.lg.on { color: var(--ink); border-color: var(--rule-2); }
+.lg .sw { width: .6rem; height: .6rem; border-radius: 50%; opacity: .3; }
 .lg.on .sw { opacity: 1; }
 .lg.reset { font-style: italic; }
-#bdetail { margin: 1rem 0; min-height: 3rem; }
+.bpick { border-left: 2px solid var(--ink); padding: .1rem 0 .1rem 1rem; }
+.bpick h3 { margin: 0 0 .3rem; }
+.bpick p { margin: 0; }
+#bdetail { margin: 1.2rem 0; min-height: 3.2rem; max-width: var(--bleed); }
 """
 
 

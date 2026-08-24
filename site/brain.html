@@ -39,20 +39,26 @@ covered it.</p>
 </section>
 
 <style>
-.bgrid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); margin: 1.2rem 0; }
-.bview { margin: 0; border: 1px solid var(--rule); border-radius: 8px; padding: .6rem; }
-.bviewhead { font-size: .84rem; color: var(--fg-mut); margin-bottom: .3rem; font-weight: 600; }
+.bgrid { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+         margin: 1.3rem 0; max-width: var(--bleed); }
+.bview { margin: 0; border-top: 1px solid var(--ink); padding-top: .55rem; }
+.bviewhead { font-family: var(--sans); font-size: .74rem; color: var(--ink-2);
+             margin-bottom: .45rem; text-transform: uppercase; letter-spacing: .06em; }
+.bviewhead span { text-transform: none; letter-spacing: 0; color: var(--ink-3); }
 .bnode { cursor: pointer; }
-.bnode:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.legend { display: flex; flex-wrap: wrap; gap: .35rem; margin: 1rem 0; }
-.lg { display: inline-flex; align-items: center; gap: .35rem; font: inherit; font-size: .78rem;
-      padding: .22rem .55rem; border-radius: 999px; border: 1px solid var(--rule);
-      background: var(--bg); color: var(--fg-mut); cursor: pointer; }
-.lg.on { color: var(--fg); border-color: var(--fg-faint); }
-.lg .sw { width: .62rem; height: .62rem; border-radius: 50%; opacity: .35; }
+.legend { display: flex; flex-wrap: wrap; gap: .3rem; margin: 1.2rem 0;
+          max-width: var(--bleed); }
+.lg { display: inline-flex; align-items: center; gap: .35rem; font-family: var(--sans);
+      font-size: .74rem; padding: .2rem .5rem; border: 1px solid var(--rule);
+      background: var(--paper); color: var(--ink-3); cursor: pointer; border-radius: 2px; }
+.lg.on { color: var(--ink); border-color: var(--rule-2); }
+.lg .sw { width: .6rem; height: .6rem; border-radius: 50%; opacity: .3; }
 .lg.on .sw { opacity: 1; }
 .lg.reset { font-style: italic; }
-#bdetail { margin: 1rem 0; min-height: 3rem; }
+.bpick { border-left: 2px solid var(--ink); padding: .1rem 0 .1rem 1rem; }
+.bpick h3 { margin: 0 0 .3rem; }
+.bpick p { margin: 0; }
+#bdetail { margin: 1.2rem 0; min-height: 3.2rem; max-width: var(--bleed); }
 </style>
 <script>
 (async function () {
@@ -64,10 +70,23 @@ covered it.</p>
   const imp = D.importance || null;
   const nets = D.networks;
 
+  // A fixed, muted palette rather than evenly spaced hues. Sensorimotor gets
+  // the two colours used everywhere else on the site, because those are the
+  // regions the whole question is about. Everything else stays quiet.
+  const PALETTE = {
+    SomMotA:      '#b0521c', SomMotB:      '#d08340',
+    Cerebellum:   '#4a6741', Subcortex:    '#7a6a4f',
+    VisCent:      '#3f6d7a', VisPeri:      '#5f8f99',
+    DorsAttnA:    '#6b7f5c', DorsAttnB:    '#8a9a76',
+    SalVentAttnA: '#8a6a17', SalVentAttnB: '#a98c47',
+    ContA:        '#1a5570', ContB:        '#3d7591', ContC:        '#6997ad',
+    DefaultA:     '#7d5a52', DefaultB:     '#9c7a70', DefaultC:     '#b59a92',
+    LimbicA:      '#6f5f7a', LimbicB:      '#8f8199',
+    TempPar:      '#556b7d'
+  };
+  const FALLBACK = '#7c7a70';
   const palette = {};
-  nets.forEach((n, i) => { palette[n] = `hsl(${Math.round((i * 360) / nets.length)} 52% 48%)`; });
-  palette['SomMotA'] = '#c2410c'; palette['SomMotB'] = '#ea7317';
-  palette['Cerebellum'] = '#3f6212'; palette['Subcortex'] = '#6d28d9';
+  nets.forEach(n => { palette[n] = PALETTE[n] || FALLBACK; });
 
   let active = new Set(nets), selected = null;
   const impOf = n => (imp ? (imp[n.id - 1] ?? 0) : null);
@@ -110,7 +129,7 @@ covered it.</p>
     if (!selected) return `<p class="small">Pick a region, or use the buttons above to show one network at a time.${imp ? ' Bigger and more solid dots are regions the model used more.' : ''}</p>`;
     const n = selected;
     const side = n.hemi === 'LH' ? 'left' : n.hemi === 'RH' ? 'right' : 'middle';
-    return `<div class="card"><h3>${n.label}</h3><p class="small">${n.network}, ${side} side, from ${n.source}, ${n.n_voxels} voxels<br>Position ${n.x}, ${n.y}, ${n.z}${imp ? `<br><strong>importance ${impOf(n).toFixed(4)}</strong>` : ''}</p></div>`;
+    return `<div class="bpick"><h3>${n.label}</h3><p class="small">${n.network}, ${side} side, from ${n.source}, ${n.n_voxels} voxels<br>Position ${n.x}, ${n.y}, ${n.z}${imp ? `<br><strong>importance ${impOf(n).toFixed(4)}</strong>` : ''}</p></div>`;
   }
 
   function table() {

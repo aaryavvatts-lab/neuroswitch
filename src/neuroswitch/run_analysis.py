@@ -56,7 +56,7 @@ def main_models(cond: str = "LH", n_repeats: int = 10, n_perm: int = 500,
             if n_perm and (name.startswith("NULL") or name in
                            ("tangent+logreg", "GCN", "tangent+svm")):
                 pt = permutation_test(make, b, n_perm=n_perm, observed=r["auc_mean"])
-                pt.pop("null", None)
+                pt.pop("null", None)          # the histogram is kept instead
                 entry["permutation"] = pt
             entry["seconds"] = round(time.time() - t0, 1)
             out["models"][name] = entry
