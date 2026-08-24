@@ -154,7 +154,7 @@ than a randomly picked control. 0.50 is a coin flip. 1.00 is perfect.</p>
 
 <section>
 <h2>Things worth knowing</h2>
-<div class="cards">{card_html}</div>
+{card_html}
 </section>
 
 <section>
