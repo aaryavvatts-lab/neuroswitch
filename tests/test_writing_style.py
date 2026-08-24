@@ -147,3 +147,18 @@ def test_stylesheet_is_plain_ascii_and_has_no_gradients():
         r, g, b = (int(hexcode[i:i + 2], 16) for i in (0, 2, 4))
         if b > r > g and (b - g) > 60 and (r - g) > 25:
             raise AssertionError(f"purple-ish colour #{hexcode} in style.css")
+
+
+def test_point_paragraphs_are_not_squeezed_into_the_number_column():
+    """Regression: .point is a 2-column grid but has 3 grid items (the
+    counter, the heading, the paragraph). Left unplaced, the paragraph
+    auto-flowed into the 2.4rem number column and wrapped one word per line.
+    """
+    css = (SITE / "style.css").read_text()
+    import re
+    def rule(selector):
+        m = re.search(re.escape(selector) + r"\s*\{([^}]*)\}", css)
+        assert m, f"no rule for {selector}"
+        return m.group(1)
+    assert "grid-column: 2" in rule(".point h3")
+    assert "grid-column: 2" in rule(".point p")
