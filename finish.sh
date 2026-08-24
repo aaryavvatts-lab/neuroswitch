@@ -52,6 +52,9 @@ echo "== step 4: analysis"
 "$PY" -m neuroswitch.run_analysis --stages cohort,main,controls --repeats 10 --perm 500 2>&1 | tail -40
 "$PY" -m neuroswitch.run_importance --condition LH --repeats 4 2>&1 | tail -15
 
+echo "== step 4b: the pipeline grid"
+"$PY" -m neuroswitch.multiverse --repeats 3 --no-gnn 2>&1 | tail -12
+
 echo "== step 5: site"
 "$PY" -m neuroswitch.site_build
 "$PY" -m neuroswitch.export_site
