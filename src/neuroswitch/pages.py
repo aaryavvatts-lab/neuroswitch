@@ -12,6 +12,15 @@ from .site_build import (DS_DOI, PREPRINT, bars, e, fmt_auc, fmt_ci, fmt_p, load
 NULL_PREFIX = "NULL "
 
 
+def figure(name: str, caption: str) -> str:
+    """Embed a generated figure, or nothing if it has not been made yet."""
+    from .site_build import SITE
+    if not (SITE / "figures" / f"{name}.svg").is_file():
+        return ""
+    return (f'<figure><img src="figures/{name}.svg" alt="{e(caption)}">'
+            f'<figcaption>{caption}</figcaption></figure>')
+
+
 # ---------------------------------------------------------------- index
 def build_index() -> None:
     coh = load("cohort") or {}
@@ -229,6 +238,11 @@ be used at all.{fd_note}</p>
 <div class="tablewrap"><table>
 <thead><tr><th>Reason for leaving someone out</th><th class="num">People</th></tr></thead>
 <tbody>{rows}</tbody></table></div>
+{figure("motion",
+        "Head movement for every person who made it through, split by group. The "
+        "red line is the cut-off. If patients sat well to the right of controls "
+        "here, movement alone could explain a group difference, which is why the "
+        "results page carries a model built from movement and nothing else.")}
 <p class="small">Three patients (<code>sub-1002</code>, <code>sub-1019</code>,
 <code>sub-1045</code>) could not draw with their injured hand at all. They are in the
 left-hand analysis but not in the left minus right comparison.</p>
@@ -327,6 +341,12 @@ region. A positive number means that region worked harder when they drew with th
 left hand.</p>
 </div>
 {sanity}
+{figure("lateralisation",
+        "Each bar is one brain region. Bars to the right were more active when "
+        "people drew with the left hand, bars to the left when they drew with the "
+        "right. Blue regions sit in the right half of the brain and orange in the "
+        "left, so the colours flip either side of the middle line. That flip is "
+        "the thing being checked.")}
 <p class="small">This one test covers the whole chain at once, including a detail
 that is easy to get wrong. Event times in the data refer to the original scan, not
 to the images left after the first ten are dropped. Miss that and every block

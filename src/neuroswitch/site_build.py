@@ -159,6 +159,11 @@ def build_all() -> None:
     except Exception as exc:            # site must still build before results exist
         print(f"  (brain data export skipped: {exc!r})")
     from . import legal
+    from .figures import build_all as build_figures
+    try:
+        build_figures()
+    except Exception as exc:
+        print(f"  (figures skipped: {exc!r})")
     for fn in (pages.build_index, pages.build_data, pages.build_methods,
                pages.build_results, pages.build_brain, pages.build_controls,
                pages.build_reproduce, pages.build_refs,
