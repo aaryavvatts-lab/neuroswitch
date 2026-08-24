@@ -17,10 +17,26 @@ NULL_PREFIX = "NULL "
 
 # ------------------------------------------------------------------ helpers
 def figure(name: str, caption: str, number: int | None = None) -> str:
-    if not (SITE / "figures" / f"{name}.svg").is_file():
+    """Embed a chart's SVG markup directly in the page.
+
+    The charts colour themselves with the site's CSS custom properties (so
+    they follow the light/dark theme), but a custom property only resolves
+    inside the document that defines it. Referencing the file with
+    <img src="..."> loads it as an opaque external resource with no access to
+    the page's :root variables, so every fill/stroke falls back to black.
+    Inlining the <svg> markup makes it part of the document instead, which is
+    what makes the theming actually work.
+    """
+    svg_path = SITE / "figures" / f"{name}.svg"
+    if not svg_path.is_file():
         return ""
+    svg = svg_path.read_text()
+    # <?xml ...?> declarations are only valid at the top of a standalone
+    # document and are meaningless (and sometimes rejected) inline in HTML.
+    if svg.lstrip().startswith("<?xml"):
+        svg = svg.split("?>", 1)[1]
     lab = f"<strong>Figure {number}.</strong> " if number else ""
-    return (f'<figure><img src="figures/{name}.svg" alt="{e(caption)}">'
+    return (f'<figure role="img" aria-label="{e(caption)}">{svg}'
             f'<figcaption>{lab}{caption}</figcaption></figure>')
 
 
@@ -344,29 +360,26 @@ images across the six drawing runs, plus resting scans.</p>
 </div>
 
 <h3>Three things about the data I did not expect</h3>
-<div class="points">
-<div class="point"><h3>One of the two groups was missing</h3>
-<p>The copy I was handed had 45 of the 46 healthy adults and none of the 25
-patients. You cannot train a model to tell two groups apart when only one is
-present. Every patient scan had to be pulled from OpenNeuro before anything could
-start, which also meant writing the download and verification step first rather
-than last.</p></div>
-
-<div class="point"><h3>There was no room on the disk</h3>
-<p>The dataset is 83 GB. The laptop had 2.5 GB free. Rather than give up on the
-laptop, the pipeline works through one person at a time and deletes their raw scans
-as soon as their signals are extracted and checked. Free space goes up as the
-analysis runs. Before deleting anything it confirms the same file is still
-downloadable from OpenNeuro at the same byte size, so nothing is lost for good.
-Peak disk use is about 3 GB no matter how many people you run.</p></div>
-
-<div class="point"><h3>The gap in drawing quality is enormous</h3>
-<p>The dataset ships drawing quality measured 30 times a second from the tablet:
-how smooth the movement was, how accurately it followed the path, how fast. Patients
-score far worse with the left hand. That is exactly what you would expect from the
-injury, and it is a serious problem for the analysis, because a brain model can
-score well by picking up effort rather than anything about reorganisation. It
-became the main control test.</p></div>
+<div class="measure">
+<p><strong>One of the two groups was missing.</strong> The copy I was handed
+had 45 of the 46 healthy adults and none of the 25 patients. You cannot train
+a model to tell two groups apart when only one is present. Every patient scan
+had to be pulled from OpenNeuro before anything could start, which also meant
+writing the download and verification step first rather than last.</p>
+<p><strong>There was no room on the disk.</strong> The dataset is 83 GB. The
+laptop had 2.5 GB free. Rather than give up on the laptop, the pipeline works
+through one person at a time and deletes their raw scans as soon as their
+signals are extracted and checked. Free space goes up as the analysis runs.
+Before deleting anything it confirms the same file is still downloadable from
+OpenNeuro at the same byte size, so nothing is lost for good. Peak disk use is
+about 3 GB no matter how many people you run.</p>
+<p><strong>The gap in drawing quality is enormous.</strong> The dataset ships
+drawing quality measured 30 times a second from the tablet: how smooth the
+movement was, how accurately it followed the path, how fast. Patients score
+far worse with the left hand. That is exactly what you would expect from the
+injury, and it is a serious problem for the analysis, because a brain model
+can score well by picking up effort rather than anything about
+reorganisation. It became the main control test.</p>
 </div>
 
 <h3>Who was left out</h3>

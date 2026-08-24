@@ -149,16 +149,43 @@ def test_stylesheet_is_plain_ascii_and_has_no_gradients():
             raise AssertionError(f"purple-ish colour #{hexcode} in style.css")
 
 
-def test_point_paragraphs_are_not_squeezed_into_the_number_column():
-    """Regression: .point is a 2-column grid but has 3 grid items (the
-    counter, the heading, the paragraph). Left unplaced, the paragraph
-    auto-flowed into the 2.4rem number column and wrapped one word per line.
+
+def test_figures_are_inlined_not_referenced_as_img():
+    """Regression: SVG figures use fill="var(--right)" etc. for theming.
+
+    A custom property only resolves inside the document that declares it. A
+    figure loaded with <img src="figures/x.svg"> is an opaque external
+    resource with no access to the page's :root variables, so every colour
+    silently fell back to black. The fix inlines the <svg> markup directly
+    into the page instead.
     """
-    css = (SITE / "style.css").read_text()
+    for path in html_files():
+        html = path.read_text()
+        assert 'src="figures/' not in html, \
+            f"{path.name} references a figure as <img src>; it should be inlined"
+
+
+def test_inlined_svg_figures_use_current_theme_variables():
+    """Regression: figures.py referenced --accent/--fg/--bad, names from a
+    design system this site no longer uses (renamed to --right/--ink/--stop
+    when the site was redesigned). The figures still built without error but
+    every colour resolved to nothing.
+    """
     import re
-    def rule(selector):
-        m = re.search(re.escape(selector) + r"\s*\{([^}]*)\}", css)
-        assert m, f"no rule for {selector}"
-        return m.group(1)
-    assert "grid-column: 2" in rule(".point h3")
-    assert "grid-column: 2" in rule(".point p")
+    current_vars = set(re.findall(r"--[a-z0-9-]+(?=\s*:)", (SITE / "style.css").read_text()))
+    for svg_path in (SITE / "figures").glob("*.svg"):
+        used = set(re.findall(r"var\((--[a-z0-9-]+)\)", svg_path.read_text()))
+        stale = used - current_vars
+        assert not stale, f"{svg_path.name} uses undefined variables: {stale}"
+
+
+def test_inlined_svg_figures_have_unique_ids():
+    """Regression: every figure's <title>/<desc> used id="t"/id="d". Inlining
+    more than one figure into the same page produced duplicate ids, which is
+    invalid HTML and breaks aria-labelledby for every figure after the first.
+    """
+    import re
+    for path in html_files():
+        ids = re.findall(r'\bid="([^"]+)"', path.read_text())
+        dupes = {i for i in ids if ids.count(i) > 1}
+        assert not dupes, f"{path.name} has duplicate ids: {dupes}"
