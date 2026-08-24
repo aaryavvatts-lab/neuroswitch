@@ -11,12 +11,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import warnings
+from contextlib import contextmanager
 from pathlib import Path
 
 import numpy as np
 
 from . import signals as sg
-from .run_subject import DERIV, available_runs
+from .run_subject import DERIV, derivative_runs
 
 FEAT = DERIV / "features"
 TR = 0.662
@@ -33,9 +35,18 @@ CONDITIONS = {
 }
 
 
+@contextmanager
+def _quiet():
+    """Parcels outside the field of view are legitimately all-NaN; the resulting
+    'Mean of empty slice' warnings are expected, not diagnostic."""
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", RuntimeWarning)
+        yield
+
+
 def _usable(sub: str, task: str) -> list[int]:
     runs = []
-    for r in available_runs(sub, task):
+    for r in derivative_runs(sub, task):
         f = DERIV / sub / f"{sub}_task-{task}_run-{r}_qc.json"
         if not f.is_file():
             continue
@@ -74,7 +85,8 @@ def build_condition(sub: str, cond: str) -> dict | None:
         if keep.sum() < 20:
             continue
         seg = clean_bp[keep]
-        segments.append((seg - np.nanmean(seg, 0)) / (np.nanstd(seg, 0) + 1e-8))
+        with _quiet():
+            segments.append((seg - np.nanmean(seg, 0)) / (np.nanstd(seg, 0) + 1e-8))
         kept += int(keep.sum())
 
         if is_task and variant == "":
@@ -95,11 +107,13 @@ def build_condition(sub: str, cond: str) -> dict | None:
     cat = np.vstack(segments).astype(np.float32)
     out = {"ts": cat, "n_runs": len(segments), "n_volumes": kept,
            "n_censored": censored, "runs": np.array(runs)}
-    out["alff"] = np.nanmean(alffs, 0) if alffs else np.full(cat.shape[1], np.nan)
-    out["falff"] = np.nanmean(falffs, 0) if falffs else np.full(cat.shape[1], np.nan)
-    out["beta_draw"] = np.nanmean(betas_draw, 0) if betas_draw else np.full(cat.shape[1], np.nan)
-    out["beta_hard_minus_easy"] = (np.nanmean(betas_hard, 0) if betas_hard
-                                   else np.full(cat.shape[1], np.nan))
+    with _quiet():
+        out["alff"] = np.nanmean(alffs, 0) if alffs else np.full(cat.shape[1], np.nan)
+        out["falff"] = np.nanmean(falffs, 0) if falffs else np.full(cat.shape[1], np.nan)
+        out["beta_draw"] = (np.nanmean(betas_draw, 0) if betas_draw
+                            else np.full(cat.shape[1], np.nan))
+        out["beta_hard_minus_easy"] = (np.nanmean(betas_hard, 0) if betas_hard
+                                       else np.full(cat.shape[1], np.nan))
     return out
 
 

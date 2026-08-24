@@ -37,6 +37,22 @@ def available_runs(sub: str, task: str) -> list[int]:
     return sorted(runs)
 
 
+def derivative_runs(sub: str, task: str) -> list[int]:
+    """Runs that have been preprocessed, read from derivatives.
+
+    Deliberately does not consult the raw BIDS tree: reaping deletes the source
+    NIfTIs once derivatives are verified, so anything keyed on raw files reports
+    zero runs for every completed subject.
+    """
+    import re
+    runs = []
+    for f in (DERIV / sub).glob(f"{sub}_task-{task}_run-*.npz"):
+        m = re.search(r"run-(\d+)", f.name)
+        if m:
+            runs.append(int(m.group(1)))
+    return sorted(runs)
+
+
 def subject_done(sub: str) -> bool:
     f = DERIV / sub / "subject_qc.json"
     if not f.is_file():

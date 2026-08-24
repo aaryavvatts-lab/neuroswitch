@@ -15,7 +15,7 @@ from pathlib import Path
 import numpy as np
 
 from .preprocess import BIDS
-from .run_subject import DERIV, TASKS, available_runs
+from .run_subject import DERIV, TASKS, available_runs, derivative_runs
 
 MIN_COVERED_FRACTION = 0.90     # parcels with usable signal
 MIN_REG_DICE = 0.85             # MNI->EPI overlap
@@ -36,7 +36,9 @@ def verify(sub: str, expect_nodes: int | None = None,
     if failed_in_scope:
         bad.append(f"{len(failed_in_scope)} failed runs in {sorted(tasks)}")
 
-    expected = {(t, r) for t in tasks for r in available_runs(sub, t)}
+    # union of raw runs (not yet reaped) and preprocessed runs (already reaped)
+    expected = {(t, r) for t in tasks
+                for r in set(available_runs(sub, t)) | set(derivative_runs(sub, t))}
     if not expected:
         bad.append("no raw runs found")
     for task, run in sorted(expected):

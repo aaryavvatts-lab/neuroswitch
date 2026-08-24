@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 
 from .preprocess import BIDS
-from .run_subject import DERIV, available_runs
+from .run_subject import DERIV, derivative_runs
 
 # Flagged by the dataset authors in participants.tsv; see README "Missing data".
 AUTHOR_EXCLUDED = {"sub-1020", "sub-1026", "sub-1051",   # motion x task correlation
@@ -83,7 +83,7 @@ def cohort(require_both_hands: bool = False) -> pd.DataFrame:
             t = sq[sq["task"] == task] if not sq.empty else sq
             d[f"n_{task}"] = int(t["usable"].sum()) if not t.empty else 0
             d[f"fd_{task}"] = float(t.loc[t["usable"], "mean_fd"].mean()) if not t.empty and t["usable"].any() else np.nan
-        d["n_raw_drawLH"] = len(available_runs(sub, "drawLH"))
+        d["n_preprocessed_drawLH"] = len(derivative_runs(sub, "drawLH"))
         d["preprocessed"] = (DERIV / sub / "subject_qc.json").is_file()
         d["mean_fd"] = float(sq.loc[sq["usable"], "mean_fd"].mean()) if not sq.empty and sq["usable"].any() else np.nan
         d["max_fd"] = float(sq.loc[sq["usable"], "max_fd"].max()) if not sq.empty and sq["usable"].any() else np.nan
