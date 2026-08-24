@@ -3,9 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Does the brain rewire after hand injury? · neuroswitch</title>
-<meta name="description" content="A student reanalysis of fMRI data from adults with long-term right hand nerve injury drawing with their left hand.">
+<title>Does the brain rewire after a hand injury? · neuroswitch</title>
+<meta name="description" content="A student reanalysis of brain scans from adults with long-term right hand nerve injury drawing with their left hand, and four tests of whether the result means what it looks like.">
 <meta name="robots" content="index, follow">
+<meta property="og:title" content="Does the brain rewire after a hand injury?">
+<meta property="og:description" content="A student reanalysis of brain scans from adults with long-term right hand nerve injury drawing with their left hand, and four tests of whether the result means what it looks like.">
+<meta property="og:type" content="article">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
@@ -13,75 +16,426 @@
 <a class="skip" href="#main">Skip to main content</a>
 <header class="site"><div class="wrap">
 <a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
-<nav class="site" aria-label="Main"><a href="index.html" aria-current="page">Overview</a><a href="data.html">The data</a><a href="methods.html">How it works</a><a href="results.html">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
+<nav class="site" aria-label="Main"><a href="index.html" aria-current="page">The study</a><a href="explore.html">Try it</a></nav>
 </div></header>
+<div class="subnav"><div class="wrap"><nav aria-label="Sections"><a href="#built">What I built</a><a href="#data">The data</a><a href="#signal">Is the signal real</a><a href="#pipeline">Pipeline</a><a href="#models">Models</a><a href="#answer">The answer</a><a href="#wrong">Could it be wrong</a><a href="#learned">What it learned</a><a href="#multiverse">Ninety pipelines</a><a href="#limits">What is wrong with this</a><a href="#run">Run it</a><a href="#refs">References</a></nav></div></div>
 <main class="wrap" id="main">
 
-<h1>Does the brain rewire after a hand injury?</h1>
-<div class="note warn"><p><strong>Still running.</strong> The scans are being processed one person at a time, and 7 of about 66 are done so far (11%). Numbers on this page come from those 7 and will change. Anything not worked out yet says so instead of showing a placeholder.</p><div class="progress" role="img" aria-label="11 percent processed"><span style="width:11%"></span></div></div>
-<p class="lede">When nerve damage takes your right hand out of action, you start
-doing everything with the left. This project looks at brain scans taken while
-people were drawing, and asks whether their brain networks really look different.
-Then it spends most of its effort asking whether that difference means what it
-looks like it means.</p>
+<h1>Does the brain rewire itself after a hand injury?</h1>
+<p class="lede">Twenty-five adults lost the use of their right hand to nerve damage
+and had to start doing everything left-handed. I took brain scans recorded while
+they drew, built a network for each person, and trained models to pick them out of
+a crowd of healthy adults. Then I spent most of the project trying to break my own
+result.</p>
 
-<div class="stats"><div class="stat"><div class="n">7</div><div class="k">people in the analysis</div></div><div class="stat"><div class="n">3/4</div><div class="k">patients / controls</div></div><div class="stat"><div class="n">241</div><div class="k">brain regions per graph</div></div><div class="stat"><div class="n">6</div><div class="k">scans per person</div></div><div class="stat"><div class="n">0.66 s</div><div class="k">time per brain image</div></div></div>
+<div class="note warn"><p><strong>Still running.</strong> The scans are being processed one person at a time and 8 of about 66 are done (12%). Every number below comes from those 8 and will change. Anything not worked out yet says so.</p><div class="progress" role="img" aria-label="12 percent processed"><span style="width:12%"></span></div></div>
+<div class="stats"><div class="stat"><div class="n">8</div><div class="k">people analysed</div></div><div class="stat"><div class="n">3/5</div><div class="k">patients / controls</div></div><div class="stat"><div class="n">241</div><div class="k">brain regions</div></div><div class="stat"><div class="n">6</div><div class="k">scans each</div></div><div class="stat"><div class="n">2,868</div><div class="k">brain images per person</div></div><div class="stat"><div class="n">0.66 s</div><div class="k">per image</div></div></div>
 
-<section>
-<h2>What this is</h2>
+<section id="built">
+<h2>What I built</h2>
 <div class="measure">
-<p>A student reanalysis of a public dataset from Washington University in St. Louis.
-46 healthy adults and 25 people with long-term nerve injury to the right hand each
-lay in a scanner and traced shapes on a tablet, three runs with one hand and three
-with the other. I pulled blood flow signals out of 241 brain regions, turned them
-into a network for each person, and trained models to tell the two groups apart.</p>
+<p>The starting idea came from a video that went roughly: get the scans, pull out
+the blood flow signals, build a graph neural network to sort patients from healthy
+adults, then look inside the model to see which brain regions it used. That is a
+reasonable sketch and it is what the first half of this project does.</p>
+<p>The trouble is that the last step only means something if the first three are
+sound. A model can separate two groups of people for many reasons that have nothing
+to do with brains reorganising. Patients might move more in the scanner. The task
+is genuinely harder for them, so their brains might just look like anyone working
+hard. They are a few years older on average. Any of those would produce a model
+that works and a story that is wrong.</p>
+<p>So the project has two halves. The first builds the thing the video describes.
+The second tries to knock it down, using four tests that each remove one of those
+explanations. There is also a page of <a href="explore.html">interactive tools</a>
+where you can walk through the analysis choices yourself and see how much the
+answer depends on them.</p>
 </div>
-</section>
-
-<section>
-<h2>What this is not</h2>
-<div class="measure">
-<p>It is not proof that anyone's brain rewired. Each person was scanned one time.
-Nothing here watches a brain change. A difference between two groups in a
-single snapshot can come from reorganisation, but it can also come from things
-that were true before the injury, from the task being harder for one group, or
-from one group moving more in the scanner.</p>
-<p>That last point is the whole reason this project has a controls page.
-<a href="https://doi.org/10.1093/brain/awv161">Makin and others, 2015</a> looked at a similar claim in arm amputees and found the link
-between remapping and pain did not survive once other factors were measured. That
-is a good reason to be careful here too.</p>
-<p>It is also not a medical device and not advice. 66 people, one scanner.</p>
-</div>
-</section>
-
-<section>
-<h2>How well does it work</h2>
 <p class="pending">Not worked out yet. The pipeline is still running.</p>
-<p class="small">AUC is the chance that a randomly picked patient scores higher
-than a randomly picked control. 0.50 is a coin flip. 1.00 is perfect.</p>
 </section>
 
-<section>
-<h2>Things worth knowing</h2>
-<p class="pending">Findings show up here once the analysis has run.</p>
+<section id="data">
+<h2>The data</h2>
+<div class="measure">
+<p>Everything comes from <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a>, collected at
+Washington University in St. Louis School of Medicine by Kapil, Kim, McAvoy and
+Philip, and paid for by an NINDS grant. They released it under CC0, which is the
+only reason a project like this is possible from a laptop.</p>
+<p>71 right-handed adults took part. 25 had long-term peripheral nerve injury to
+the right hand or arm, meaning damage to the nerves running into the hand rather
+than to the brain itself. That distinction matters. The brain was never injured, so
+anything different about it is a response to losing the hand, not damage.</p>
+<p>Everyone did the same task. Lying in the scanner holding a special tablet, they
+traced inside a path that moved ahead of them. The instruction was to go as fast as
+they could while staying inside the lines, and staying inside mattered more than
+speed. Three runs with the left hand, three with the right, alternating, always
+starting with the hand they normally write with. Each run alternates 15 seconds of
+drawing with 15 seconds of rest, ten times over.</p>
+<p>The scanner took a picture of the whole brain every 0.66 seconds. That is fast
+for fMRI, and it comes from a multiband sequence that images several slices at
+once. Each run is 488 images, so each person contributes about 2,868 whole-brain
+images across the six drawing runs, plus resting scans.</p>
+</div>
+
+<h3>Three things about the data I did not expect</h3>
+<div class="points">
+<div class="point"><h3>One of the two groups was missing</h3>
+<p>The copy I was handed had 45 of the 46 healthy adults and none of the 25
+patients. You cannot train a model to tell two groups apart when only one is
+present. Every patient scan had to be pulled from OpenNeuro before anything could
+start, which also meant writing the download and verification step first rather
+than last.</p></div>
+
+<div class="point"><h3>There was no room on the disk</h3>
+<p>The dataset is 83 GB. The laptop had 2.5 GB free. Rather than give up on the
+laptop, the pipeline works through one person at a time and deletes their raw scans
+as soon as their signals are extracted and checked. Free space goes up as the
+analysis runs. Before deleting anything it confirms the same file is still
+downloadable from OpenNeuro at the same byte size, so nothing is lost for good.
+Peak disk use is about 3 GB no matter how many people you run.</p></div>
+
+<div class="point"><h3>The gap in drawing quality is enormous</h3>
+<p>The dataset ships drawing quality measured 30 times a second from the tablet:
+how smooth the movement was, how accurately it followed the path, how fast. Patients
+score far worse with the left hand. That is exactly what you would expect from the
+injury, and it is a serious problem for the analysis, because a brain model can
+score well by picking up effort rather than anything about reorganisation. It
+became the main control test.</p></div>
+</div>
+
+<h3>Who was left out</h3>
+<div class="measure">
+<p>Five people were excluded by the original team: three patients whose head
+movement tracked the task, one control with a tablet problem, and one who moved too
+much. Those exclusions are kept here rather than quietly reversed.</p>
+<p>On top of that a run was dropped if average head movement went above 0.30 mm,
+if more than 30% of its images had to be censored, or if the brain did not line up
+with the template well enough. A person needed at least two surviving left-hand runs
+to be used at all. Three patients could not draw with the injured hand at all, so
+they appear in the left-hand analysis but not in the left-minus-right comparison.</p>
+</div>
+<figure><img src="figures/motion.svg" alt="Head movement for every person who made it through, split by group. The red line is the cut-off. If patients sat well to the right of controls here, movement alone could explain a group difference, which is why one of the models below uses movement and nothing else."><figcaption><strong>Figure 1.</strong> Head movement for every person who made it through, split by group. The red line is the cut-off. If patients sat well to the right of controls here, movement alone could explain a group difference, which is why one of the models below uses movement and nothing else.</figcaption></figure>
 </section>
 
-<section>
-<h2>Read on</h2>
-<dl class="toc">
-<dt><a href="data.html">The data</a></dt>
-<dd>Where the scans came from, what people did in the scanner, and the three
-problems I ran into before any of it would run.</dd>
-<dt><a href="methods.html">How it works</a></dt>
-<dd>Raw scans to brain networks without the usual software, and the one test
-that shows the pipeline is not making things up.</dd>
-<dt><a href="controls.html">Could this be wrong?</a></dt>
-<dd>Four ways the headline could be an artefact, each one tested rather than
-listed as a caveat at the end.</dd>
-<dt><a href="brain.html">Explore the brain</a></dt>
-<dd>Which regions the model leaned on, and how left and right hand drawing
-differ.</dd>
-</dl>
+<section id="signal">
+<h2>First I checked the signal was really there</h2>
+<div class="measure">
+<p>Before believing anything about groups, the pipeline has to reproduce a fact that
+cannot be wrong. Moving your left hand drives the right side of the brain. Moving
+your right hand drives the left. If that does not appear, then the alignment, the
+region labels, the hemisphere assignment or the event timing is broken, and
+everything downstream is noise with a story attached.</p>
+<p>Because everyone drew with both hands, the test can be paired. For each person,
+subtract their right-hand response from their left-hand response, region by region.
+A positive number means that region worked harder when they drew left-handed. That
+paired form cancels everything fixed about the person and is far more sensitive than
+comparing across people.</p>
+</div>
+
+<div class="stats">
+<div class="stat"><div class="n">+0.212</div>
+<div class="k">size of the hand by side effect</div></div>
+<div class="stat"><div class="n">8/8</div>
+<div class="k">people showing the right pattern</div></div>
+<div class="stat"><div class="n">8/10</div>
+<div class="k">top left-hand regions on the right</div></div>
+</div>
+<div class="tablewrap"><table>
+<caption>The eight regions most engaged by left-hand drawing</caption>
+<thead><tr><th>Region</th><th>Network</th><th>Side of brain</th>
+<th class="num">Left minus right</th></tr></thead>
+<tbody><tr><td>RH SomMotA 4</td><td>SomMotA</td><td>right</td><td class='num'>+0.413</td></tr><tr><td>RH SomMotA 6</td><td>SomMotA</td><td>right</td><td class='num'>+0.321</td></tr><tr><td>RH SomMotA 1</td><td>SomMotA</td><td>right</td><td class='num'>+0.201</td></tr><tr><td>RH SomMotA 11</td><td>SomMotA</td><td>right</td><td class='num'>+0.176</td></tr><tr><td>RH SomMotA 7</td><td>SomMotA</td><td>right</td><td class='num'>+0.174</td></tr><tr><td>RH SomMotA 2</td><td>SomMotA</td><td>right</td><td class='num'>+0.162</td></tr><tr><td>Cerebellum 4 5 L</td><td>Cerebellum</td><td>left</td><td class='num'>+0.140</td></tr><tr><td>RH SomMotA 3</td><td>SomMotA</td><td>right</td><td class='num'>+0.137</td></tr></tbody></table></div>
+<figure><img src="figures/lateralisation.svg" alt="Each bar is one brain region. Bars to the right were more active during left-hand drawing, bars to the left during right-hand drawing. Blue regions sit in the right half of the brain, orange in the left. The colours flip across the middle line, which is the whole point of the test."><figcaption><strong>Figure 2.</strong> Each bar is one brain region. Bars to the right were more active during left-hand drawing, bars to the left during right-hand drawing. Blue regions sit in the right half of the brain, orange in the left. The colours flip across the middle line, which is the whole point of the test.</figcaption></figure>
+<div class="measure">
+<p>This one test covers the entire chain at once, including a detail that is easy to
+get wrong. Event times in the data refer to the original scan, not to the images
+left after the first ten are dropped for the scanner to settle. Miss that and every
+block lands 6.6 seconds early, which quietly destroys the effect while leaving the
+pipeline apparently working.</p>
+<p>Two weaker versions of this test came first and were thrown out. Averaging all 34
+sensorimotor regions waters down a hand effect with hearing and face areas the task
+barely uses. Comparing across people rather than within them puts back every
+difference the paired version removes. Both were too blunt to tell me anything, and
+one of them reported a failure that was not real.</p>
+</div>
+</section>
+
+<section id="pipeline">
+<h2>Getting from scans to networks</h2>
+<div class="measure">
+<p>The usual route is fMRIPrep inside Docker. There was no Docker on this machine,
+and no FSL, FreeSurfer or AFNI either. Running fMRIPrep on 71 people would also have
+taken days. So the pipeline is built directly on ANTs through the
+<code>antspyx</code> package, with numpy, nibabel and nilearn doing the rest.</p>
+<p>Per run: drop the first 10 images while the scanner settles, correct for slices
+being taken at slightly different moments, then align every image to the run average
+so head movement is taken out. Per person: even out brightness across the anatomical
+scan, get a brain mask by warping a template mask onto it, and split the brain into
+grey matter, white matter and fluid.</p>
+</div>
+
+<div class="note">
+<p><strong>The step that made this feasible.</strong> The slow part of a normal
+pipeline is pushing all 488 images of every run into a shared template space. This
+pipeline never does that. It moves the region map the other way instead, from the
+template into each run's own space, and reads region averages straight off the data
+where it already sits.</p>
+<p>That is exact rather than a shortcut. Removing confounds and filtering both act
+along the time axis. Averaging a region acts across space. Operations on separate
+axes commute, so cleaning 241 region signals gives the same answer as cleaning
+150,000 voxels and averaging afterwards. It is simply much cheaper, and it is what
+brought the job down from days to hours.</p>
+</div>
+
+<div class="measure">
+<p>Taken out of every signal: 24 movement terms, which are six numbers describing
+head position, their frame-to-frame change, and both of those squared. Then five
+summary components each from white matter and fluid, which capture noise shared
+across the brain. Then a marker for any image where the head moved more than half a
+millimetre. Finally a filter keeping 0.008 to 0.10 Hz, which holds the task rhythm
+of 0.033 Hz comfortably inside it.</p>
+<p>None of that is the only defensible recipe. <a href="https://doi.org/10.1016/j.neuroimage.2017.12.073">Parkes and others, 2018</a> compared 19
+versions of this step and found that group differences can flip depending which you
+pick. That finding is the reason this project ends with a grid of pipelines rather
+than a single number.</p>
+<p>Each brain then becomes a network of 241 points: 200 cortical regions from
+<a href="https://doi.org/10.1093/cercor/bhx179">Schaefer and others, 2018</a>, 15 deeper structures from the Harvard-Oxford atlas, and 26
+parts of the cerebellum from <a href="https://doi.org/10.1006/nimg.2001.0978">Tzourio-Mazoyer and others, 2002</a>. The cerebellum is included on
+purpose. It matters for learning movements and a lot of work in this area leaves it
+out. Links between points are partial correlations computed from the drawing blocks
+only, shifted four seconds to allow for how slowly blood flow responds.</p>
+</div>
+
+<div class="note warn">
+<p><strong>A trap worth naming.</strong> One of the strongest ways to describe
+connectivity, called tangent space, computes a group average first. Do that once
+across everybody and then cross-validate, and the test people have leaked into
+training. Every score comes out too high and nothing warns you.</p>
+<p>To make that impossible, the stored files hold time signals rather than finished
+connectivity matrices, which forces every estimator to be fitted inside the training
+half. Splits are grouped by person, so nobody appears on both sides of a fold. One
+of the tests shuffles the labels and checks the score lands near 0.50, which is what
+catches a leak if one ever gets introduced.</p>
+</div>
+</section>
+
+<section id="models">
+<h2>How the models work</h2>
+<div class="measure">
+<p>The graph neural network the original idea calls for is here, along with two
+other kinds. A graph network passes information between connected regions and
+learns what to pay attention to, so in principle it can use the shape of the network
+rather than just the strength of individual links. The design follows the recipes
+tested in <a href="https://doi.org/10.1109/tmi.2022.3218745">Cui and others, 2022</a>: two message-passing layers, batch normalisation,
+dropout, and a readout that combines the average and the strongest response across
+regions.</p>
+<p>Next to it sit the models that might beat it. A linear classifier and a support
+vector machine over the same connection strengths. Gradient boosting over classic
+network measures like how well connected each region is and how clustered its
+neighbourhood is.</p>
+<p>Then three models built to be dangerous. One uses head movement and nothing else.
+One uses drawing quality and nothing else. One uses age and sex. If any of them
+matches the brain models, then the headline is not about brain networks, and burying
+them in an appendix would be the wrong choice.</p>
+<p>Every score is the average of 10 repeats of five-fold cross-validation grouped by
+person. Every headline number also gets a permutation test: the group labels are
+shuffled between people and the whole procedure is run again, hundreds of times, to
+see what scores are reachable with no real difference in the data.
+<a href="https://doi.org/10.1073/pnas.1602413113">Eklund and others, 2016</a> showed permutation tests behaving correctly in fMRI where the
+standard maths did not.</p>
+</div>
+</section>
+
+<section id="answer">
+<h2>Does the graph network beat the simple method?</h2>
+<div class="measure"><p class="pending">Not worked out yet. The pipeline is still running.</p></div>
+<p class="pending">Not worked out yet. The pipeline is still running.</p>
+<p class="pending">Not worked out yet. The pipeline is still running.</p>
+<div class="measure">
+<p>The grey rows use no brain data. They exist to be compared against, and the most
+important number in the whole table is what the drawing quality model scores.</p>
+</div>
+</section>
+
+<section id="wrong">
+<h2>Four ways this could be wrong</h2>
+<div class="measure">
+<p>Getting a model to tell patients from controls is easy. Working out whether it
+did so for the reason you hoped is the hard part. <a href="https://doi.org/10.1093/brain/awv161">Makin and others, 2015</a> is the
+cautionary case here: a well-known story about brain remapping after arm amputation
+that did not survive once someone measured the other explanations properly.</p>
+</div>
+
+<h3>1. Is it the hand, or is it just these people?</h3>
+<div class="measure">
+<p>Patients and controls differ in fixed ways with nothing to do with drawing. Head
+size, blood vessels, how still someone lies, whatever else has happened to them.
+A model comparing one group of brains against another can pick up any of it.</p>
+<p>The way round it is that everyone drew with both hands. Take a person's
+right-hand network away from their own left-hand network and everything fixed about
+them cancels. They become their own control, and whatever survives has to be
+specific to using the weaker hand.</p>
+</div>
+<p class="pending">Not worked out yet. The pipeline is still running.</p>
+
+<h3>2. Is it the brain, or do they simply draw worse?</h3>
+<div class="measure">
+<p>This is the one that matters most. Drawing left-handed is genuinely harder for
+someone whose dominant hand no longer works, and the dataset records exactly how
+much worse they did. A brain model can score well by noticing effort. That is a
+real result, but it is not the one being claimed.</p>
+<p>So: how well does drawing quality do on its own, with no brain data at all? And
+does connectivity still predict anything once drawing quality is regressed out, and
+inside a smaller group where patients and controls are matched on how well they
+drew?</p>
+</div>
+<p class="pending">Not worked out yet. The pipeline is still running.</p>
+
+<h3>3. Does it track how badly someone is affected?</h3>
+<div class="measure">
+<p>A yes-or-no label is blunt. If networks really do reorganise after losing the use
+of a hand, the effect should be graded: stronger in people who struggle more, who
+have lived with it longer, or whose writing hand has actually shifted. A
+relationship that scales is much harder to explain away than a split between two
+groups. <a href="https://doi.org/10.1093/brain/awr093">Freund and others, 2011</a> did this after spinal cord injury and found the amount
+of remapping tracked how disabled people were. The same idea runs here, inside the
+patient group alone, where there is no healthy comparison to lean on.</p>
+</div>
+<p class="pending">Not worked out yet. The pipeline is still running.</p>
+
+<h3>4. Is it about drawing at all?</h3>
+<div class="measure">
+<p>Everyone also lay in the scanner doing nothing. If the same model works on those
+scans, the difference is something people carry around all the time rather than
+something the task brings out. Both answers are interesting. Running them together
+and reporting whichever is stronger is what makes "the brain rewires itself" sound
+more settled than it is.</p>
+</div>
+<p class="pending">The resting scans run in a second pass. This shows up when that finishes.</p>
+
+<h3>Extra: do patients treat easy blocks like hard ones?</h3>
+<div class="measure">
+<p>The task was built with graded difficulty and the data labels every block as
+easier or harder. If patients are working flat out throughout, their easy blocks
+should already look like everyone else's hard ones.</p>
+</div>
+<p class="pending">Not worked out yet. The pipeline is still running.</p>
+</section>
+
+<section id="learned">
+<h2>What the model learned</h2>
+<div class="measure">
+<p>Reading a model's internals is the part most likely to produce a confident
+picture of nothing. A saliency map from a single fit at this sample size is close to
+noise. So importance is recomputed inside every cross-validation split and the
+rankings are combined, and only regions that come out near the top again and again
+are reported.</p>
+<p>Whichever model actually wins provides the importances. If a linear model on
+connection strengths is the best performer, then its coefficients are the
+interpretability result, and they are far steadier than graph network saliency.</p>
+</div>
+<p class="pending">Not worked out yet. The pipeline is still running.</p>
+<div class="measure">
+<p>One warning worth repeating. Importance tells you what the model used to tell the
+groups apart. It does not tell you what the brain is doing. If two regions carry the
+same information the model will often split the credit between them at random, and a
+region can score low simply because a neighbour already covered it.</p>
+<p>You can look at all 241 regions, filter by network and click any of them on the
+<a href="explore.html">tools page</a>.</p>
+</div>
+</section>
+
+<section id="multiverse">
+<h2>The same data, ninety different ways</h2>
+<div class="measure">
+<p>Everything above reports one pipeline. But the pipeline had choices in it, and
+every one of them was defensible: which confounds to remove, which frequency band to
+keep, how to measure connectivity, which model to use, which hand condition to look
+at. Picking a different combination gives a different number.</p>
+<p>Reporting only the combination that worked is how a field ends up with findings
+that do not replicate. So rather than pick, this project runs the whole grid and
+keeps every result.</p>
+</div>
+<p class="pending">The pipeline grid runs after the main analysis.</p>
+<div class="measure">
+<p>This is the single most useful thing here for anyone reading about brain imaging
+results elsewhere. When you see one number reported from a small study, the honest
+question is not whether that number is real. It is how many other numbers the same
+data could have produced.</p>
+</div>
+</section>
+
+<section id="limits">
+<h2>What is wrong with this</h2>
+<div class="measure">
+<p>Being specific about the weaknesses, because a list of caveats written in general
+terms is worth nothing:</p>
+</div>
+<ul class="flaws">
+<li><strong>One scan per person.</strong> Nothing here watches a brain change.
+Calling any of this rewiring means inferring a process from a single snapshot of
+differences between groups. A proper test would scan the same people before and
+after the injury, which for obvious reasons nobody can arrange.</li>
+<li><strong>66 people is a small study.</strong> <a href="https://doi.org/10.1038/s41586-022-04492-9">Marek and others, 2022</a> looked at
+roughly 50,000 scans and found brain-to-behaviour effects are much smaller than
+assumed, and that studies this size produce inflated estimates that later fail to
+replicate. <a href="https://doi.org/10.1038/s42003-018-0073-z">Turner and others, 2018</a> found the same for task studies. Nothing here should
+be treated as settled, and the tools page has a calculator that shows why.</li>
+<li><strong>No fieldmap correction.</strong> Echo-planar images are stretched and
+squashed near air pockets in the skull. The proper fix uses a fieldmap, which was
+skipped here to save disk and time. Non-linear alignment to each person's anatomy
+absorbs some of it, but regions near the front and bottom of the brain are worse
+off than the numbers suggest.</li>
+<li><strong>The patients are older on average</strong> and the sexes are not evenly
+split between groups. Age and sex are checked as a control model, but a control
+model only rules out the simplest version of that problem.</li>
+<li><strong>Task-correlated movement.</strong> People move when they draw, and
+patients may move differently. The original team excluded three patients for exactly
+this. Movement regressors remove some of it and also remove some real signal, and
+there is no clean way to separate the two.</li>
+<li><strong>One scanner, one site, one protocol.</strong> Nothing here has been
+tested on data collected anywhere else.</li>
+<li><strong>The region map is an assumption.</strong> Dividing the cortex into 200
+pieces is a choice, and a region that does not match the real functional boundary
+mixes signals that should be kept apart.</li>
+</ul>
+</section>
+
+<section id="run">
+<h2>Run it yourself</h2>
+<div class="measure">
+<p>Public data, open-source packages, no licence keys, no GPU. This ran on an Apple
+M4 laptop with 10 cores and 24 GB of memory. Aligning head movement is the slow step
+at about two minutes a run, and it already uses every core, so running several
+people at once does not help. Budget roughly twenty minutes a person.</p>
+</div>
+<pre><code>git clone https://github.com/aaryavvatts-lab/neuroswitch
+cd neuroswitch &amp;&amp; uv sync
+uv run python -m neuroswitch.atlas 200
+uv run python -m neuroswitch.acquire --top-level
+./drive.sh 1 3 subjects.txt drawLH,drawRH
+uv run python -m neuroswitch.run_analysis --stages cohort,main,controls
+uv run python -m neuroswitch.multiverse
+uv run python -m neuroswitch.site_build
+uv run pytest</code></pre>
+<div class="measure">
+<p>Every page here is generated from the files in <code>results/</code>, so no
+number on the site is typed in by hand. The tests cover slice timing against a known
+shift, head movement against a hand-worked example, region averaging on a made-up
+brain, and a full dry run of the model chain on data where the answer is known in
+advance.</p>
+</div>
+</section>
+
+<section id="refs">
+<h2>References</h2>
+<div class="measure">
+<p>Every paper below was looked up in a live literature index and has a working DOI.
+All credit for collecting the data belongs to the Washington University team. This
+is an independent student reanalysis and they have not reviewed it.</p>
+</div>
+<ul class="refs">
+<li><a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3"><strong>Precision drawing during task fMRI in healthy adults and individuals with peripheral nerve injury</strong></a><div class="meta">Kapil N, Kim T, McAvoy MP, Philip BA, 2026. OpenNeuro (dataset). doi:10.18112/openneuro.ds008162.v1.0.3</div><div class="why">The scans used here. Released under CC0.</div></li><li><a href="https://doi.org/10.1101/2025.11.18.689091"><strong>Study accompanying the drawing fMRI dataset</strong></a><div class="meta">Philip BA and colleagues, 2025. bioRxiv preprint. doi:10.1101/2025.11.18.689091</div><div class="why">Listed by the dataset authors as the related publication.</div></li><li><a href="https://doi.org/10.1093/brain/awv161"><strong>Reassessing cortical reorganization in the primary sensorimotor cortex following arm amputation</strong></a><div class="meta">Makin TR, Scholz J, Slater D, Johansen-Berg H, Tracey I, 2015. Brain 138(8):2140. doi:10.1093/brain/awv161</div><div class="why">Found that the link between cortical remapping and phantom pain did not hold up once other factors were measured. A direct warning that remapping results need hard controls.</div></li><li><a href="https://doi.org/10.1038/s41586-022-04492-9"><strong>Reproducible brain-wide association studies require thousands of individuals</strong></a><div class="meta">Marek S, Tervo-Clemmens B, Calabro FJ, and 42 others, 2022. Nature. doi:10.1038/s41586-022-04492-9</div><div class="why">Brain to behaviour effects are smaller than people assumed, and small samples give inflated results that do not replicate. The main reason this project reports permutation tests and does not lead with accuracy.</div></li><li><a href="https://doi.org/10.1038/s42003-018-0073-z"><strong>Small sample sizes reduce the replicability of task-based fMRI studies</strong></a><div class="meta">Turner BO, Paul EJ, Miller MB, Barbey AK, 2018. Communications Biology. doi:10.1038/s42003-018-0073-z</div><div class="why">Same problem, measured for task fMRI rather than resting state.</div></li><li><a href="https://doi.org/10.1016/j.neuroimage.2017.12.073"><strong>An evaluation of the efficacy, reliability, and sensitivity of motion correction strategies for resting-state functional MRI</strong></a><div class="meta">Parkes L, Fulcher B, Yücel M, Fornito A, 2018. NeuroImage. doi:10.1016/j.neuroimage.2017.12.073</div><div class="why">Compared 19 denoising pipelines. Showed that group differences in connectivity depend heavily on how motion is handled, which is why the motion-only model is reported here.</div></li><li><a href="https://doi.org/10.1073/pnas.1602413113"><strong>Cluster failure: why fMRI inferences for spatial extent have inflated false-positive rates</strong></a><div class="meta">Eklund A, Nichols TE, Knutsson H, 2016. PNAS. doi:10.1073/pnas.1602413113</div><div class="why">Showed permutation tests behave correctly where parametric ones did not.</div></li><li><a href="https://doi.org/10.1109/tmi.2022.3218745"><strong>BrainGB: a benchmark for brain network analysis with graph neural networks</strong></a><div class="meta">Cui H, Dai W, Zhu Y, and 7 others, 2022. IEEE Transactions on Medical Imaging. doi:10.1109/tmi.2022.3218745</div><div class="why">Benchmark for graph networks on brain data, and the source of the model design choices used here.</div></li><li><a href="https://doi.org/10.1093/cercor/bhx179"><strong>Local-global parcellation of the human cerebral cortex from intrinsic functional connectivity MRI</strong></a><div class="meta">Schaefer A, Kong R, Gordon EM, and 5 others, 2018. Cerebral Cortex 28(9):3095. doi:10.1093/cercor/bhx179</div><div class="why">The 200 cortical regions used as graph nodes.</div></li><li><a href="https://doi.org/10.1006/nimg.2001.0978"><strong>Automated anatomical labeling of activations in SPM using a macroscopic anatomical parcellation of the MNI MRI single-subject brain</strong></a><div class="meta">Tzourio-Mazoyer N, Landeau B, Papathanassiou D, and 5 others, 2002. NeuroImage. doi:10.1006/nimg.2001.0978</div><div class="why">Source of the 26 cerebellar regions added to the graph.</div></li><li><a href="https://doi.org/10.1177/1073858403262111"><strong>Reorganization of human cerebral cortex: the range of changes following use and injury</strong></a><div class="meta">Elbert T, Rockstroh B, 2004. The Neuroscientist. doi:10.1177/1073858403262111</div><div class="why">Review of how use and injury change cortical maps.</div></li><li><a href="https://doi.org/10.1016/j.neuroscience.2021.11.048"><strong>Greater cortical activation and motor recovery following mirror therapy immediately after peripheral nerve repair of the forearm</strong></a><div class="meta">Chen YH, Siow TY, Wang JY, and 2 others, 2021. Neuroscience. doi:10.1016/j.neuroscience.2021.11.048</div><div class="why">One of the few fMRI studies of peripheral nerve injury in the hand and forearm.</div></li><li><a href="https://doi.org/10.1093/brain/awr093"><strong>Disability, atrophy and cortical reorganization following spinal cord injury</strong></a><div class="meta">Freund P, Weiskopf N, Ward NS, and 6 others, 2011. Brain 134(6):1610. doi:10.1093/brain/awr093</div><div class="why">Linked the amount of remapping to how disabled someone was. The model for the severity analysis used here.</div></li>
+</ul>
 </section>
 
 </main>
@@ -90,9 +444,9 @@ differ.</dd>
 Kapil, Kim, McAvoy and Philip at Washington University in St. Louis. This is a
 student reanalysis. It is not connected to that group and they have not reviewed it.
 Page built 2026-08-24.</p>
-<p>This site is for education. It is not medical advice, and it does not diagnose
-anything. If you have a hand or nerve problem, talk to a doctor.</p>
-<p class="legal"><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="cookies.html">Cookies</a> · <a href="accessibility.html">Accessibility</a></p>
+<p>This is a student project. It is not medical advice and it is not a medical
+device. If you have a hand or nerve problem, talk to a doctor.</p>
+<p class="legal"><a href="index.html">The study</a> · <a href="explore.html">Try it</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="cookies.html">Cookies</a> · <a href="accessibility.html">Accessibility</a></p>
 </div></footer>
 </body>
 </html>

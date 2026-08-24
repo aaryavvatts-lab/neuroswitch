@@ -109,14 +109,17 @@ def test_site_builds_with_no_results_present(tmp_path, monkeypatch):
     monkeypatch.setattr(site_build, "RESULTS", tmp_path / "empty")
     monkeypatch.setattr(site_build, "SITE", tmp_path / "site")
     import neuroswitch.pages as pages
+    import neuroswitch.legal as legal
     monkeypatch.setattr(pages, "load", lambda name: None)
-    for fn in (pages.build_index, pages.build_data, pages.build_methods,
-               pages.build_results, pages.build_brain, pages.build_controls,
-               pages.build_reproduce, pages.build_refs):
+    monkeypatch.setattr(pages, "SITE", tmp_path / "site")
+    for fn in (pages.build_index, pages.build_explore, legal.build_privacy,
+               legal.build_terms, legal.build_cookies, legal.build_accessibility):
         fn()
     made = sorted(p.name for p in (tmp_path / "site").glob("*.html"))
-    assert len(made) == 8, made
+    assert len(made) == 6, made
     for p in (tmp_path / "site").glob("*.html"):
         t = p.read_text()
         assert t.startswith("<!doctype html>") and t.rstrip().endswith("</html>")
-        assert "{" not in t.split("<body>")[1][:200]     # no unrendered f-string braces
+        body = t.split("<body>")[1]
+        # no unrendered f-string braces should survive into the page
+        assert "{progress_banner" not in body and "{figure(" not in body

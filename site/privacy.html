@@ -4,8 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Privacy · neuroswitch</title>
-<meta name="description" content="This site collects nothing. No analytics, no cookies, no accounts.">
+<meta name="description" content="This site collects nothing. No analytics, no cookies, no accounts, and no third-party requests, with tests that keep it that way.">
 <meta name="robots" content="index, follow">
+<meta property="og:title" content="Privacy">
+<meta property="og:description" content="This site collects nothing. No analytics, no cookies, no accounts, and no third-party requests, with tests that keep it that way.">
+<meta property="og:type" content="article">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
@@ -13,84 +16,163 @@
 <a class="skip" href="#main">Skip to main content</a>
 <header class="site"><div class="wrap">
 <a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
-<nav class="site" aria-label="Main"><a href="index.html">Overview</a><a href="data.html">The data</a><a href="methods.html">How it works</a><a href="results.html">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
+<nav class="site" aria-label="Main"><a href="index.html">The study</a><a href="explore.html">Try it</a></nav>
 </div></header>
+
 <main class="wrap" id="main">
 
 <h1>Privacy</h1>
-<p class="lede">Short version. This site does not collect anything about you.</p>
+<p class="lede">The short version: this site does not collect anything about you.
+There is no analytics, no tracking, no account, and no database. The long version
+explains what that means in practice and what the host can still see.</p>
 
 <section>
-<h2>What we collect</h2>
+<h2>Who runs this</h2>
 <div class="measure">
-<p>Nothing. There is no sign-up, no login, no contact form, and no comment box.
-The site is a set of plain HTML files. There is no database behind it and no
-account for you to have.</p>
-<p>We do not run analytics. There is no Google Analytics, no Meta pixel, no
-heatmap tool, and no session recorder. We do not know who visits or what pages
-they read.</p>
-<p>We do not use advertising, and we do not sell or share data with anyone,
-because we do not have any data to sell or share.</p>
+<p>This is a student project run by one person. It is not a company, it has no
+employees, and it makes no money. There is no marketing list, no customer record
+and no third party being paid for anything.</p>
+<p>The site is a set of static HTML files. It has no server-side code of its own, no
+login, no comment box, no contact form, no search that talks to a server, and no
+shopping of any kind.</p>
+</div>
+</section>
+
+<section>
+<h2>What this site collects</h2>
+<div class="measure">
+<p>Nothing. To be specific, because "nothing" is easy to write and often untrue:</p>
+</div>
+<ul class="flaws">
+<li><strong>No analytics.</strong> There is no Google Analytics, no Plausible, no
+Fathom, no Matomo, no Vercel Analytics, no Meta pixel, no TikTok pixel, no LinkedIn
+tag and no advertising script of any kind.</li>
+<li><strong>No cookies.</strong> The site sets none. See the
+<a href="cookies.html">cookies page</a> for how to check this yourself in about
+twenty seconds.</li>
+<li><strong>No local storage.</strong> Nothing is written to localStorage,
+sessionStorage or IndexedDB. Close the tab and no trace remains.</li>
+<li><strong>No fingerprinting.</strong> No canvas fingerprinting, no font
+enumeration, no device probing.</li>
+<li><strong>No third-party requests.</strong> Every file a page loads comes from
+this same site. There are no web fonts from Google, no scripts from a CDN, no
+embedded videos and no iframes. That matters because a request to another company's
+server tells that company your IP address and which page you were reading, even if
+this site never sees it.</li>
+<li><strong>No accounts.</strong> There is nothing to sign up for, so there is no
+email address, name or password to lose.</li>
+</ul>
+<div class="measure">
+<p>There are automated tests in the repository that check the built pages for
+analytics scripts, third-party resources, cookie calls and storage calls. If someone
+later adds a web font or a tracking tag, those tests fail and the claim on this page
+stops being quietly false. That is the only way a promise like this stays true over
+time.</p>
 </div>
 </section>
 
 <section>
 <h2>What the host can see</h2>
 <div class="measure">
-<p>The site is hosted on Vercel. Like any web host, their servers keep short
-request logs so the service can run and stay secure. Those logs can include your
-IP address, the page you asked for, the time, and your browser's user agent
-string. We do not open those logs, and we do not link them to anything.</p>
-<p>If you want to know how the host handles that, read Vercel's own privacy
-policy at <a href="https://vercel.com/legal/privacy-policy">vercel.com/legal/privacy-policy</a>.</p>
+<p>The site is hosted on Vercel. Like any web host, their servers keep short request
+logs so the service can run, stay online and resist abuse. Those logs can include
+your IP address, the page you requested, the time of the request, the response code
+and your browser's user agent string.</p>
+<p>This is ordinary infrastructure logging and it happens for every website you have
+ever visited. I do not open those logs, I do not export them, and I have not
+connected them to anything. I could not identify a visitor from them and have no
+interest in doing so.</p>
+<p>Vercel acts as the host here. Their own policy governs what they do with that
+data, and it is worth reading if you care:
+<a href="https://vercel.com/legal/privacy-policy">vercel.com/legal/privacy-policy</a>.
+If you would rather they saw nothing at all, a VPN or Tor will hide your address
+from them, and the site works fine either way because it needs no scripts to read.</p>
 </div>
 </section>
 
 <section>
-<h2>Links out</h2>
+<h2>Links to other sites</h2>
 <div class="measure">
-<p>Pages link to papers and to the dataset. Those sites are run by other people,
-usually publishers or universities, and they have their own rules. Once you click
-away, this policy stops applying.</p>
+<p>The study page links to research papers, mostly through DOI links that resolve to
+publishers such as Nature, Oxford University Press, Elsevier and the Society for
+Neuroscience. It also links to OpenNeuro, to GitHub and to Vercel.</p>
+<p>Those are other people's websites with their own rules and, in most cases, their
+own tracking. Once you click away from here, this policy stops applying and theirs
+begins. Nothing on this site is loaded from any of them, so simply reading a page
+here does not tell any of them anything.</p>
 </div>
 </section>
 
 <section>
 <h2>Whose brain scans are these?</h2>
 <div class="measure">
-<p>None of the brain data on this site belongs to a person you could identify.
-The scans come from <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro dataset ds008162</a>. Everyone in
-that study agreed to have their de-identified data shared. Faces were stripped
-from the structural scans by the original team using pydeface before release.</p>
-<p>This site never shows an individual brain image. Everything shown is a group
-average or a summary number. Subject codes like sub-1001 appear in the code and in
-the public dataset, but they are the codes the original team assigned and they do
-not point back to a real name.</p>
+<p>This is the part that deserves the most care, because the underlying data came
+from real people who agreed to something specific.</p>
+<p>The scans come from <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro dataset ds008162</a>, collected at
+Washington University in St. Louis. Everyone in that study consented to having their
+de-identified data shared publicly, and it was released under a CC0 licence by the
+team who collected it. That consent is theirs, given to that team, and this project
+relies on it rather than asking for anything new.</p>
+<p>Before release, the original team removed facial features from the structural
+scans using a tool called pydeface. That matters because a high-resolution head scan
+can otherwise be rendered into a recognisable face.</p>
+<p>This site never shows an individual person's brain image. Everything you see is
+either a group average, a summary number, or a map of standard anatomical regions
+that is the same for everyone. Codes such as <code>sub-1001</code> appear in the code
+and in the public dataset, but they are labels the original team assigned during
+recruitment and they do not lead back to a name.</p>
+<p>The pipeline also deletes its copies of the raw scans as it goes, keeping only
+extracted region signals. That was originally a disk-space decision, but it also
+means this project holds far less identifiable material than it otherwise would.</p>
 </div>
 </section>
 
 <section>
 <h2>Children</h2>
 <div class="measure">
-<p>The site is not aimed at children and collects nothing from anyone, including
-children.</p>
+<p>This site is not directed at children, and since it collects nothing from anyone,
+it collects nothing from children either. It does not knowingly hold personal
+information about anyone of any age. Everyone in the underlying dataset was an
+adult.</p>
 </div>
 </section>
 
 <section>
-<h2>Your rights</h2>
+<h2>Your rights under GDPR, UK GDPR and CCPA</h2>
 <div class="measure">
-<p>Rules like the GDPR and the CCPA give you the right to see, correct or delete
-personal data a site holds about you. We hold none, so there is nothing to show
-you and nothing to delete. If you think that is wrong, get in touch through the
-GitHub repository linked from the References page and we will look into it.</p>
+<p>If you are in the European Union, the United Kingdom, California or one of the
+other places with a modern privacy law, you have rights over personal data a site
+holds about you. Those typically include the right to know what is held, to get a
+copy, to have mistakes corrected, to have it deleted, to object to processing, and
+not to be sold to anyone.</p>
+<p>I hold no personal data about visitors, so there is nothing to disclose, nothing
+to correct, nothing to delete and nothing to opt out of. Your data has never been
+sold or shared because it has never been collected.</p>
+<p>If you think that is wrong, or you want to raise something, open an issue on the
+<a href="https://github.com/aaryavvatts-lab/neuroswitch">project repository</a>. For anything about the host's own logs,
+Vercel is the party to ask.</p>
+<p>There is no legitimate-interest balancing test to describe and no legal basis to
+declare, because there is no processing of personal data taking place on this end.</p>
 </div>
 </section>
 
 <section>
-<h2>Changes</h2>
+<h2>Security</h2>
 <div class="measure">
-<p>If this ever changes, the date below changes with it.</p>
+<p>Pages are served over HTTPS. There is no login to compromise and no stored
+personal data to breach. The worst realistic outcome of someone gaining access would
+be defacement of the published pages, which would be visible immediately and fixed
+by redeploying from the public repository.</p>
+</div>
+</section>
+
+<section>
+<h2>Changes to this policy</h2>
+<div class="measure">
+<p>If the site ever starts collecting anything, this page changes first and the date
+below changes with it. Given that it is a static research write-up, that is unlikely.
+The full history of every version of this page is public in the repository, so you
+can check what it said on any past date rather than taking my word for it.</p>
 <p class="small">Last updated 2026-08-24.</p>
 </div>
 </section>
@@ -101,9 +183,9 @@ GitHub repository linked from the References page and we will look into it.</p>
 Kapil, Kim, McAvoy and Philip at Washington University in St. Louis. This is a
 student reanalysis. It is not connected to that group and they have not reviewed it.
 Page built 2026-08-24.</p>
-<p>This site is for education. It is not medical advice, and it does not diagnose
-anything. If you have a hand or nerve problem, talk to a doctor.</p>
-<p class="legal"><a href="privacy.html" aria-current="page">Privacy</a> · <a href="terms.html">Terms</a> · <a href="cookies.html">Cookies</a> · <a href="accessibility.html">Accessibility</a></p>
+<p>This is a student project. It is not medical advice and it is not a medical
+device. If you have a hand or nerve problem, talk to a doctor.</p>
+<p class="legal"><a href="index.html">The study</a> · <a href="explore.html">Try it</a> · <a href="privacy.html" aria-current="page">Privacy</a> · <a href="terms.html">Terms</a> · <a href="cookies.html">Cookies</a> · <a href="accessibility.html">Accessibility</a></p>
 </div></footer>
 </body>
 </html>

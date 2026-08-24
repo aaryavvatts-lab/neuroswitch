@@ -60,7 +60,10 @@ def visible_text(path: Path) -> str:
 
 
 def test_site_was_built():
-    assert len(html_files()) >= 12, "run neuroswitch.site_build first"
+    names = {p.name for p in html_files()}
+    expected = {"index.html", "explore.html", "privacy.html", "terms.html",
+                "cookies.html", "accessibility.html"}
+    assert expected <= names, f"run neuroswitch.site_build first; have {names}"
 
 
 @pytest.mark.parametrize("path", html_files(), ids=lambda p: p.name)

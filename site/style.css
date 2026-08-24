@@ -300,3 +300,32 @@ dl.toc dt a { text-decoration: none; }
 dl.toc dt a:hover { text-decoration: underline; text-underline-offset: 3px; }
 dl.toc dd { margin: .3rem 0 0; color: var(--ink-2); font-size: .96rem;
             max-width: var(--measure); }
+
+/* ------------------------------------------------------- section jump bar */
+.subnav { border-bottom: 1px solid var(--rule); background: var(--paper-2);
+          overflow-x: auto; }
+.subnav .wrap { max-width: 64rem; padding-top: .5rem; padding-bottom: .5rem; }
+.subnav nav { display: flex; gap: 1rem; white-space: nowrap; }
+.subnav a { font-family: var(--sans); font-size: .76rem; color: var(--ink-2);
+            text-decoration: none; }
+.subnav a:hover { color: var(--ink); text-decoration: underline;
+                  text-underline-offset: 3px; }
+
+/* section anchors should not hide under the sticky header */
+section[id] { scroll-margin-top: 5.5rem; }
+
+/* ---------------------------------------------------------- flaws list */
+ul.flaws { list-style: none; padding: 0; margin: 1.5rem 0; max-width: var(--bleed); }
+ul.flaws li { border-top: 1px solid var(--rule); padding: .95rem 0 .95rem 1.4rem;
+              position: relative; max-width: 44rem; }
+ul.flaws li:last-child { border-bottom: 1px solid var(--rule); }
+ul.flaws li::before { content: ""; position: absolute; left: 0; top: 1.5rem;
+                      width: .5rem; height: 1px; background: var(--stop); }
+
+/* --------------------------------------------------------- table caption */
+table caption { caption-side: top; text-align: left; font-family: var(--sans);
+                font-size: .74rem; text-transform: uppercase; letter-spacing: .06em;
+                color: var(--ink-2); padding-bottom: .5rem; }
+
+/* range inputs, kept plain */
+input[type=range] { accent-color: var(--right); }

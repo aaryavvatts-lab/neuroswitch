@@ -1,7 +1,7 @@
 {
  "n_sensorimotor_left": 16,
  "n_sensorimotor_right": 18,
- "n_subjects": 6,
+ "n_subjects": 8,
  "per_subject": [
   {
    "sub": "sub-1001",
@@ -44,82 +44,96 @@
    "right_sensorimotor": 0.1433161774258843,
    "interaction": 0.17078813853625427,
    "correct": true
+  },
+  {
+   "sub": "sub-2004",
+   "left_sensorimotor": -0.03884366718572018,
+   "right_sensorimotor": -0.021728764144933275,
+   "interaction": 0.017114903040786906,
+   "correct": true
+  },
+  {
+   "sub": "sub-2007",
+   "left_sensorimotor": -0.1213649555951169,
+   "right_sensorimotor": 0.19852033178003056,
+   "interaction": 0.31988528737514743,
+   "correct": true
   }
  ],
  "conditions": [
   {
    "label": "Left-hand drawing",
    "expected_side": "right",
-   "lh_mean": -0.1169124244059085,
-   "rh_mean": 0.11006846331641358,
+   "lh_mean": -0.10771039615203601,
+   "rh_mean": 0.10465029344169735,
    "verdict": "yes"
   }
  ],
- "interaction_mean": 0.22698088772232206,
- "interaction_sd": 0.09581361133507284,
- "subjects_correct": 6,
+ "interaction_mean": 0.21236068959373333,
+ "interaction_sd": 0.115133860222058,
+ "subjects_correct": 8,
  "pct_subjects_correct": 100.0,
- "wilcoxon_p": 0.015625,
+ "wilcoxon_p": 0.00390625,
  "top_left_hand": [
   {
    "name": "17Networks_RH_SomMotA_4",
    "network": "SomMotA",
    "hemi": "RH",
-   "value": 0.42943347839056406
+   "value": 0.4126033853940954
   },
   {
    "name": "17Networks_RH_SomMotA_6",
    "network": "SomMotA",
    "hemi": "RH",
-   "value": 0.3003862046039429
+   "value": 0.321199638246129
   },
   {
    "name": "17Networks_RH_SomMotA_1",
    "network": "SomMotA",
    "hemi": "RH",
-   "value": 0.2387896430838766
-  },
-  {
-   "name": "17Networks_RH_SomMotA_7",
-   "network": "SomMotA",
-   "hemi": "RH",
-   "value": 0.19313726503119147
+   "value": 0.20094716648557173
   },
   {
    "name": "17Networks_RH_SomMotA_11",
    "network": "SomMotA",
    "hemi": "RH",
-   "value": 0.1666474022399721
+   "value": 0.17618276654627896
+  },
+  {
+   "name": "17Networks_RH_SomMotA_7",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "value": 0.17374861000872976
   },
   {
    "name": "17Networks_RH_SomMotA_2",
    "network": "SomMotA",
    "hemi": "RH",
-   "value": 0.16280935301456942
+   "value": 0.16239703548669868
   },
   {
    "name": "Cerebellum_4_5_L",
    "network": "Cerebellum",
    "hemi": "LH",
-   "value": 0.15629090091466566
-  },
-  {
-   "name": "17Networks_RH_SomMotB_S2_2",
-   "network": "SomMotB",
-   "hemi": "RH",
-   "value": 0.13006577589379165
-  },
-  {
-   "name": "17Networks_LH_DefaultB_PFCd_1",
-   "network": "DefaultB",
-   "hemi": "LH",
-   "value": 0.11903049132456194
+   "value": 0.1397804941798906
   },
   {
    "name": "17Networks_RH_SomMotA_3",
    "network": "SomMotA",
    "hemi": "RH",
-   "value": 0.10006290769789143
+   "value": 0.13655923430712846
+  },
+  {
+   "name": "17Networks_RH_SomMotB_S2_2",
+   "network": "SomMotB",
+   "hemi": "RH",
+   "value": 0.11524943165763109
+  },
+  {
+   "name": "17Networks_LH_DefaultB_PFCd_1",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "value": 0.10487154724862607
   }
  ],
  "top_right_hand": [
@@ -127,64 +141,64 @@
    "name": "17Networks_LH_SomMotA_3",
    "network": "SomMotA",
    "hemi": "LH",
-   "value": -0.4610524586264926
+   "value": -0.4402777452580899
   },
   {
    "name": "17Networks_LH_SomMotA_4",
    "network": "SomMotA",
    "hemi": "LH",
-   "value": -0.28149228681055094
-  },
-  {
-   "name": "17Networks_LH_SomMotA_2",
-   "network": "SomMotA",
-   "hemi": "LH",
-   "value": -0.22381672337814698
+   "value": -0.3404338527676966
   },
   {
    "name": "Cerebellum_4_5_R",
    "network": "Cerebellum",
    "hemi": "RH",
-   "value": -0.2047602565843543
+   "value": -0.21069967403607792
   },
   {
-   "name": "17Networks_LH_SomMotB_Cent_2",
-   "network": "SomMotB",
+   "name": "17Networks_LH_SomMotA_2",
+   "network": "SomMotA",
    "hemi": "LH",
-   "value": -0.18270301693128269
+   "value": -0.19233028684077055
   },
   {
    "name": "Cerebellum_8_R",
    "network": "Cerebellum",
    "hemi": "RH",
-   "value": -0.17612802105332911
+   "value": -0.1509136894730601
   },
   {
-   "name": "Cerebellum_6_R",
-   "network": "Cerebellum",
-   "hemi": "RH",
-   "value": -0.14635225157317897
-  },
-  {
-   "name": "17Networks_RH_DorsAttnA_SPL_4",
-   "network": "DorsAttnA",
-   "hemi": "RH",
-   "value": -0.14141011556265734
-  },
-  {
-   "name": "17Networks_LH_SomMotA_6",
-   "network": "SomMotA",
+   "name": "17Networks_LH_SomMotB_Cent_2",
+   "network": "SomMotB",
    "hemi": "LH",
-   "value": -0.13506874837567923
+   "value": -0.1398210193126252
   },
   {
    "name": "17Networks_LH_VisCent_ExStr_3",
    "network": "VisCent",
    "hemi": "LH",
-   "value": -0.13406683804185235
+   "value": -0.11701237552528383
+  },
+  {
+   "name": "17Networks_LH_VisCent_Striate_1",
+   "network": "VisCent",
+   "hemi": "LH",
+   "value": -0.1127419937951116
+  },
+  {
+   "name": "17Networks_LH_SomMotB_S2_1",
+   "network": "SomMotB",
+   "hemi": "LH",
+   "value": -0.10806543639245149
+  },
+  {
+   "name": "Cerebellum_6_R",
+   "network": "Cerebellum",
+   "hemi": "RH",
+   "value": -0.10673695233812568
   }
  ],
  "top10_left_hand_in_right_hemisphere": 8,
- "top10_right_hand_in_left_hemisphere": 6,
+ "top10_right_hand_in_left_hemisphere": 7,
  "all_pass": true
 }

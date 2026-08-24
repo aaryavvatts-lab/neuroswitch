@@ -19,15 +19,26 @@ SITE = ROOT / "site"
 DS_DOI = "https://doi.org/10.18112/openneuro.ds008162.v1.0.3"
 PREPRINT = "https://doi.org/10.1101/2025.11.18.689091"
 
+# One long article plus a tools page, rather than eight thin pages.
 PAGES = [
-    ("index.html", "Overview"),
-    ("data.html", "The data"),
-    ("methods.html", "How it works"),
-    ("results.html", "Results"),
-    ("brain.html", "Explore the brain"),
-    ("controls.html", "Could this be wrong?"),
-    ("reproduce.html", "Run it yourself"),
-    ("refs.html", "References"),
+    ("index.html", "The study"),
+    ("explore.html", "Try it"),
+]
+
+# In-page anchors for the article, shown as a secondary row.
+ANCHORS = [
+    ("#built", "What I built"),
+    ("#data", "The data"),
+    ("#signal", "Is the signal real"),
+    ("#pipeline", "Pipeline"),
+    ("#models", "Models"),
+    ("#answer", "The answer"),
+    ("#wrong", "Could it be wrong"),
+    ("#learned", "What it learned"),
+    ("#multiverse", "Ninety pipelines"),
+    ("#limits", "What is wrong with this"),
+    ("#run", "Run it"),
+    ("#refs", "References"),
 ]
 
 # Linked from the footer rather than the main nav.
@@ -105,13 +116,19 @@ def bars(rows, lo=0.4, hi=1.0) -> str:
     return "".join(out)
 
 
-def page(fname: str, title: str, body: str, lede: str = "") -> str:
+def page(fname: str, title: str, body: str, lede: str = "",
+         anchors: bool = False) -> str:
     nav = "".join(
         f'<a href="{h}"{" aria-current=\"page\"" if h == fname else ""}>{e(t)}</a>'
         for h, t in PAGES)
     legal = " · ".join(
         f'<a href="{h}"{" aria-current=\"page\"" if h == fname else ""}>{e(t)}</a>'
         for h, t in LEGAL_PAGES)
+    sub = ""
+    if anchors:
+        sub = ('<div class="subnav"><div class="wrap"><nav aria-label="Sections">'
+               + "".join(f'<a href="{h}">{e(t)}</a>' for h, t in ANCHORS)
+               + "</nav></div></div>")
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -120,6 +137,9 @@ def page(fname: str, title: str, body: str, lede: str = "") -> str:
 <title>{e(title)} · neuroswitch</title>
 <meta name="description" content="{e(lede[:180] if lede else title)}">
 <meta name="robots" content="index, follow">
+<meta property="og:title" content="{e(title)}">
+<meta property="og:description" content="{e(lede[:180] if lede else title)}">
+<meta property="og:type" content="article">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
@@ -129,6 +149,7 @@ def page(fname: str, title: str, body: str, lede: str = "") -> str:
 <a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
 <nav class="site" aria-label="Main">{nav}</nav>
 </div></header>
+{sub}
 <main class="wrap" id="main">
 {body}
 </main>
@@ -137,18 +158,19 @@ def page(fname: str, title: str, body: str, lede: str = "") -> str:
 Kapil, Kim, McAvoy and Philip at Washington University in St. Louis. This is a
 student reanalysis. It is not connected to that group and they have not reviewed it.
 Page built {date.today().isoformat()}.</p>
-<p>This site is for education. It is not medical advice, and it does not diagnose
-anything. If you have a hand or nerve problem, talk to a doctor.</p>
-<p class="legal">{legal}</p>
+<p>This is a student project. It is not medical advice and it is not a medical
+device. If you have a hand or nerve problem, talk to a doctor.</p>
+<p class="legal"><a href="index.html">The study</a> · <a href="explore.html">Try it</a> · {legal}</p>
 </div></footer>
 </body>
 </html>
 """
 
 
-def write(fname: str, title: str, body: str, lede: str = "") -> None:
+def write(fname: str, title: str, body: str, lede: str = "",
+          anchors: bool = False) -> None:
     SITE.mkdir(parents=True, exist_ok=True)
-    (SITE / fname).write_text(page(fname, title, body, lede))
+    (SITE / fname).write_text(page(fname, title, body, lede, anchors))
 
 
 def build_all() -> None:
@@ -164,12 +186,13 @@ def build_all() -> None:
         build_figures()
     except Exception as exc:
         print(f"  (figures skipped: {exc!r})")
-    for fn in (pages.build_index, pages.build_data, pages.build_methods,
-               pages.build_results, pages.build_brain, pages.build_controls,
-               pages.build_reproduce, pages.build_refs,
+    for fn in (pages.build_index, pages.build_explore,
                legal.build_privacy, legal.build_terms, legal.build_cookies,
                legal.build_accessibility):
         fn()
+    for stale in ("data.html", "methods.html", "results.html", "brain.html",
+                  "controls.html", "reproduce.html", "refs.html"):
+        (SITE / stale).unlink(missing_ok=True)
     n = len(PAGES) + len(LEGAL_PAGES)
     print(f"built {n} pages -> {SITE}")
 

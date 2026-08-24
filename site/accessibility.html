@@ -4,8 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Accessibility · neuroswitch</title>
-<meta name="description" content="Aiming for WCAG 2.1 AA. What works, and where the site still falls short.">
+<meta name="description" content="Targeting WCAG 2.1 AA. What works, how the interactive tools behave, and six specific places the site still falls short.">
 <meta name="robots" content="index, follow">
+<meta property="og:title" content="Accessibility">
+<meta property="og:description" content="Targeting WCAG 2.1 AA. What works, how the interactive tools behave, and six specific places the site still falls short.">
+<meta property="og:type" content="article">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
@@ -13,74 +16,128 @@
 <a class="skip" href="#main">Skip to main content</a>
 <header class="site"><div class="wrap">
 <a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
-<nav class="site" aria-label="Main"><a href="index.html">Overview</a><a href="data.html">The data</a><a href="methods.html">How it works</a><a href="results.html">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
+<nav class="site" aria-label="Main"><a href="index.html">The study</a><a href="explore.html">Try it</a></nav>
 </div></header>
+
 <main class="wrap" id="main">
 
 <h1>Accessibility</h1>
-<p class="lede">The aim is WCAG 2.1 level AA. Here is what has been done and what
-is still weak.</p>
+<p class="lede">The target is WCAG 2.1 level AA. This page says what has been done,
+and is honest about the places where the site still falls short, because an
+accessibility statement that only lists successes is not much use to anyone.</p>
 
 <section>
-<h2>What has been done</h2>
+<h2>Structure and navigation</h2>
 <div class="measure">
-<p>Pages use real headings in order, so a screen reader can jump through the
-structure. Every page starts with a skip link that takes you straight to the main
-content. Tables use proper header cells. The main navigation is marked as
-navigation and the current page is flagged.</p>
-<p>Text and background colours were picked to pass the AA contrast ratio in both
-the light and dark themes. The site follows whatever theme your system is set to
-rather than forcing one.</p>
-<p>Nothing is measured only in pixels, so browser zoom and larger default font
-sizes work. The layout reflows down to a phone screen without a sideways scroll
-bar. Wide tables scroll inside their own box instead of pushing the page around.</p>
-<p>Colour is never the only signal. Control models in the results table are
-labelled in text as well as shown in grey.</p>
+<p>Every page starts with a skip link that jumps straight to the main content, so a
+keyboard or screen reader user does not have to walk through the navigation on every
+page.</p>
+<p>Headings are real headings and run in order without skipping levels, so a screen
+reader can jump through the structure and build an outline. The main article is one
+long page with a section jump bar, which means fewer navigation steps than the eight
+separate pages this site used to have.</p>
+<p>Navigation is marked as navigation, the current page is flagged with
+<code>aria-current</code>, and every page declares its language. Tables use real
+header cells and carry captions describing what they show.</p>
+<p>Everything works with a keyboard alone. Focus is visible at all times, with a
+two-pixel outline rather than a faint colour shift, and focus order follows reading
+order.</p>
 </div>
 </section>
 
 <section>
-<h2>The brain map</h2>
+<h2>Reading and text</h2>
 <div class="measure">
-<p>The interactive map on the Explore page is the hardest part to make accessible.
-Each region can be reached with the Tab key and opened with Enter or Space, and
-each one has a text label a screen reader can read. Network filters are real
-buttons.</p>
-<p>Even so, a scatter plot of 241 dots is a visual thing. For that reason every
-number the map shows is also given as a plain table underneath it, ranked in
-order. If the map does not work for you, the table has the same information.</p>
+<p>Body text is 19 pixels with a line height of about 1.6 and a measure of roughly 34
+rem, which keeps lines at a comfortable length rather than running the full width of a
+monitor.</p>
+<p>Nothing is sized in fixed pixels in a way that breaks zoom. The page reflows down
+to a 320 pixel screen without a horizontal scroll bar. Wide tables scroll inside their
+own container rather than pushing the whole page sideways.</p>
+<p>Colours were chosen to meet the AA contrast ratio in both the light and dark
+themes. The site follows whatever theme your system is set to rather than forcing
+one, and it does not override your browser's font size.</p>
+</div>
+</section>
+
+<section>
+<h2>Colour and meaning</h2>
+<div class="measure">
+<p>Only two colours carry meaning anywhere on the site: one for the right side of the
+brain and patients, one for the left side and controls. Everything else is ink on
+paper.</p>
+<p>Colour is never the only signal. Control models in the results table are labelled
+in text as well as shown in grey. The lateralisation figure labels each bar with the
+side it belongs to. Every chart states its values in a table or in the surrounding
+text.</p>
 </div>
 </section>
 
 <section>
 <h2>Motion</h2>
 <div class="measure">
-<p>There is no animation, no autoplay, no parallax and no carousel. The site also
-respects the reduce motion setting if your system has one turned on.</p>
+<p>There is no animation, no autoplay, no parallax, no carousel and nothing that
+moves on its own. Smooth scrolling for the section links is disabled automatically if
+your system asks for reduced motion.</p>
 </div>
 </section>
 
 <section>
-<h2>Where it falls short</h2>
+<h2>The interactive tools</h2>
 <div class="measure">
-<p>Being honest about the gaps:</p>
-<p>The brain map has no audio description, and a sighted reader will get more from
-it than a screen reader user, even with the table.</p>
-<p>Some region names are compressed atlas labels such as SomMotB S2 2. They are
-hard to read out loud and hard to understand without background knowledge. The
-full name is given in the detail panel, but it is still jargon.</p>
-<p>The site has not been tested with every screen reader. It has been checked for
-keyboard navigation, heading order and contrast, but not on JAWS or Dragon.</p>
+<p>These are the hardest parts to make accessible and they are handled differently
+from one another.</p>
+<p>The replication calculator uses two standard range sliders, which are keyboard
+operable by default with arrow keys. Every number it produces is written out as text
+next to the chart, and the verdict below it is a plain sentence. You can use the whole
+tool without seeing the chart at all.</p>
+<p>The pipeline explorer uses standard dropdown menus, which work with a keyboard and
+are read correctly by screen readers. Its result is text.</p>
+<p>The brain map is a scatter plot of 241 points, which is inherently visual. Each
+point can be reached with Tab and activated with Enter or Space, and each has a text
+label that a screen reader announces. Network filters are real buttons with pressed
+state. Underneath the map, the same information is repeated as a ranked table, so the
+content is available without the picture.</p>
 </div>
 </section>
 
 <section>
-<h2>Tell us</h2>
+<h2>Where this still falls short</h2>
 <div class="measure">
-<p>If something here blocks you, open an issue on the GitHub repository linked
-from the References page and describe what happened. That is the fastest way to
-get it fixed.</p>
-<p class="small">Last updated 2026-08-24.</p>
+<p>Being specific, because vague statements here help nobody:</p>
+</div>
+<ul class="flaws">
+<li><strong>The brain map favours sighted users.</strong> The table underneath carries
+the same numbers, but spatial relationships between regions are not conveyed. There is
+no audio description and no sonification.</li>
+<li><strong>Tabbing through 241 points is tedious.</strong> There is no way to skip
+past the map to the table below without going through every region, which is a real
+problem I have not fixed.</li>
+<li><strong>Region names are compressed atlas labels</strong> such as "R SomMotB S2 2".
+They are hard to read aloud and mean little without background knowledge. The full
+description appears in the detail panel, but it is still jargon.</li>
+<li><strong>Charts are images without long descriptions.</strong> Each has alt text
+and a caption, but a genuinely equivalent description of a distribution would be
+better.</li>
+<li><strong>Not tested with real assistive technology.</strong> The site has been
+checked for keyboard operation, heading order, contrast ratios, reflow and zoom. It
+has not been tested with JAWS, NVDA, VoiceOver or Dragon by someone who uses them
+daily, and that is the test that actually counts.</li>
+<li><strong>The subject matter is dense.</strong> Plain wording helps, but this is a
+technical write-up about brain imaging statistics and no amount of formatting makes
+that easy reading.</li>
+</ul>
+</section>
+
+<section>
+<h2>Tell me what is broken</h2>
+<div class="measure">
+<p>If something here stops you using the site, open an issue on the
+<a href="https://github.com/aaryavvatts-lab/neuroswitch">project repository</a> and describe what happened and what you were
+using. That is the fastest route to a fix, and accessibility problems get priority
+over new features.</p>
+<p class="small">Last updated 2026-08-24. This statement describes the site as built on
+that date and is reviewed whenever the pages change.</p>
 </div>
 </section>
 
@@ -90,9 +147,9 @@ get it fixed.</p>
 Kapil, Kim, McAvoy and Philip at Washington University in St. Louis. This is a
 student reanalysis. It is not connected to that group and they have not reviewed it.
 Page built 2026-08-24.</p>
-<p>This site is for education. It is not medical advice, and it does not diagnose
-anything. If you have a hand or nerve problem, talk to a doctor.</p>
-<p class="legal"><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="cookies.html">Cookies</a> · <a href="accessibility.html" aria-current="page">Accessibility</a></p>
+<p>This is a student project. It is not medical advice and it is not a medical
+device. If you have a hand or nerve problem, talk to a doctor.</p>
+<p class="legal"><a href="index.html">The study</a> · <a href="explore.html">Try it</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="cookies.html">Cookies</a> · <a href="accessibility.html" aria-current="page">Accessibility</a></p>
 </div></footer>
 </body>
 </html>

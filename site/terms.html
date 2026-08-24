@@ -4,8 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Terms of use · neuroswitch</title>
-<meta name="description" content="Student project shared as is. Not medical advice. MIT licensed code.">
+<meta name="description" content="Student project shared as it is. Not medical advice. Code under MIT, data under CC0.">
 <meta name="robots" content="index, follow">
+<meta property="og:title" content="Terms of use">
+<meta property="og:description" content="Student project shared as it is. Not medical advice. Code under MIT, data under CC0.">
+<meta property="og:type" content="article">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
@@ -13,74 +16,111 @@
 <a class="skip" href="#main">Skip to main content</a>
 <header class="site"><div class="wrap">
 <a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
-<nav class="site" aria-label="Main"><a href="index.html">Overview</a><a href="data.html">The data</a><a href="methods.html">How it works</a><a href="results.html">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
+<nav class="site" aria-label="Main"><a href="index.html">The study</a><a href="explore.html">Try it</a></nav>
 </div></header>
+
 <main class="wrap" id="main">
 
 <h1>Terms of use</h1>
-<p class="lede">A student project, shared as is. Read it, learn from it, do not
-treat it as medical advice.</p>
+<p class="lede">A student project, shared as it is. Read it, learn from it, reuse the
+code. Do not treat it as medical advice and do not present it as something it is
+not.</p>
 
 <section>
 <h2>What this is</h2>
 <div class="measure">
-<p>This is a student reanalysis of a public brain imaging dataset. It is a
-learning project. It has not been peer reviewed, it has not been checked by the
-team who collected the data, and no journal has accepted it.</p>
+<p>This site is a student reanalysis of a public brain imaging dataset. It is a
+learning project written by one person.</p>
+<p>It has not been peer reviewed. No journal has accepted it. It has not been checked
+by the team who collected the data, and they have no involvement in it. Any errors
+are mine, not theirs, and the presence of their names in the credits is
+acknowledgement rather than endorsement.</p>
+<p>Numbers on the study page are generated automatically from analysis output and
+change when the analysis is rerun. If you are citing something from here, cite the
+version and check the repository history, because a figure you read last week may
+not be the figure there today.</p>
 </div>
 </section>
 
 <section>
 <h2>Not medical advice</h2>
 <div class="note bad">
-<p>Nothing here diagnoses, treats or predicts any condition in any person. The
-models are trained on 66 people from one scanner. They are not a medical device
-and must not be used to make decisions about anyone's care. If you have hand pain,
-nerve damage, or any other health problem, see a qualified clinician.</p>
+<p>Nothing here diagnoses, treats, predicts or screens for any condition in any
+person. The models were trained on 66 people scanned on a single machine at a single
+site. They are not a medical device, they have not been validated for clinical use,
+and they must not be used to make decisions about anyone's care.</p>
+<p>If you have hand pain, numbness, weakness, nerve damage or any other health
+concern, see a qualified clinician. Nothing on this site is a substitute for that,
+and no part of it should delay you seeking care.</p>
+</div>
+<div class="measure">
+<p>This applies to the interactive tools as much as the write-up. The replication
+calculator is a teaching aid built on standard statistics. It tells you about study
+designs in general. It cannot tell you whether any particular published finding is
+true.</p>
 </div>
 </section>
 
 <section>
 <h2>No warranty</h2>
 <div class="measure">
-<p>The site and the code are provided as is, with no promise that they are
-correct, complete or fit for anything in particular. Numbers may change as more
-data is processed. Bugs are possible, and some have already been found and fixed
-during the work. Use it at your own risk.</p>
-<p>To the extent the law allows, the author is not liable for any loss that comes
-from using this site or the code.</p>
+<p>The site and the code are provided as they are, with no promise that they are
+correct, complete, current or fit for any particular purpose.</p>
+<p>Bugs are likely. Several were found and fixed during the work, including one that
+would have silently produced empty results for every completed subject and one that
+made a statistical test unstable. Others probably remain. The tests in the repository
+catch a useful class of mistakes and cannot catch all of them.</p>
+<p>To the fullest extent the law allows, the author is not liable for any loss,
+damage or cost arising from use of this site, the code, or anything derived from
+either, including decisions made in reliance on them.</p>
 </div>
 </section>
 
 <section>
-<h2>Using the material</h2>
+<h2>The data, and who to credit</h2>
 <div class="measure">
-<p>The underlying scans come from <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a> and are
-released under CC0, which means the original team placed them in the public domain.
-Credit for collecting that data belongs to Kapil, Kim, McAvoy and Philip at
-Washington University in St. Louis.</p>
-<p>The analysis code in the linked repository is released under the MIT licence.
-You can reuse it. If you build on the writing or figures here, a link back is
-appreciated.</p>
-<p>Papers linked from the References page belong to their publishers. Follow the
-links to read them under whatever terms those publishers set.</p>
+<p>The brain scans come from <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a>, released under
+CC0 by Kapil, Kim, McAvoy and Philip at Washington University in St. Louis, funded by
+NINDS grant R01 NS114046. CC0 means they placed it in the public domain, which is a
+generous thing to do and the only reason this project exists.</p>
+<p>If you build on this, credit them for the data. Their own write-up is the
+authoritative account of the study and should be read in preference to mine.</p>
+</div>
+</section>
+
+<section>
+<h2>Using the code and the writing</h2>
+<div class="measure">
+<p>The analysis code in the <a href="https://github.com/aaryavvatts-lab/neuroswitch">repository</a> is released under the MIT
+licence. You can use it, change it, and build on it commercially, as long as the
+copyright notice travels with it. There is no obligation to share your changes.</p>
+<p>The writing and figures on this site are yours to quote and teach from. A link
+back is appreciated but not required. What is not fine is republishing the whole
+thing in a way that implies it came from Washington University, from the original
+research team, or from a peer-reviewed source.</p>
+<p>Papers linked from the references belong to their publishers. Follow the links and
+read them under whatever terms those publishers set.</p>
 </div>
 </section>
 
 <section>
 <h2>Fair use of the site</h2>
 <div class="measure">
-<p>Please do not scrape the site in a way that hammers the host, and do not
-present the content as though it came from the original research team or from
-Washington University.</p>
+<p>Please do not scrape the site in a way that hammers the host. Everything here is
+also in the public repository, which is a better thing to clone if you want the
+whole lot.</p>
+<p>Please do not present generated numbers from this project as established
+findings, and do not use the interactive tools to make claims about specific people.
+</p>
 </div>
 </section>
 
 <section>
 <h2>Governing law</h2>
 <div class="measure">
-<p>These terms are governed by the laws of the United States and the State of
-Minnesota, without regard to conflict of law rules.</p>
+<p>These terms are governed by the laws of the State of Minnesota and the United
+States, without regard to conflict of law rules. If any part of these terms is found
+unenforceable, the rest continues to apply.</p>
 <p class="small">Last updated 2026-08-24.</p>
 </div>
 </section>
@@ -91,9 +131,9 @@ Minnesota, without regard to conflict of law rules.</p>
 Kapil, Kim, McAvoy and Philip at Washington University in St. Louis. This is a
 student reanalysis. It is not connected to that group and they have not reviewed it.
 Page built 2026-08-24.</p>
-<p>This site is for education. It is not medical advice, and it does not diagnose
-anything. If you have a hand or nerve problem, talk to a doctor.</p>
-<p class="legal"><a href="privacy.html">Privacy</a> · <a href="terms.html" aria-current="page">Terms</a> · <a href="cookies.html">Cookies</a> · <a href="accessibility.html">Accessibility</a></p>
+<p>This is a student project. It is not medical advice and it is not a medical
+device. If you have a hand or nerve problem, talk to a doctor.</p>
+<p class="legal"><a href="index.html">The study</a> · <a href="explore.html">Try it</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html" aria-current="page">Terms</a> · <a href="cookies.html">Cookies</a> · <a href="accessibility.html">Accessibility</a></p>
 </div></footer>
 </body>
 </html>
