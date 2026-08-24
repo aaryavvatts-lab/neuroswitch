@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The data · neuroswitch</title>
+<meta name="description" content="OpenNeuro ds008162: 71 adults drawing in a 3T scanner, and the three problems that had to be solved first.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🧠</text></svg>">
+</head>
+<body>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
+<nav class="site" aria-label="Sections"><a href="index.html">Overview</a><a href="data.html" aria-current="page">The data</a><a href="methods.html">How it works</a><a href="results.html">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1>Where the data comes from</h1>
+<p class="lede">A public dataset of 71 adults drawing shapes inside a 3T scanner,
+released under CC0 by the group that collected it.</p>
+
+<section>
+<h2>The study</h2>
+<div class="measure">
+<p>The scans come from <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a>, collected at Washington
+University in St. Louis School of Medicine by Kapil, Kim, McAvoy and Philip and funded
+by NINDS. 71 right-handed adults took part: 25 with chronic unilateral peripheral nerve
+injury to the right hand or arm, and 46 healthy controls.</p>
+<p>Everyone did the same thing. Lying in the scanner with an MRI-compatible drawing
+tablet, they traced inside a moving path — "draw within the lines, and move as quickly
+as you can, but staying within the lines is more important than speed." Three runs with
+the left hand, three with the right, alternating, always starting with the hand they
+naturally write with.</p>
+<p>Each run alternates 15-second drawing blocks with 15-second rest, ten times. The
+scanner sampled the whole brain every 0.66 seconds — fast, thanks to a multiband
+sequence — giving 488 volumes per run at 3&nbsp;mm resolution.</p>
+</div>
+
+<div class="stats">
+<div class="stat"><div class="n">71</div><div class="k">people scanned</div></div>
+<div class="stat"><div class="n">0.66 s</div><div class="k">per whole-brain volume</div></div>
+<div class="stat"><div class="n">488</div><div class="k">volumes per run</div></div>
+<div class="stat"><div class="n">10</div><div class="k">drawing blocks per run</div></div>
+</div>
+</section>
+
+<section>
+<h2>Three things about the data I did not expect</h2>
+<div class="cards">
+<div class="card"><h3>Half the experiment was missing</h3>
+<p>The copy of the dataset I was handed contained 45 of the 46 healthy controls — and
+none of the 25 patients. One of the two groups simply was not there, which makes
+"classify patient vs. control" impossible. The patient scans had to be streamed from
+OpenNeuro before anything could start.</p></div>
+
+<div class="card"><h3>There was no room to work</h3>
+<p>The dataset is 83&nbsp;GB and the disk had 2.5&nbsp;GB free. The pipeline was
+restructured to process one person at a time and delete their raw scans immediately
+after extracting their signals, so free space <em>grows</em> as the analysis runs. Every
+deleted file is recorded with its public download URL, so nothing is unrecoverable.</p></div>
+
+<div class="card"><h3>Patients draw dramatically worse</h3>
+<p>The dataset ships per-person drawing quality measured at 30&nbsp;Hz from the tablet.
+The gap between groups is large. That is clinically unsurprising and analytically
+dangerous: a brain model can score well by indirectly detecting task difficulty. This
+became the main control analysis.</p></div>
+</div>
+</section>
+
+<section>
+<h2>Who was left out, and why</h2>
+<div class="measure">
+<p>Five participants were excluded by the original authors — three patients for head
+motion correlated with the task, one control for a tablet error, one for excessive
+motion. Those exclusions are honoured here. On top of that, runs were dropped for mean
+framewise displacement above 0.30&nbsp;mm, more than 30% of frames censored, or poor
+registration; a person needed at least two surviving left-hand runs to be analysed.
+Across included participants, mean framewise displacement was 0.142 mm — low for a task where people are moving a hand.</p>
+</div>
+<div class="tablewrap"><table>
+<thead><tr><th>Reason for exclusion</th><th class="num">People</th></tr></thead>
+<tbody><tr><td>not preprocessed</td><td class='num'>65</td></tr><tr><td>author-flagged; not preprocessed</td><td class='num'>5</td></tr></tbody></table></div>
+<p class="small">Three patients (<code>sub-1002</code>, <code>sub-1019</code>,
+<code>sub-1045</code>) could not draw with their injured right hand at all, so they
+contribute to left-hand analyses but not to the left-minus-right comparison.</p>
+</section>
+
+</main>
+<footer class="site"><div class="wrap">
+<p>Analysis of <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a> (CC0) — Kapil, Kim, McAvoy &amp; Philip,
+Washington University in St. Louis. This site is an independent reanalysis and is
+not affiliated with or endorsed by the dataset authors.
+Built 2026-08-24.</p>
+<p>Not medical advice. No clinical claims.</p>
+</div></footer>
+</body>
+</html>

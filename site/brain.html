@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Explore the brain · neuroswitch</title>
+<meta name="description" content="Interactive map of the 241 brain regions and how much each contributed.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🧠</text></svg>">
+</head>
+<body>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
+<nav class="site" aria-label="Sections"><a href="index.html">Overview</a><a href="data.html">The data</a><a href="methods.html">How it works</a><a href="results.html">Results</a><a href="brain.html" aria-current="page">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1>What the model learned</h1>
+<p class="lede">241 regions — 200 cortical, 15 subcortical, 26 cerebellar. Filter by
+network, or select any region to see where it sits and how much the model used it.</p>
+
+<section>
+<div class="measure"><p class="pending">Region importances appear once the models have been fit. Until then this shows the parcellation itself.</p></div>
+<div id="brainapp"><p class="pending">Loading…</p></div>
+</section>
+
+<section>
+
+<div class="measure">
+<p class="small">A caution worth repeating: importance tells you what the model used to
+separate the groups, not what the brain is doing. Two regions carrying the same
+information will often split the credit arbitrarily, and a region can rank low simply
+because a neighbour already captured its signal.</p>
+</div>
+</section>
+
+<style>
+.bgrid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+         margin: 1.2rem 0; }
+.bview { margin: 0; border: 1px solid var(--rule); border-radius: 8px; padding: .6rem; }
+.bviewhead { font-size: .84rem; color: var(--fg-mut); margin-bottom: .3rem; font-weight: 600; }
+.bnode { cursor: pointer; }
+.bnode:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
+.legend { display: flex; flex-wrap: wrap; gap: .35rem; margin: 1rem 0; }
+.lg { display: inline-flex; align-items: center; gap: .35rem; font: inherit;
+      font-size: .78rem; padding: .22rem .55rem; border-radius: 999px;
+      border: 1px solid var(--rule); background: var(--bg); color: var(--fg-mut);
+      cursor: pointer; }
+.lg.on { color: var(--fg); border-color: var(--fg-faint); }
+.lg .sw { width: .62rem; height: .62rem; border-radius: 50%; opacity: .35; }
+.lg.on .sw { opacity: 1; }
+.lg.reset { font-style: italic; }
+#bdetail { margin: 1rem 0; min-height: 3rem; }
+</style>
+<script>
+(async function () {
+  const host = document.getElementById('brainapp');
+  let D;
+  try {
+    D = await (await fetch('data/brain.json')).json();
+  } catch (err) {
+    host.innerHTML = '<p class="pending">Could not load brain data.</p>';
+    return;
+  }
+  const nodes = D.nodes.filter(n => isFinite(n.x) && isFinite(n.y) && isFinite(n.z));
+  const imp = D.importance || null;
+  const nets = D.networks;
+
+  // stable, readable hues per network; sensorimotor deliberately the warm anchor
+  const palette = {};
+  nets.forEach((n, i) => {
+    const hue = Math.round((i * 360) / nets.length);
+    palette[n] = `hsl(${hue} 52% 48%)`;
+  });
+  palette['SomMotA'] = '#c2410c';
+  palette['SomMotB'] = '#ea7317';
+  palette['Cerebellum'] = '#3f6212';
+  palette['Subcortex'] = '#6d28d9';
+
+  let active = new Set(nets);
+  let selected = null;
+
+  const impOf = n => (imp ? (imp[n.id - 1] ?? 0) : null);
+  const impVals = imp ? nodes.map(impOf).filter(v => isFinite(v)) : [];
+  const impMax = impVals.length ? Math.max(...impVals) : 1;
+  const impMin = impVals.length ? Math.min(...impVals) : 0;
+  const norm = v => (impMax > impMin ? (v - impMin) / (impMax - impMin) : 0.5);
+
+  // ---- views: [horizontal axis, vertical axis, label, flip vertical]
+  const VIEWS = [
+    { a: 'x', b: 'y', title: 'From above', note: 'left of image = left hemisphere' },
+    { a: 'y', b: 'z', title: 'From the side', note: 'front of head to the right' },
+  ];
+
+  function svgFor(view, w, h) {
+    const pad = 16;
+    const xs = nodes.map(n => n[view.a]), ys = nodes.map(n => n[view.b]);
+    const x0 = Math.min(...xs), x1 = Math.max(...xs);
+    const y0 = Math.min(...ys), y1 = Math.max(...ys);
+    const sx = v => pad + ((v - x0) / (x1 - x0)) * (w - 2 * pad);
+    const sy = v => h - pad - ((v - y0) / (y1 - y0)) * (h - 2 * pad);
+
+    let s = `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${view.title}">`;
+    s += `<ellipse cx="${w / 2}" cy="${h / 2}" rx="${w / 2 - pad + 6}" ry="${h / 2 - pad + 6}"
+           fill="var(--bg-soft)" stroke="var(--rule)"/>`;
+    if (view.a === 'x') {
+      s += `<line x1="${w / 2}" y1="${pad - 6}" x2="${w / 2}" y2="${h - pad + 6}"
+             stroke="var(--rule)" stroke-dasharray="3 4"/>`;
+    }
+    const order = [...nodes].sort((m, n) => (imp ? norm(impOf(m)) - norm(impOf(n)) : 0));
+    for (const n of order) {
+      const on = active.has(n.network);
+      const t = imp ? norm(impOf(n)) : 0.5;
+      const r = imp ? 2.2 + t * 7 : 3.4;
+      const op = on ? (imp ? 0.35 + 0.65 * t : 0.85) : 0.07;
+      const isSel = selected && selected.id === n.id;
+      s += `<circle class="bnode" data-id="${n.id}" cx="${sx(n[view.a]).toFixed(1)}"
+             cy="${sy(n[view.b]).toFixed(1)}" r="${(isSel ? r + 3 : r).toFixed(1)}"
+             fill="${palette[n.network]}" fill-opacity="${op.toFixed(2)}"
+             stroke="${isSel ? 'var(--fg)' : 'none'}" stroke-width="1.5"
+             tabindex="0" role="button"
+             aria-label="${n.label}"><title>${n.label}${imp ? ' — importance ' + impOf(n).toFixed(3) : ''}</title></circle>`;
+    }
+    s += `</svg>`;
+    return `<figure class="bview"><div class="bviewhead">${view.title}
+            <span class="small">· ${view.note}</span></div>${s}</figure>`;
+  }
+
+  function legend() {
+    return `<div class="legend">` + nets.map(n =>
+      `<button class="lg${active.has(n) ? ' on' : ''}" data-net="${n}">
+        <span class="sw" style="background:${palette[n]}"></span>${n}</button>`).join('')
+      + `<button class="lg reset" data-net="__all">reset</button></div>`;
+  }
+
+  function detail() {
+    if (!selected) {
+      return `<p class="small">Select a region, or filter by network above.${
+        imp ? ' Larger, more solid circles are regions the model relied on more.' : ''}</p>`;
+    }
+    const n = selected;
+    return `<div class="card"><h3>${n.label}</h3>
+      <p class="small">${n.network} · ${n.hemi === 'LH' ? 'left' : n.hemi === 'RH' ? 'right' : 'midline'}
+      · ${n.source} · ${n.n_voxels} voxels<br>
+      MNI ${n.x}, ${n.y}, ${n.z}${imp ? `<br><strong>importance ${impOf(n).toFixed(4)}</strong>` : ''}</p></div>`;
+  }
+
+  function topTable() {
+    if (!imp) return '';
+    const rows = [...nodes].sort((a, b) => impOf(b) - impOf(a)).slice(0, 15).map((n, i) =>
+      `<tr><td class="num">${i + 1}</td><td>${n.label}</td><td>${n.network}</td>
+       <td>${n.hemi === 'LH' ? 'left' : n.hemi === 'RH' ? 'right' : '—'}</td>
+       <td class="num">${impOf(n).toFixed(4)}</td></tr>`).join('');
+    return `<h3>Regions the model leaned on most</h3><div class="tablewrap"><table>
+      <thead><tr><th class="num">#</th><th>Region</th><th>Network</th><th>Side</th>
+      <th class="num">Importance</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  }
+
+  function render() {
+    host.innerHTML = legend()
+      + `<div class="bgrid">${VIEWS.map(v => svgFor(v, 340, 300)).join('')}</div>`
+      + `<div id="bdetail">${detail()}</div>` + topTable();
+    host.querySelectorAll('.lg').forEach(b => b.addEventListener('click', () => {
+      const n = b.dataset.net;
+      if (n === '__all') active = new Set(nets);
+      else if (active.size === nets.length) active = new Set([n]);
+      else if (active.has(n)) { active.delete(n); if (!active.size) active = new Set(nets); }
+      else active.add(n);
+      render();
+    }));
+    const pick = el => {
+      const id = +el.dataset.id;
+      selected = nodes.find(n => n.id === id) || null;
+      render();
+    };
+    host.querySelectorAll('.bnode').forEach(c => {
+      c.addEventListener('click', () => pick(c));
+      c.addEventListener('keydown', ev => {
+        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); pick(c); }
+      });
+    });
+  }
+  render();
+})();
+</script>
+
+</main>
+<footer class="site"><div class="wrap">
+<p>Analysis of <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a> (CC0) — Kapil, Kim, McAvoy &amp; Philip,
+Washington University in St. Louis. This site is an independent reanalysis and is
+not affiliated with or endorsed by the dataset authors.
+Built 2026-08-24.</p>
+<p>Not medical advice. No clinical claims.</p>
+</div></footer>
+</body>
+</html>

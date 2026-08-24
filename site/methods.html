@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How it works · neuroswitch</title>
+<meta name="description" content="Preprocessing without fMRIPrep, building brain graphs, and the lateralisation test that validates the pipeline.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🧠</text></svg>">
+</head>
+<body>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
+<nav class="site" aria-label="Sections"><a href="index.html">Overview</a><a href="data.html">The data</a><a href="methods.html" aria-current="page">How it works</a><a href="results.html">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1>How it works</h1>
+<p class="lede">Raw scanner output to brain graphs, using no neuroimaging software
+beyond a Python package — and one test that decides whether any of it is trustworthy.</p>
+
+<section>
+<h2>Preprocessing without the usual toolchain</h2>
+<div class="measure">
+<p>The standard route is fMRIPrep inside Docker. Neither Docker nor FSL, FreeSurfer or
+AFNI were available here, and fMRIPrep on 71 people would have taken days. So the
+pipeline is built directly on ANTs (through <code>antspyx</code>) plus numpy, nibabel
+and nilearn.</p>
+<p>Per run: drop the first 10 volumes while the scanner reaches equilibrium, correct
+slice timing by Fourier phase shift, then rigid-body motion correction against the run
+mean. Per person: bias-correct the T1 anatomical scan, obtain a brain mask by warping
+the template mask, and segment tissue with Atropos to get white-matter and
+cerebrospinal-fluid compartments.</p>
+</div>
+
+<div class="note">
+<p><strong>The step that makes this feasible.</strong> The expensive part of a normal
+pipeline is resampling a 488-volume series into template space. This pipeline never
+does that. Instead the <em>atlas</em> is pulled into each run's own native space
+through the composed transform chain MNI&nbsp;→&nbsp;T1&nbsp;→&nbsp;EPI, and region
+averages are read straight off the motion-corrected data.</p>
+<p>That is exact, not a shortcut: removing confounds and band-pass filtering act along
+time, averaging a region acts across space, and operations on independent axes commute.
+Averaging first and cleaning 241 signals gives the same answer as cleaning 150,000
+voxels and averaging afterwards.</p>
+</div>
+
+<div class="measure">
+<p>Confounds removed from every signal: 24 motion terms (six parameters, their
+derivatives, and both squared), five principal components each from white matter and
+CSF, framewise displacement, DVARS, and a spike regressor for every frame moving more
+than 0.5&nbsp;mm. Band-pass 0.008–0.10&nbsp;Hz, which comfortably contains the
+0.033&nbsp;Hz task-block rhythm.</p>
+</div>
+</section>
+
+<section>
+<h2>Does the pipeline actually work?</h2>
+<div class="measure">
+<p>Before trusting any group difference, the pipeline has to reproduce something that
+cannot be wrong. Moving your left hand activates the <em>right</em> side of the brain,
+and vice versa. If that flip does not appear, registration, region labelling, hemisphere
+assignment or event timing is broken and everything downstream is noise.</p>
+<p>Because everyone drew with both hands, the test is a paired one: for each person,
+subtract their right-hand response from their left-hand response, region by region. A
+positive value means a region worked harder when that person drew left-handed.</p>
+</div>
+
+<div class="stats">
+<div class="stat"><div class="n">+0.185</div>
+<div class="k">hand × hemisphere interaction</div></div>
+<div class="stat"><div class="n">2/2</div>
+<div class="k">people showing the correct flip</div></div>
+<div class="stat"><div class="n">9/10</div>
+<div class="k">top left-hand regions that are right-hemisphere</div></div>
+</div>
+<div class="tablewrap"><table>
+<thead><tr><th>Region</th><th>Network</th><th>Side</th>
+<th class="num">Left-hand minus right-hand</th></tr></thead>
+<tbody><tr><td>RH SomMotA 4</td><td>SomMotA</td><td>right</td><td class='num'>+0.318</td></tr><tr><td>RH SomMotA 6</td><td>SomMotA</td><td>right</td><td class='num'>+0.257</td></tr><tr><td>RH SomMotA 1</td><td>SomMotA</td><td>right</td><td class='num'>+0.187</td></tr><tr><td>RH SomMotA 5</td><td>SomMotA</td><td>right</td><td class='num'>+0.180</td></tr><tr><td>RH DorsAttnB PostC 4</td><td>DorsAttnB</td><td>right</td><td class='num'>+0.169</td></tr><tr><td>RH SomMotA 3</td><td>SomMotA</td><td>right</td><td class='num'>+0.114</td></tr><tr><td>RH SomMotA 11</td><td>SomMotA</td><td>right</td><td class='num'>+0.112</td></tr><tr><td>RH SomMotA 7</td><td>SomMotA</td><td>right</td><td class='num'>+0.088</td></tr></tbody></table></div>
+<div class="note"><p>The check <strong>passes</strong>: the regions most engaged
+by left-hand drawing sit in the right hemisphere, and the sensorimotor regions
+flip sides when the drawing hand flips.</p></div>
+<p class="small">This single test exercises the whole chain at once — including the
+easily-botched detail that event onsets refer to the original scan, not to the volumes
+that remain after the first ten are trimmed. Getting that wrong shifts every block by
+6.6&nbsp;seconds and quietly destroys the contrast.</p>
+<div class="measure"><p class="small">Two weaker versions of this check were tried first
+and discarded: averaging all 34 sensorimotor parcels (which dilutes a hand-specific
+effect with auditory and face regions the task barely engages), and comparing conditions
+between subjects rather than within them. Both were far too insensitive to be evidence
+either way.</p></div>
+</section>
+
+<section>
+<h2>From signals to graphs</h2>
+<div class="measure">
+<p>Each brain becomes a graph of 241 nodes: 200 cortical regions from the Schaefer
+parcellation, 15 subcortical structures from Harvard–Oxford, and 26 cerebellar regions
+from AAL. The cerebellum is included deliberately — it is central to motor learning and
+routinely dropped from this kind of analysis.</p>
+<p>Edges are partial correlations between region signals during drawing blocks only,
+shifted four seconds to allow for the delay in the blood-oxygen response, with the
+strongest 10% retained. Node features combine each region's connectivity profile, its
+task response, its low-frequency signal amplitude, and which functional network it
+belongs to.</p>
+</div>
+<div class="note warn">
+<p><strong>A leakage trap worth naming.</strong> Tangent-space connectivity — the
+strongest classical representation — estimates a group average. Computing it once over
+everyone and then cross-validating would leak test subjects into training and inflate
+every score. Here the feature store deliberately keeps <em>time series</em> rather than
+connectivity matrices, which forces every estimator to be fit inside the training split.
+Splits are grouped by person, so no one appears on both sides of a fold.</p>
+</div>
+</section>
+
+<section>
+<h2>The models</h2>
+<div class="measure">
+<p>The graph convolutional network the premise calls for is here, alongside GAT and GIN
+variants. So are the models that might beat it: linear and support-vector classifiers on
+connectivity edges, and gradient boosting on classical graph-theory summaries.</p>
+<p>And three models designed to be <em>dangerous</em> — head motion alone, drawing
+performance alone, and age and sex alone. If any of them matches the brain models, the
+headline is not about brain networks. They are reported in the same table, not buried.</p>
+<p>Every score is the mean over 10 repeats of 5-fold cross-validation grouped by person,
+and every headline number carries a permutation test in which group labels are shuffled
+and the whole procedure re-run.</p>
+</div>
+</section>
+
+</main>
+<footer class="site"><div class="wrap">
+<p>Analysis of <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a> (CC0) — Kapil, Kim, McAvoy &amp; Philip,
+Washington University in St. Louis. This site is an independent reanalysis and is
+not affiliated with or endorsed by the dataset authors.
+Built 2026-08-24.</p>
+<p>Not medical advice. No clinical claims.</p>
+</div></footer>
+</body>
+</html>

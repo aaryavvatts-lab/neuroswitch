@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Results · neuroswitch</title>
+<meta name="description" content="Model-by-model results with permutation tests and control models.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🧠</text></svg>">
+</head>
+<body>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
+<nav class="site" aria-label="Sections"><a href="index.html">Overview</a><a href="data.html">The data</a><a href="methods.html">How it works</a><a href="results.html" aria-current="page">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1>Does the graph network beat the simple method?</h1>
+<p class="lede">Every model, including the ones built to fail, scored the same way:
+10 repeats of 5-fold cross-validation grouped by person, with shuffled-label
+permutation tests on the headline numbers.</p>
+
+<section>
+<h2>The answer</h2>
+<div class="measure"><p class="pending">Not yet computed — the pipeline is still running.</p></div>
+</section>
+
+<section>
+<h2>Every model, side by side</h2>
+<p class="pending">Not yet computed — the pipeline is still running.</p>
+<p class="small">Rows in grey are control models. They use no brain data and exist to
+be compared against — if one of them matched the brain models, the brain result would
+need reinterpreting, not celebrating. Sample:
+— patients, — controls,
+— regions.</p>
+</section>
+
+<section>
+<h2>How to read a permutation test</h2>
+<div class="measure">
+<p>Cross-validated accuracy on a small sample is a noisy quantity, and a model given
+random labels rarely scores exactly 0.50. So each headline model was re-fit hundreds of
+times with group labels shuffled between people, building the distribution of scores
+obtainable from data with no real group difference. The reported p-value is the fraction
+of shuffles that matched or beat the real score.</p>
+<p>A shuffled-label distribution that does not centre near 0.50 is itself a red flag —
+it would mean the cross-validation is leaking. That check is part of the output.</p>
+</div>
+</section>
+
+</main>
+<footer class="site"><div class="wrap">
+<p>Analysis of <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a> (CC0) — Kapil, Kim, McAvoy &amp; Philip,
+Washington University in St. Louis. This site is an independent reanalysis and is
+not affiliated with or endorsed by the dataset authors.
+Built 2026-08-24.</p>
+<p>Not medical advice. No clinical claims.</p>
+</div></footer>
+</body>
+</html>

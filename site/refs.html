@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>References · neuroswitch</title>
+<meta name="description" content="Dataset citation, atlases, and software.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🧠</text></svg>">
+</head>
+<body>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
+<nav class="site" aria-label="Sections"><a href="index.html">Overview</a><a href="data.html">The data</a><a href="methods.html">How it works</a><a href="results.html">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html" aria-current="page">References</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1>References and credits</h1>
+
+<section>
+<h2>The dataset</h2>
+<div class="measure">
+<p>Kapil, N., Kim, T., McAvoy, M. P., &amp; Philip, B. A. (2026). <em>Precision drawing
+during task fMRI in healthy adults and individuals with peripheral nerve injury.</em>
+OpenNeuro. <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">doi:10.18112/openneuro.ds008162.v1.0.3</a>. Released
+under CC0. Collected at Washington University in St. Louis School of Medicine and
+funded by NINDS R01 NS114046.</p>
+<p>The accompanying study is available as a preprint:
+<a href="https://doi.org/10.1101/2025.11.18.689091">doi:10.1101/2025.11.18.689091</a>.</p>
+<p>All credit for designing the study, recruiting participants and collecting the data
+belongs to that group. This site is an independent reanalysis; any errors in it are
+mine, not theirs, and nothing here should be read as their conclusion.</p>
+</div>
+</section>
+
+<section>
+<h2>Atlases</h2>
+<div class="measure">
+<p>Schaefer et al. (2018), local-global cortical parcellation, 200 regions / 17 networks.
+Harvard–Oxford subcortical atlas (Harvard Center for Morphometric Analysis).
+AAL (Tzourio-Mazoyer et al., 2002) for cerebellar regions.
+Template space MNI152NLin6Asym via TemplateFlow.</p>
+</div>
+</section>
+
+<section>
+<h2>Software</h2>
+<div class="measure">
+<p>ANTs / antspyx for registration, motion correction and segmentation; nibabel and
+nilearn for neuroimaging I/O, signal cleaning and connectivity; scikit-learn for the
+classical models; PyTorch and PyTorch Geometric for the graph networks; Captum for
+attribution. All open source.</p>
+</div>
+</section>
+
+<section>
+<h2>Scope</h2>
+<div class="note">
+<p>This is a methods demonstration on public data, not a clinical study. It makes no
+diagnostic claim, and it should not be used to inform anyone's care.</p>
+</div>
+</section>
+
+</main>
+<footer class="site"><div class="wrap">
+<p>Analysis of <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a> (CC0) — Kapil, Kim, McAvoy &amp; Philip,
+Washington University in St. Louis. This site is an independent reanalysis and is
+not affiliated with or endorsed by the dataset authors.
+Built 2026-08-24.</p>
+<p>Not medical advice. No clinical claims.</p>
+</div></footer>
+</body>
+</html>

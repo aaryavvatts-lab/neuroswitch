@@ -1,0 +1,154 @@
+"""Generate the static site from results/*.json.
+
+The site is generated rather than hand-written so that no number on a page can
+drift from the number the analysis actually produced.  Pages render in a
+"pending" state when a result file is absent, which keeps the site buildable at
+every point during a long pipeline run.
+"""
+from __future__ import annotations
+
+import html
+import json
+from datetime import date
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+RESULTS = ROOT / "results"
+SITE = ROOT / "site"
+
+DS_DOI = "https://doi.org/10.18112/openneuro.ds008162.v1.0.3"
+PREPRINT = "https://doi.org/10.1101/2025.11.18.689091"
+
+PAGES = [
+    ("index.html", "Overview"),
+    ("data.html", "The data"),
+    ("methods.html", "How it works"),
+    ("results.html", "Results"),
+    ("brain.html", "Explore the brain"),
+    ("controls.html", "Could this be wrong?"),
+    ("reproduce.html", "Run it yourself"),
+    ("refs.html", "References"),
+]
+
+
+# ------------------------------------------------------------------ helpers
+def e(s) -> str:
+    return html.escape(str(s), quote=True)
+
+
+def load(name: str):
+    p = RESULTS / f"{name}.json"
+    if not p.is_file():
+        return None
+    try:
+        return json.loads(p.read_text())
+    except json.JSONDecodeError:
+        return None
+
+
+def fmt_auc(v) -> str:
+    return "—" if v is None else f"{v:.3f}"
+
+
+def fmt_ci(ci) -> str:
+    if not ci or ci[0] is None or (isinstance(ci[0], float) and ci[0] != ci[0]):
+        return ""
+    return f"{ci[0]:.2f}–{ci[1]:.2f}"
+
+
+def fmt_p(p) -> str:
+    if p is None:
+        return "—"
+    if p < 0.001:
+        return "&lt;0.001"
+    return f"{p:.3f}"
+
+
+def pending(msg="Not yet computed — the pipeline is still running.") -> str:
+    return f'<p class="pending">{e(msg)}</p>'
+
+
+def stat(n, k) -> str:
+    return f'<div class="stat"><div class="n">{n}</div><div class="k">{e(k)}</div></div>'
+
+
+def stats(items) -> str:
+    return '<div class="stats">' + "".join(stat(n, k) for n, k in items) + "</div>"
+
+
+def bars(rows, lo=0.4, hi=1.0) -> str:
+    """rows: (label, value, is_null). Chance line drawn at 0.5."""
+    out = ['<div class="bars">']
+    span = hi - lo
+    chance = (0.5 - lo) / span * 100
+    for label, val, is_null in rows:
+        if val is None:
+            continue
+        pct = max(0.0, min(1.0, (val - lo) / span)) * 100
+        cls = " is-null" if is_null else ""
+        out.append(
+            f'<div class="bar{cls}"><div class="lab">{e(label)}</div>'
+            f'<div class="track"><div class="fill" style="width:{pct:.1f}%"></div>'
+            f'<div class="chance" style="left:{chance:.1f}%"></div></div>'
+            f'<div class="val">{val:.3f}</div></div>')
+    out.append('</div><p class="small">Bars span AUC 0.40–1.00; '
+               'the vertical line is chance (0.50). Grey bars are control models '
+               'that <em>should</em> stay near chance.</p>')
+    return "".join(out)
+
+
+def page(fname: str, title: str, body: str, lede: str = "") -> str:
+    nav = "".join(
+        f'<a href="{h}"{" aria-current=\"page\"" if h == fname else ""}>{e(t)}</a>'
+        for h, t in PAGES)
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{e(title)} · neuroswitch</title>
+<meta name="description" content="{e(lede[:180] if lede else title)}">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🧠</text></svg>">
+</head>
+<body>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
+<nav class="site" aria-label="Sections">{nav}</nav>
+</div></header>
+<main class="wrap">
+{body}
+</main>
+<footer class="site"><div class="wrap">
+<p>Analysis of <a href="{DS_DOI}">OpenNeuro ds008162</a> (CC0) — Kapil, Kim, McAvoy &amp; Philip,
+Washington University in St. Louis. This site is an independent reanalysis and is
+not affiliated with or endorsed by the dataset authors.
+Built {date.today().isoformat()}.</p>
+<p>Not medical advice. No clinical claims.</p>
+</div></footer>
+</body>
+</html>
+"""
+
+
+def write(fname: str, title: str, body: str, lede: str = "") -> None:
+    SITE.mkdir(parents=True, exist_ok=True)
+    (SITE / fname).write_text(page(fname, title, body, lede))
+
+
+def build_all() -> None:
+    from . import pages
+    from .export_site import build as build_data_json
+    try:
+        build_data_json()
+    except Exception as exc:            # site must still build before results exist
+        print(f"  (brain data export skipped: {exc!r})")
+    for fn in (pages.build_index, pages.build_data, pages.build_methods,
+               pages.build_results, pages.build_brain, pages.build_controls,
+               pages.build_reproduce, pages.build_refs):
+        fn()
+    print(f"built {len(PAGES)} pages -> {SITE}")
+
+
+if __name__ == "__main__":
+    build_all()

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Could this be wrong? · neuroswitch</title>
+<meta name="description" content="Four ways the headline could be an artefact, each tested: hand-difference graphs, drawing performance, severity scaling, and rest versus task.">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>🧠</text></svg>">
+</head>
+<body>
+<header class="site"><div class="wrap">
+<a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
+<nav class="site" aria-label="Sections"><a href="index.html">Overview</a><a href="data.html">The data</a><a href="methods.html">How it works</a><a href="results.html">Results</a><a href="brain.html">Explore the brain</a><a href="controls.html" aria-current="page">Could this be wrong?</a><a href="reproduce.html">Run it yourself</a><a href="refs.html">References</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1>Could this be wrong?</h1>
+<p class="lede">A classifier that separates patients from controls is easy to get and
+easy to over-read. These are the four ways the result could be an artefact — each one
+turned into a test rather than a caveat.</p>
+
+<section>
+<h2>1. Is it the hand, or just these people?</h2>
+<div class="measure">
+<p>Patients and controls differ in many fixed ways that have nothing to do with drawing:
+head size, vascular anatomy, how still they lie, what else has happened to them. A model
+comparing one group's brains to another's can pick up any of it.</p>
+<p>The fix uses the fact that everyone drew with <em>both</em> hands. Subtracting each
+person's right-hand network from their own left-hand network cancels everything fixed
+about that person — they are their own control. Whatever survives is specific to using
+the non-dominant hand.</p>
+</div>
+<p class="pending">Not yet computed — the pipeline is still running.</p>
+</section>
+
+<section>
+<h2>2. Is it the brain, or do they simply draw worse?</h2>
+<div class="measure">
+<p>This is the one that matters most. Patients have nerve damage in their dominant hand,
+so drawing with the other hand is genuinely harder for them, and the dataset records
+exactly how much worse they were. A brain model can score well purely by detecting
+effort and difficulty — a real finding, but not the one being claimed.</p>
+<p>So: how well does drawing performance alone classify, with no brain data at all? And
+does connectivity still predict once performance is regressed out and within a subsample
+of patients and controls matched on how well they drew?</p>
+</div>
+<p class="pending">Not yet computed — the pipeline is still running.</p>
+</section>
+
+<section>
+<h2>3. Does the signature track how badly someone is affected?</h2>
+<div class="measure">
+<p>Group labels are crude. If brain networks genuinely reorganise in response to losing
+a hand, the effect should be <em>graded</em>: stronger in people who are more disabled,
+or who have lived with the injury longer, or whose hand preference has actually shifted.
+A relationship that scales is far harder to explain away than a binary split — so this
+is tested within the patient group alone, where there is no healthy comparison to lean on.</p>
+</div>
+<p class="pending">Not yet computed — the pipeline is still running.</p>
+</section>
+
+<section>
+<h2>4. Is it about drawing at all, or is it always there?</h2>
+<div class="measure">
+<p>Everyone also lay in the scanner doing nothing. If the same classifier works on
+resting-state data, the difference is a persistent trait rather than something recruited
+by the task. Both answers are informative; conflating them is what makes "the brain
+rewires itself" sound more established than it is.</p>
+</div>
+<p class="pending">Resting-state runs are processed in a second pass; this comparison appears when that finishes.</p>
+</section>
+
+<section>
+<h2>Bonus: do patients treat easy blocks like hard ones?</h2>
+<div class="measure">
+<p>The task was designed with graded difficulty, and the dataset labels every block as
+easier or harder. If patients are working harder throughout, the easy blocks should
+already look like everyone else's hard blocks.</p>
+</div>
+<p class="pending">Not yet computed — the pipeline is still running.</p>
+</section>
+
+<section>
+<h2>What would still not be settled</h2>
+<div class="note bad">
+<p>Even if every test above comes out favourably, this remains cross-sectional: each
+person was scanned once. Nothing here observes a brain changing. "Rewiring" is an
+inference about a process from a snapshot of differences, and a single-site sample of
+66 people cannot carry that inference on its own.</p>
+</div>
+</section>
+
+</main>
+<footer class="site"><div class="wrap">
+<p>Analysis of <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a> (CC0) — Kapil, Kim, McAvoy &amp; Philip,
+Washington University in St. Louis. This site is an independent reanalysis and is
+not affiliated with or endorsed by the dataset authors.
+Built 2026-08-24.</p>
+<p>Not medical advice. No clinical claims.</p>
+</div></footer>
+</body>
+</html>

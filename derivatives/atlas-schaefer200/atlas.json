@@ -1,0 +1,2186 @@
+{
+ "space": "MNI152NLin6Asym",
+ "resolution_mm": 2,
+ "shape": [
+  91,
+  109,
+  91
+ ],
+ "n_nodes": 241,
+ "sources": {
+  "cortex": "Schaefer2018 200Parcels 17Networks",
+  "subcortex": "HarvardOxford sub-maxprob-thr25-2mm",
+  "cerebellum": "AAL (cerebellar hemispheres + vermis)"
+ },
+ "nodes": [
+  {
+   "id": 1,
+   "name": "17Networks_LH_VisCent_ExStr_1",
+   "source": "Schaefer2018",
+   "network": "VisCent",
+   "hemi": "LH",
+   "n_voxels": 1127,
+   "src_value": 1
+  },
+  {
+   "id": 2,
+   "name": "17Networks_LH_VisCent_ExStr_2",
+   "source": "Schaefer2018",
+   "network": "VisCent",
+   "hemi": "LH",
+   "n_voxels": 765,
+   "src_value": 2
+  },
+  {
+   "id": 3,
+   "name": "17Networks_LH_VisCent_Striate_1",
+   "source": "Schaefer2018",
+   "network": "VisCent",
+   "hemi": "LH",
+   "n_voxels": 835,
+   "src_value": 3
+  },
+  {
+   "id": 4,
+   "name": "17Networks_LH_VisCent_ExStr_3",
+   "source": "Schaefer2018",
+   "network": "VisCent",
+   "hemi": "LH",
+   "n_voxels": 793,
+   "src_value": 4
+  },
+  {
+   "id": 5,
+   "name": "17Networks_LH_VisCent_ExStr_4",
+   "source": "Schaefer2018",
+   "network": "VisCent",
+   "hemi": "LH",
+   "n_voxels": 827,
+   "src_value": 5
+  },
+  {
+   "id": 6,
+   "name": "17Networks_LH_VisCent_ExStr_5",
+   "source": "Schaefer2018",
+   "network": "VisCent",
+   "hemi": "LH",
+   "n_voxels": 787,
+   "src_value": 6
+  },
+  {
+   "id": 7,
+   "name": "17Networks_LH_VisPeri_ExStrInf_1",
+   "source": "Schaefer2018",
+   "network": "VisPeri",
+   "hemi": "LH",
+   "n_voxels": 545,
+   "src_value": 7
+  },
+  {
+   "id": 8,
+   "name": "17Networks_LH_VisPeri_ExStrInf_2",
+   "source": "Schaefer2018",
+   "network": "VisPeri",
+   "hemi": "LH",
+   "n_voxels": 517,
+   "src_value": 8
+  },
+  {
+   "id": 9,
+   "name": "17Networks_LH_VisPeri_ExStrInf_3",
+   "source": "Schaefer2018",
+   "network": "VisPeri",
+   "hemi": "LH",
+   "n_voxels": 163,
+   "src_value": 9
+  },
+  {
+   "id": 10,
+   "name": "17Networks_LH_VisPeri_StriCal_1",
+   "source": "Schaefer2018",
+   "network": "VisPeri",
+   "hemi": "LH",
+   "n_voxels": 940,
+   "src_value": 10
+  },
+  {
+   "id": 11,
+   "name": "17Networks_LH_VisPeri_ExStrSup_1",
+   "source": "Schaefer2018",
+   "network": "VisPeri",
+   "hemi": "LH",
+   "n_voxels": 339,
+   "src_value": 11
+  },
+  {
+   "id": 12,
+   "name": "17Networks_LH_VisPeri_ExStrSup_2",
+   "source": "Schaefer2018",
+   "network": "VisPeri",
+   "hemi": "LH",
+   "n_voxels": 1138,
+   "src_value": 12
+  },
+  {
+   "id": 13,
+   "name": "17Networks_LH_SomMotA_1",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "LH",
+   "n_voxels": 544,
+   "src_value": 13
+  },
+  {
+   "id": 14,
+   "name": "17Networks_LH_SomMotA_2",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "LH",
+   "n_voxels": 432,
+   "src_value": 14
+  },
+  {
+   "id": 15,
+   "name": "17Networks_LH_SomMotA_3",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "LH",
+   "n_voxels": 548,
+   "src_value": 15
+  },
+  {
+   "id": 16,
+   "name": "17Networks_LH_SomMotA_4",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "LH",
+   "n_voxels": 619,
+   "src_value": 16
+  },
+  {
+   "id": 17,
+   "name": "17Networks_LH_SomMotA_5",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "LH",
+   "n_voxels": 369,
+   "src_value": 17
+  },
+  {
+   "id": 18,
+   "name": "17Networks_LH_SomMotA_6",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "LH",
+   "n_voxels": 543,
+   "src_value": 18
+  },
+  {
+   "id": 19,
+   "name": "17Networks_LH_SomMotA_7",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "LH",
+   "n_voxels": 1090,
+   "src_value": 19
+  },
+  {
+   "id": 20,
+   "name": "17Networks_LH_SomMotA_8",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "LH",
+   "n_voxels": 290,
+   "src_value": 20
+  },
+  {
+   "id": 21,
+   "name": "17Networks_LH_SomMotB_Aud_1",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "LH",
+   "n_voxels": 593,
+   "src_value": 21
+  },
+  {
+   "id": 22,
+   "name": "17Networks_LH_SomMotB_Aud_2",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "LH",
+   "n_voxels": 793,
+   "src_value": 22
+  },
+  {
+   "id": 23,
+   "name": "17Networks_LH_SomMotB_S2_1",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "LH",
+   "n_voxels": 495,
+   "src_value": 23
+  },
+  {
+   "id": 24,
+   "name": "17Networks_LH_SomMotB_S2_2",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "LH",
+   "n_voxels": 648,
+   "src_value": 24
+  },
+  {
+   "id": 25,
+   "name": "17Networks_LH_SomMotB_Aud_3",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "LH",
+   "n_voxels": 576,
+   "src_value": 25
+  },
+  {
+   "id": 26,
+   "name": "17Networks_LH_SomMotB_S2_3",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "LH",
+   "n_voxels": 386,
+   "src_value": 26
+  },
+  {
+   "id": 27,
+   "name": "17Networks_LH_SomMotB_Cent_1",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "LH",
+   "n_voxels": 846,
+   "src_value": 27
+  },
+  {
+   "id": 28,
+   "name": "17Networks_LH_SomMotB_Cent_2",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "LH",
+   "n_voxels": 528,
+   "src_value": 28
+  },
+  {
+   "id": 29,
+   "name": "17Networks_LH_DorsAttnA_TempOcc_1",
+   "source": "Schaefer2018",
+   "network": "DorsAttnA",
+   "hemi": "LH",
+   "n_voxels": 1244,
+   "src_value": 29
+  },
+  {
+   "id": 30,
+   "name": "17Networks_LH_DorsAttnA_TempOcc_2",
+   "source": "Schaefer2018",
+   "network": "DorsAttnA",
+   "hemi": "LH",
+   "n_voxels": 727,
+   "src_value": 30
+  },
+  {
+   "id": 31,
+   "name": "17Networks_LH_DorsAttnA_ParOcc_1",
+   "source": "Schaefer2018",
+   "network": "DorsAttnA",
+   "hemi": "LH",
+   "n_voxels": 711,
+   "src_value": 31
+  },
+  {
+   "id": 32,
+   "name": "17Networks_LH_DorsAttnA_SPL_1",
+   "source": "Schaefer2018",
+   "network": "DorsAttnA",
+   "hemi": "LH",
+   "n_voxels": 569,
+   "src_value": 32
+  },
+  {
+   "id": 33,
+   "name": "17Networks_LH_DorsAttnA_SPL_2",
+   "source": "Schaefer2018",
+   "network": "DorsAttnA",
+   "hemi": "LH",
+   "n_voxels": 614,
+   "src_value": 33
+  },
+  {
+   "id": 34,
+   "name": "17Networks_LH_DorsAttnA_SPL_3",
+   "source": "Schaefer2018",
+   "network": "DorsAttnA",
+   "hemi": "LH",
+   "n_voxels": 328,
+   "src_value": 34
+  },
+  {
+   "id": 35,
+   "name": "17Networks_LH_DorsAttnB_PostC_1",
+   "source": "Schaefer2018",
+   "network": "DorsAttnB",
+   "hemi": "LH",
+   "n_voxels": 526,
+   "src_value": 35
+  },
+  {
+   "id": 36,
+   "name": "17Networks_LH_DorsAttnB_PostC_2",
+   "source": "Schaefer2018",
+   "network": "DorsAttnB",
+   "hemi": "LH",
+   "n_voxels": 408,
+   "src_value": 36
+  },
+  {
+   "id": 37,
+   "name": "17Networks_LH_DorsAttnB_PostC_3",
+   "source": "Schaefer2018",
+   "network": "DorsAttnB",
+   "hemi": "LH",
+   "n_voxels": 369,
+   "src_value": 37
+  },
+  {
+   "id": 38,
+   "name": "17Networks_LH_DorsAttnB_PostC_4",
+   "source": "Schaefer2018",
+   "network": "DorsAttnB",
+   "hemi": "LH",
+   "n_voxels": 629,
+   "src_value": 38
+  },
+  {
+   "id": 39,
+   "name": "17Networks_LH_DorsAttnB_FEF_1",
+   "source": "Schaefer2018",
+   "network": "DorsAttnB",
+   "hemi": "LH",
+   "n_voxels": 750,
+   "src_value": 39
+  },
+  {
+   "id": 40,
+   "name": "17Networks_LH_SalVentAttnA_ParOper_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "LH",
+   "n_voxels": 695,
+   "src_value": 40
+  },
+  {
+   "id": 41,
+   "name": "17Networks_LH_SalVentAttnA_Ins_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "LH",
+   "n_voxels": 706,
+   "src_value": 41
+  },
+  {
+   "id": 42,
+   "name": "17Networks_LH_SalVentAttnA_FrOper_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "LH",
+   "n_voxels": 292,
+   "src_value": 42
+  },
+  {
+   "id": 43,
+   "name": "17Networks_LH_SalVentAttnA_FrOper_2",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "LH",
+   "n_voxels": 495,
+   "src_value": 43
+  },
+  {
+   "id": 44,
+   "name": "17Networks_LH_SalVentAttnA_ParMed_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "LH",
+   "n_voxels": 631,
+   "src_value": 44
+  },
+  {
+   "id": 45,
+   "name": "17Networks_LH_SalVentAttnA_FrMed_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "LH",
+   "n_voxels": 782,
+   "src_value": 45
+  },
+  {
+   "id": 46,
+   "name": "17Networks_LH_SalVentAttnA_FrMed_2",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "LH",
+   "n_voxels": 524,
+   "src_value": 46
+  },
+  {
+   "id": 47,
+   "name": "17Networks_LH_SalVentAttnB_IPL_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnB",
+   "hemi": "LH",
+   "n_voxels": 534,
+   "src_value": 47
+  },
+  {
+   "id": 48,
+   "name": "17Networks_LH_SalVentAttnB_PFCl_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnB",
+   "hemi": "LH",
+   "n_voxels": 1310,
+   "src_value": 48
+  },
+  {
+   "id": 49,
+   "name": "17Networks_LH_SalVentAttnB_Ins_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnB",
+   "hemi": "LH",
+   "n_voxels": 469,
+   "src_value": 49
+  },
+  {
+   "id": 50,
+   "name": "17Networks_LH_SalVentAttnB_PFCmp_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnB",
+   "hemi": "LH",
+   "n_voxels": 607,
+   "src_value": 50
+  },
+  {
+   "id": 51,
+   "name": "17Networks_LH_LimbicB_OFC_1",
+   "source": "Schaefer2018",
+   "network": "LimbicB",
+   "hemi": "LH",
+   "n_voxels": 527,
+   "src_value": 51
+  },
+  {
+   "id": 52,
+   "name": "17Networks_LH_LimbicB_OFC_2",
+   "source": "Schaefer2018",
+   "network": "LimbicB",
+   "hemi": "LH",
+   "n_voxels": 1329,
+   "src_value": 52
+  },
+  {
+   "id": 53,
+   "name": "17Networks_LH_LimbicA_TempPole_1",
+   "source": "Schaefer2018",
+   "network": "LimbicA",
+   "hemi": "LH",
+   "n_voxels": 890,
+   "src_value": 53
+  },
+  {
+   "id": 54,
+   "name": "17Networks_LH_LimbicA_TempPole_2",
+   "source": "Schaefer2018",
+   "network": "LimbicA",
+   "hemi": "LH",
+   "n_voxels": 1023,
+   "src_value": 54
+  },
+  {
+   "id": 55,
+   "name": "17Networks_LH_LimbicA_TempPole_3",
+   "source": "Schaefer2018",
+   "network": "LimbicA",
+   "hemi": "LH",
+   "n_voxels": 610,
+   "src_value": 55
+  },
+  {
+   "id": 56,
+   "name": "17Networks_LH_LimbicA_TempPole_4",
+   "source": "Schaefer2018",
+   "network": "LimbicA",
+   "hemi": "LH",
+   "n_voxels": 370,
+   "src_value": 56
+  },
+  {
+   "id": 57,
+   "name": "17Networks_LH_ContA_Temp_1",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "LH",
+   "n_voxels": 631,
+   "src_value": 57
+  },
+  {
+   "id": 58,
+   "name": "17Networks_LH_ContA_IPS_1",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "LH",
+   "n_voxels": 647,
+   "src_value": 58
+  },
+  {
+   "id": 59,
+   "name": "17Networks_LH_ContA_IPS_2",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "LH",
+   "n_voxels": 430,
+   "src_value": 59
+  },
+  {
+   "id": 60,
+   "name": "17Networks_LH_ContA_IPS_3",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "LH",
+   "n_voxels": 408,
+   "src_value": 60
+  },
+  {
+   "id": 61,
+   "name": "17Networks_LH_ContA_PFCd_1",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "LH",
+   "n_voxels": 586,
+   "src_value": 61
+  },
+  {
+   "id": 62,
+   "name": "17Networks_LH_ContA_PFClv_1",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "LH",
+   "n_voxels": 1260,
+   "src_value": 62
+  },
+  {
+   "id": 63,
+   "name": "17Networks_LH_ContA_PFCl_1",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "LH",
+   "n_voxels": 829,
+   "src_value": 63
+  },
+  {
+   "id": 64,
+   "name": "17Networks_LH_ContA_PFCl_2",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "LH",
+   "n_voxels": 414,
+   "src_value": 64
+  },
+  {
+   "id": 65,
+   "name": "17Networks_LH_ContA_PFCl_3",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "LH",
+   "n_voxels": 671,
+   "src_value": 65
+  },
+  {
+   "id": 66,
+   "name": "17Networks_LH_ContA_Cingm_1",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "LH",
+   "n_voxels": 164,
+   "src_value": 66
+  },
+  {
+   "id": 67,
+   "name": "17Networks_LH_ContB_Temp_1",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "LH",
+   "n_voxels": 696,
+   "src_value": 67
+  },
+  {
+   "id": 68,
+   "name": "17Networks_LH_ContB_IPL_1",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "LH",
+   "n_voxels": 455,
+   "src_value": 68
+  },
+  {
+   "id": 69,
+   "name": "17Networks_LH_ContB_PFCl_1",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "LH",
+   "n_voxels": 680,
+   "src_value": 69
+  },
+  {
+   "id": 70,
+   "name": "17Networks_LH_ContB_PFClv_1",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "LH",
+   "n_voxels": 607,
+   "src_value": 70
+  },
+  {
+   "id": 71,
+   "name": "17Networks_LH_ContB_PFClv_2",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "LH",
+   "n_voxels": 727,
+   "src_value": 71
+  },
+  {
+   "id": 72,
+   "name": "17Networks_LH_ContC_pCun_1",
+   "source": "Schaefer2018",
+   "network": "ContC",
+   "hemi": "LH",
+   "n_voxels": 527,
+   "src_value": 72
+  },
+  {
+   "id": 73,
+   "name": "17Networks_LH_ContC_pCun_2",
+   "source": "Schaefer2018",
+   "network": "ContC",
+   "hemi": "LH",
+   "n_voxels": 662,
+   "src_value": 73
+  },
+  {
+   "id": 74,
+   "name": "17Networks_LH_ContC_Cingp_1",
+   "source": "Schaefer2018",
+   "network": "ContC",
+   "hemi": "LH",
+   "n_voxels": 208,
+   "src_value": 74
+  },
+  {
+   "id": 75,
+   "name": "17Networks_LH_DefaultA_IPL_1",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "LH",
+   "n_voxels": 1073,
+   "src_value": 75
+  },
+  {
+   "id": 76,
+   "name": "17Networks_LH_DefaultA_PFCd_1",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "LH",
+   "n_voxels": 861,
+   "src_value": 76
+  },
+  {
+   "id": 77,
+   "name": "17Networks_LH_DefaultA_pCunPCC_1",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "LH",
+   "n_voxels": 702,
+   "src_value": 77
+  },
+  {
+   "id": 78,
+   "name": "17Networks_LH_DefaultA_pCunPCC_2",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "LH",
+   "n_voxels": 429,
+   "src_value": 78
+  },
+  {
+   "id": 79,
+   "name": "17Networks_LH_DefaultA_pCunPCC_3",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "LH",
+   "n_voxels": 588,
+   "src_value": 79
+  },
+  {
+   "id": 80,
+   "name": "17Networks_LH_DefaultA_PFCm_1",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "LH",
+   "n_voxels": 557,
+   "src_value": 80
+  },
+  {
+   "id": 81,
+   "name": "17Networks_LH_DefaultA_PFCm_2",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "LH",
+   "n_voxels": 1093,
+   "src_value": 81
+  },
+  {
+   "id": 82,
+   "name": "17Networks_LH_DefaultA_PFCm_3",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "LH",
+   "n_voxels": 623,
+   "src_value": 82
+  },
+  {
+   "id": 83,
+   "name": "17Networks_LH_DefaultB_Temp_1",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 1237,
+   "src_value": 83
+  },
+  {
+   "id": 84,
+   "name": "17Networks_LH_DefaultB_Temp_2",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 777,
+   "src_value": 84
+  },
+  {
+   "id": 85,
+   "name": "17Networks_LH_DefaultB_Temp_3",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 942,
+   "src_value": 85
+  },
+  {
+   "id": 86,
+   "name": "17Networks_LH_DefaultB_Temp_4",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 787,
+   "src_value": 86
+  },
+  {
+   "id": 87,
+   "name": "17Networks_LH_DefaultB_IPL_1",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 391,
+   "src_value": 87
+  },
+  {
+   "id": 88,
+   "name": "17Networks_LH_DefaultB_PFCd_1",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 1015,
+   "src_value": 88
+  },
+  {
+   "id": 89,
+   "name": "17Networks_LH_DefaultB_PFCd_2",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 730,
+   "src_value": 89
+  },
+  {
+   "id": 90,
+   "name": "17Networks_LH_DefaultB_PFCd_3",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 689,
+   "src_value": 90
+  },
+  {
+   "id": 91,
+   "name": "17Networks_LH_DefaultB_PFCd_4",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 686,
+   "src_value": 91
+  },
+  {
+   "id": 92,
+   "name": "17Networks_LH_DefaultB_PFCv_1",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 585,
+   "src_value": 92
+  },
+  {
+   "id": 93,
+   "name": "17Networks_LH_DefaultB_PFCv_2",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 539,
+   "src_value": 93
+  },
+  {
+   "id": 94,
+   "name": "17Networks_LH_DefaultB_PFCv_3",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 438,
+   "src_value": 94
+  },
+  {
+   "id": 95,
+   "name": "17Networks_LH_DefaultB_PFCv_4",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "LH",
+   "n_voxels": 842,
+   "src_value": 95
+  },
+  {
+   "id": 96,
+   "name": "17Networks_LH_DefaultC_IPL_1",
+   "source": "Schaefer2018",
+   "network": "DefaultC",
+   "hemi": "LH",
+   "n_voxels": 626,
+   "src_value": 96
+  },
+  {
+   "id": 97,
+   "name": "17Networks_LH_DefaultC_Rsp_1",
+   "source": "Schaefer2018",
+   "network": "DefaultC",
+   "hemi": "LH",
+   "n_voxels": 539,
+   "src_value": 97
+  },
+  {
+   "id": 98,
+   "name": "17Networks_LH_DefaultC_PHC_1",
+   "source": "Schaefer2018",
+   "network": "DefaultC",
+   "hemi": "LH",
+   "n_voxels": 692,
+   "src_value": 98
+  },
+  {
+   "id": 99,
+   "name": "17Networks_LH_TempPar_1",
+   "source": "Schaefer2018",
+   "network": "TempPar",
+   "hemi": "LH",
+   "n_voxels": 806,
+   "src_value": 99
+  },
+  {
+   "id": 100,
+   "name": "17Networks_LH_TempPar_2",
+   "source": "Schaefer2018",
+   "network": "TempPar",
+   "hemi": "LH",
+   "n_voxels": 547,
+   "src_value": 100
+  },
+  {
+   "id": 101,
+   "name": "17Networks_RH_VisCent_ExStr_1",
+   "source": "Schaefer2018",
+   "network": "VisCent",
+   "hemi": "RH",
+   "n_voxels": 1288,
+   "src_value": 101
+  },
+  {
+   "id": 102,
+   "name": "17Networks_RH_VisCent_ExStr_2",
+   "source": "Schaefer2018",
+   "network": "VisCent",
+   "hemi": "RH",
+   "n_voxels": 684,
+   "src_value": 102
+  },
+  {
+   "id": 103,
+   "name": "17Networks_RH_VisCent_Striate_1",
+   "source": "Schaefer2018",
+   "network": "VisCent",
+   "hemi": "RH",
+   "n_voxels": 993,
+   "src_value": 103
+  },
+  {
+   "id": 104,
+   "name": "17Networks_RH_VisCent_ExStr_3",
+   "source": "Schaefer2018",
+   "network": "VisCent",
+   "hemi": "RH",
+   "n_voxels": 1027,
+   "src_value": 104
+  },
+  {
+   "id": 105,
+   "name": "17Networks_RH_VisCent_ExStr_4",
+   "source": "Schaefer2018",
+   "network": "VisCent",
+   "hemi": "RH",
+   "n_voxels": 680,
+   "src_value": 105
+  },
+  {
+   "id": 106,
+   "name": "17Networks_RH_VisCent_ExStr_5",
+   "source": "Schaefer2018",
+   "network": "VisCent",
+   "hemi": "RH",
+   "n_voxels": 1198,
+   "src_value": 106
+  },
+  {
+   "id": 107,
+   "name": "17Networks_RH_VisPeri_ExStrInf_1",
+   "source": "Schaefer2018",
+   "network": "VisPeri",
+   "hemi": "RH",
+   "n_voxels": 659,
+   "src_value": 107
+  },
+  {
+   "id": 108,
+   "name": "17Networks_RH_VisPeri_ExStrInf_2",
+   "source": "Schaefer2018",
+   "network": "VisPeri",
+   "hemi": "RH",
+   "n_voxels": 377,
+   "src_value": 108
+  },
+  {
+   "id": 109,
+   "name": "17Networks_RH_VisPeri_StriCal_1",
+   "source": "Schaefer2018",
+   "network": "VisPeri",
+   "hemi": "RH",
+   "n_voxels": 759,
+   "src_value": 109
+  },
+  {
+   "id": 110,
+   "name": "17Networks_RH_VisPeri_ExStrSup_1",
+   "source": "Schaefer2018",
+   "network": "VisPeri",
+   "hemi": "RH",
+   "n_voxels": 385,
+   "src_value": 110
+  },
+  {
+   "id": 111,
+   "name": "17Networks_RH_VisPeri_ExStrSup_2",
+   "source": "Schaefer2018",
+   "network": "VisPeri",
+   "hemi": "RH",
+   "n_voxels": 683,
+   "src_value": 111
+  },
+  {
+   "id": 112,
+   "name": "17Networks_RH_VisPeri_ExStrSup_3",
+   "source": "Schaefer2018",
+   "network": "VisPeri",
+   "hemi": "RH",
+   "n_voxels": 461,
+   "src_value": 112
+  },
+  {
+   "id": 113,
+   "name": "17Networks_RH_SomMotA_1",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "n_voxels": 466,
+   "src_value": 113
+  },
+  {
+   "id": 114,
+   "name": "17Networks_RH_SomMotA_2",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "n_voxels": 399,
+   "src_value": 114
+  },
+  {
+   "id": 115,
+   "name": "17Networks_RH_SomMotA_3",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "n_voxels": 465,
+   "src_value": 115
+  },
+  {
+   "id": 116,
+   "name": "17Networks_RH_SomMotA_4",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "n_voxels": 357,
+   "src_value": 116
+  },
+  {
+   "id": 117,
+   "name": "17Networks_RH_SomMotA_5",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "n_voxels": 276,
+   "src_value": 117
+  },
+  {
+   "id": 118,
+   "name": "17Networks_RH_SomMotA_6",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "n_voxels": 528,
+   "src_value": 118
+  },
+  {
+   "id": 119,
+   "name": "17Networks_RH_SomMotA_7",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "n_voxels": 282,
+   "src_value": 119
+  },
+  {
+   "id": 120,
+   "name": "17Networks_RH_SomMotA_8",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "n_voxels": 655,
+   "src_value": 120
+  },
+  {
+   "id": 121,
+   "name": "17Networks_RH_SomMotA_9",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "n_voxels": 375,
+   "src_value": 121
+  },
+  {
+   "id": 122,
+   "name": "17Networks_RH_SomMotA_10",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "n_voxels": 692,
+   "src_value": 122
+  },
+  {
+   "id": 123,
+   "name": "17Networks_RH_SomMotA_11",
+   "source": "Schaefer2018",
+   "network": "SomMotA",
+   "hemi": "RH",
+   "n_voxels": 248,
+   "src_value": 123
+  },
+  {
+   "id": 124,
+   "name": "17Networks_RH_SomMotB_Aud_1",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "RH",
+   "n_voxels": 602,
+   "src_value": 124
+  },
+  {
+   "id": 125,
+   "name": "17Networks_RH_SomMotB_Aud_2",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "RH",
+   "n_voxels": 530,
+   "src_value": 125
+  },
+  {
+   "id": 126,
+   "name": "17Networks_RH_SomMotB_S2_1",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "RH",
+   "n_voxels": 382,
+   "src_value": 126
+  },
+  {
+   "id": 127,
+   "name": "17Networks_RH_SomMotB_S2_2",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "RH",
+   "n_voxels": 398,
+   "src_value": 127
+  },
+  {
+   "id": 128,
+   "name": "17Networks_RH_SomMotB_S2_3",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "RH",
+   "n_voxels": 279,
+   "src_value": 128
+  },
+  {
+   "id": 129,
+   "name": "17Networks_RH_SomMotB_S2_4",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "RH",
+   "n_voxels": 294,
+   "src_value": 129
+  },
+  {
+   "id": 130,
+   "name": "17Networks_RH_SomMotB_Cent_1",
+   "source": "Schaefer2018",
+   "network": "SomMotB",
+   "hemi": "RH",
+   "n_voxels": 771,
+   "src_value": 130
+  },
+  {
+   "id": 131,
+   "name": "17Networks_RH_DorsAttnA_TempOcc_1",
+   "source": "Schaefer2018",
+   "network": "DorsAttnA",
+   "hemi": "RH",
+   "n_voxels": 1196,
+   "src_value": 131
+  },
+  {
+   "id": 132,
+   "name": "17Networks_RH_DorsAttnA_ParOcc_1",
+   "source": "Schaefer2018",
+   "network": "DorsAttnA",
+   "hemi": "RH",
+   "n_voxels": 974,
+   "src_value": 132
+  },
+  {
+   "id": 133,
+   "name": "17Networks_RH_DorsAttnA_SPL_1",
+   "source": "Schaefer2018",
+   "network": "DorsAttnA",
+   "hemi": "RH",
+   "n_voxels": 814,
+   "src_value": 133
+  },
+  {
+   "id": 134,
+   "name": "17Networks_RH_DorsAttnA_SPL_2",
+   "source": "Schaefer2018",
+   "network": "DorsAttnA",
+   "hemi": "RH",
+   "n_voxels": 459,
+   "src_value": 134
+  },
+  {
+   "id": 135,
+   "name": "17Networks_RH_DorsAttnA_SPL_3",
+   "source": "Schaefer2018",
+   "network": "DorsAttnA",
+   "hemi": "RH",
+   "n_voxels": 555,
+   "src_value": 135
+  },
+  {
+   "id": 136,
+   "name": "17Networks_RH_DorsAttnA_SPL_4",
+   "source": "Schaefer2018",
+   "network": "DorsAttnA",
+   "hemi": "RH",
+   "n_voxels": 855,
+   "src_value": 136
+  },
+  {
+   "id": 137,
+   "name": "17Networks_RH_DorsAttnB_PostC_1",
+   "source": "Schaefer2018",
+   "network": "DorsAttnB",
+   "hemi": "RH",
+   "n_voxels": 377,
+   "src_value": 137
+  },
+  {
+   "id": 138,
+   "name": "17Networks_RH_DorsAttnB_PostC_2",
+   "source": "Schaefer2018",
+   "network": "DorsAttnB",
+   "hemi": "RH",
+   "n_voxels": 424,
+   "src_value": 138
+  },
+  {
+   "id": 139,
+   "name": "17Networks_RH_DorsAttnB_PostC_3",
+   "source": "Schaefer2018",
+   "network": "DorsAttnB",
+   "hemi": "RH",
+   "n_voxels": 733,
+   "src_value": 139
+  },
+  {
+   "id": 140,
+   "name": "17Networks_RH_DorsAttnB_PostC_4",
+   "source": "Schaefer2018",
+   "network": "DorsAttnB",
+   "hemi": "RH",
+   "n_voxels": 605,
+   "src_value": 140
+  },
+  {
+   "id": 141,
+   "name": "17Networks_RH_DorsAttnB_FEF_1",
+   "source": "Schaefer2018",
+   "network": "DorsAttnB",
+   "hemi": "RH",
+   "n_voxels": 505,
+   "src_value": 141
+  },
+  {
+   "id": 142,
+   "name": "17Networks_RH_SalVentAttnA_ParOper_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "RH",
+   "n_voxels": 952,
+   "src_value": 142
+  },
+  {
+   "id": 143,
+   "name": "17Networks_RH_SalVentAttnA_PrC_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "RH",
+   "n_voxels": 409,
+   "src_value": 143
+  },
+  {
+   "id": 144,
+   "name": "17Networks_RH_SalVentAttnA_Ins_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "RH",
+   "n_voxels": 367,
+   "src_value": 144
+  },
+  {
+   "id": 145,
+   "name": "17Networks_RH_SalVentAttnA_Ins_2",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "RH",
+   "n_voxels": 752,
+   "src_value": 145
+  },
+  {
+   "id": 146,
+   "name": "17Networks_RH_SalVentAttnA_FrOper_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "RH",
+   "n_voxels": 890,
+   "src_value": 146
+  },
+  {
+   "id": 147,
+   "name": "17Networks_RH_SalVentAttnA_FrMed_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "RH",
+   "n_voxels": 727,
+   "src_value": 147
+  },
+  {
+   "id": 148,
+   "name": "17Networks_RH_SalVentAttnA_ParMed_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "RH",
+   "n_voxels": 239,
+   "src_value": 148
+  },
+  {
+   "id": 149,
+   "name": "17Networks_RH_SalVentAttnA_ParMed_2",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "RH",
+   "n_voxels": 587,
+   "src_value": 149
+  },
+  {
+   "id": 150,
+   "name": "17Networks_RH_SalVentAttnA_FrMed_2",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnA",
+   "hemi": "RH",
+   "n_voxels": 608,
+   "src_value": 150
+  },
+  {
+   "id": 151,
+   "name": "17Networks_RH_SalVentAttnB_IPL_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnB",
+   "hemi": "RH",
+   "n_voxels": 433,
+   "src_value": 151
+  },
+  {
+   "id": 152,
+   "name": "17Networks_RH_SalVentAttnB_PFClv_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnB",
+   "hemi": "RH",
+   "n_voxels": 1022,
+   "src_value": 152
+  },
+  {
+   "id": 153,
+   "name": "17Networks_RH_SalVentAttnB_PFCl_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnB",
+   "hemi": "RH",
+   "n_voxels": 1027,
+   "src_value": 153
+  },
+  {
+   "id": 154,
+   "name": "17Networks_RH_SalVentAttnB_Ins_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnB",
+   "hemi": "RH",
+   "n_voxels": 242,
+   "src_value": 154
+  },
+  {
+   "id": 155,
+   "name": "17Networks_RH_SalVentAttnB_Ins_2",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnB",
+   "hemi": "RH",
+   "n_voxels": 364,
+   "src_value": 155
+  },
+  {
+   "id": 156,
+   "name": "17Networks_RH_SalVentAttnB_PFCmp_1",
+   "source": "Schaefer2018",
+   "network": "SalVentAttnB",
+   "hemi": "RH",
+   "n_voxels": 636,
+   "src_value": 156
+  },
+  {
+   "id": 157,
+   "name": "17Networks_RH_LimbicB_OFC_1",
+   "source": "Schaefer2018",
+   "network": "LimbicB",
+   "hemi": "RH",
+   "n_voxels": 854,
+   "src_value": 157
+  },
+  {
+   "id": 158,
+   "name": "17Networks_RH_LimbicB_OFC_2",
+   "source": "Schaefer2018",
+   "network": "LimbicB",
+   "hemi": "RH",
+   "n_voxels": 739,
+   "src_value": 158
+  },
+  {
+   "id": 159,
+   "name": "17Networks_RH_LimbicB_OFC_3",
+   "source": "Schaefer2018",
+   "network": "LimbicB",
+   "hemi": "RH",
+   "n_voxels": 990,
+   "src_value": 159
+  },
+  {
+   "id": 160,
+   "name": "17Networks_RH_LimbicB_OFC_4",
+   "source": "Schaefer2018",
+   "network": "LimbicB",
+   "hemi": "RH",
+   "n_voxels": 793,
+   "src_value": 160
+  },
+  {
+   "id": 161,
+   "name": "17Networks_RH_LimbicA_TempPole_1",
+   "source": "Schaefer2018",
+   "network": "LimbicA",
+   "hemi": "RH",
+   "n_voxels": 1144,
+   "src_value": 161
+  },
+  {
+   "id": 162,
+   "name": "17Networks_RH_LimbicA_TempPole_2",
+   "source": "Schaefer2018",
+   "network": "LimbicA",
+   "hemi": "RH",
+   "n_voxels": 1136,
+   "src_value": 162
+  },
+  {
+   "id": 163,
+   "name": "17Networks_RH_LimbicA_TempPole_3",
+   "source": "Schaefer2018",
+   "network": "LimbicA",
+   "hemi": "RH",
+   "n_voxels": 544,
+   "src_value": 163
+  },
+  {
+   "id": 164,
+   "name": "17Networks_RH_LimbicA_TempPole_4",
+   "source": "Schaefer2018",
+   "network": "LimbicA",
+   "hemi": "RH",
+   "n_voxels": 798,
+   "src_value": 164
+  },
+  {
+   "id": 165,
+   "name": "17Networks_RH_ContA_IPS_1",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "RH",
+   "n_voxels": 756,
+   "src_value": 165
+  },
+  {
+   "id": 166,
+   "name": "17Networks_RH_ContA_IPS_2",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "RH",
+   "n_voxels": 453,
+   "src_value": 166
+  },
+  {
+   "id": 167,
+   "name": "17Networks_RH_ContA_PFCd_1",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "RH",
+   "n_voxels": 633,
+   "src_value": 167
+  },
+  {
+   "id": 168,
+   "name": "17Networks_RH_ContA_PFCl_1",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "RH",
+   "n_voxels": 823,
+   "src_value": 168
+  },
+  {
+   "id": 169,
+   "name": "17Networks_RH_ContA_PFCl_2",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "RH",
+   "n_voxels": 1085,
+   "src_value": 169
+  },
+  {
+   "id": 170,
+   "name": "17Networks_RH_ContA_Cingm_1",
+   "source": "Schaefer2018",
+   "network": "ContA",
+   "hemi": "RH",
+   "n_voxels": 210,
+   "src_value": 170
+  },
+  {
+   "id": 171,
+   "name": "17Networks_RH_ContB_Temp_1",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "RH",
+   "n_voxels": 1134,
+   "src_value": 171
+  },
+  {
+   "id": 172,
+   "name": "17Networks_RH_ContB_Temp_2",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "RH",
+   "n_voxels": 753,
+   "src_value": 172
+  },
+  {
+   "id": 173,
+   "name": "17Networks_RH_ContB_IPL_1",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "RH",
+   "n_voxels": 689,
+   "src_value": 173
+  },
+  {
+   "id": 174,
+   "name": "17Networks_RH_ContB_IPL_2",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "RH",
+   "n_voxels": 410,
+   "src_value": 174
+  },
+  {
+   "id": 175,
+   "name": "17Networks_RH_ContB_PFCld_1",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "RH",
+   "n_voxels": 448,
+   "src_value": 175
+  },
+  {
+   "id": 176,
+   "name": "17Networks_RH_ContB_PFCld_2",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "RH",
+   "n_voxels": 1103,
+   "src_value": 176
+  },
+  {
+   "id": 177,
+   "name": "17Networks_RH_ContB_PFClv_1",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "RH",
+   "n_voxels": 986,
+   "src_value": 177
+  },
+  {
+   "id": 178,
+   "name": "17Networks_RH_ContB_PFClv_2",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "RH",
+   "n_voxels": 796,
+   "src_value": 178
+  },
+  {
+   "id": 179,
+   "name": "17Networks_RH_ContB_PFCmp_1",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "RH",
+   "n_voxels": 824,
+   "src_value": 179
+  },
+  {
+   "id": 180,
+   "name": "17Networks_RH_ContB_PFCld_3",
+   "source": "Schaefer2018",
+   "network": "ContB",
+   "hemi": "RH",
+   "n_voxels": 468,
+   "src_value": 180
+  },
+  {
+   "id": 181,
+   "name": "17Networks_RH_ContC_pCun_1",
+   "source": "Schaefer2018",
+   "network": "ContC",
+   "hemi": "RH",
+   "n_voxels": 478,
+   "src_value": 181
+  },
+  {
+   "id": 182,
+   "name": "17Networks_RH_ContC_pCun_2",
+   "source": "Schaefer2018",
+   "network": "ContC",
+   "hemi": "RH",
+   "n_voxels": 570,
+   "src_value": 182
+  },
+  {
+   "id": 183,
+   "name": "17Networks_RH_ContC_Cingp_1",
+   "source": "Schaefer2018",
+   "network": "ContC",
+   "hemi": "RH",
+   "n_voxels": 340,
+   "src_value": 183
+  },
+  {
+   "id": 184,
+   "name": "17Networks_RH_DefaultA_IPL_1",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "RH",
+   "n_voxels": 855,
+   "src_value": 184
+  },
+  {
+   "id": 185,
+   "name": "17Networks_RH_DefaultA_PFCd_1",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "RH",
+   "n_voxels": 537,
+   "src_value": 185
+  },
+  {
+   "id": 186,
+   "name": "17Networks_RH_DefaultA_pCunPCC_1",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "RH",
+   "n_voxels": 924,
+   "src_value": 186
+  },
+  {
+   "id": 187,
+   "name": "17Networks_RH_DefaultA_PFCm_1",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "RH",
+   "n_voxels": 591,
+   "src_value": 187
+  },
+  {
+   "id": 188,
+   "name": "17Networks_RH_DefaultA_PFCm_2",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "RH",
+   "n_voxels": 114,
+   "src_value": 188
+  },
+  {
+   "id": 189,
+   "name": "17Networks_RH_DefaultA_PFCm_3",
+   "source": "Schaefer2018",
+   "network": "DefaultA",
+   "hemi": "RH",
+   "n_voxels": 1446,
+   "src_value": 189
+  },
+  {
+   "id": 190,
+   "name": "17Networks_RH_DefaultB_Temp_1",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "RH",
+   "n_voxels": 476,
+   "src_value": 190
+  },
+  {
+   "id": 191,
+   "name": "17Networks_RH_DefaultB_AntTemp_1",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "RH",
+   "n_voxels": 1059,
+   "src_value": 191
+  },
+  {
+   "id": 192,
+   "name": "17Networks_RH_DefaultB_PFCd_1",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "RH",
+   "n_voxels": 933,
+   "src_value": 192
+  },
+  {
+   "id": 193,
+   "name": "17Networks_RH_DefaultB_PFCv_1",
+   "source": "Schaefer2018",
+   "network": "DefaultB",
+   "hemi": "RH",
+   "n_voxels": 1043,
+   "src_value": 193
+  },
+  {
+   "id": 194,
+   "name": "17Networks_RH_DefaultC_IPL_1",
+   "source": "Schaefer2018",
+   "network": "DefaultC",
+   "hemi": "RH",
+   "n_voxels": 791,
+   "src_value": 194
+  },
+  {
+   "id": 195,
+   "name": "17Networks_RH_DefaultC_Rsp_1",
+   "source": "Schaefer2018",
+   "network": "DefaultC",
+   "hemi": "RH",
+   "n_voxels": 484,
+   "src_value": 195
+  },
+  {
+   "id": 196,
+   "name": "17Networks_RH_DefaultC_PHC_1",
+   "source": "Schaefer2018",
+   "network": "DefaultC",
+   "hemi": "RH",
+   "n_voxels": 676,
+   "src_value": 196
+  },
+  {
+   "id": 197,
+   "name": "17Networks_RH_TempPar_1",
+   "source": "Schaefer2018",
+   "network": "TempPar",
+   "hemi": "RH",
+   "n_voxels": 712,
+   "src_value": 197
+  },
+  {
+   "id": 198,
+   "name": "17Networks_RH_TempPar_2",
+   "source": "Schaefer2018",
+   "network": "TempPar",
+   "hemi": "RH",
+   "n_voxels": 465,
+   "src_value": 198
+  },
+  {
+   "id": 199,
+   "name": "17Networks_RH_TempPar_3",
+   "source": "Schaefer2018",
+   "network": "TempPar",
+   "hemi": "RH",
+   "n_voxels": 491,
+   "src_value": 199
+  },
+  {
+   "id": 200,
+   "name": "17Networks_RH_TempPar_4",
+   "source": "Schaefer2018",
+   "network": "TempPar",
+   "hemi": "RH",
+   "n_voxels": 392,
+   "src_value": 200
+  },
+  {
+   "id": 201,
+   "name": "Left Thalamus",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "LH",
+   "n_voxels": 1320,
+   "src_value": 4
+  },
+  {
+   "id": 202,
+   "name": "Left Caudate",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "LH",
+   "n_voxels": 487,
+   "src_value": 5
+  },
+  {
+   "id": 203,
+   "name": "Left Putamen",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "LH",
+   "n_voxels": 799,
+   "src_value": 6
+  },
+  {
+   "id": 204,
+   "name": "Left Pallidum",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "LH",
+   "n_voxels": 267,
+   "src_value": 7
+  },
+  {
+   "id": 205,
+   "name": "Brain-Stem",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "NA",
+   "n_voxels": 4890,
+   "src_value": 8
+  },
+  {
+   "id": 206,
+   "name": "Left Hippocampus",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "LH",
+   "n_voxels": 674,
+   "src_value": 9
+  },
+  {
+   "id": 207,
+   "name": "Left Amygdala",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "LH",
+   "n_voxels": 304,
+   "src_value": 10
+  },
+  {
+   "id": 208,
+   "name": "Left Accumbens",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "LH",
+   "n_voxels": 87,
+   "src_value": 11
+  },
+  {
+   "id": 209,
+   "name": "Right Thalamus",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "RH",
+   "n_voxels": 1282,
+   "src_value": 15
+  },
+  {
+   "id": 210,
+   "name": "Right Caudate",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "RH",
+   "n_voxels": 511,
+   "src_value": 16
+  },
+  {
+   "id": 211,
+   "name": "Right Putamen",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "RH",
+   "n_voxels": 796,
+   "src_value": 17
+  },
+  {
+   "id": 212,
+   "name": "Right Pallidum",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "RH",
+   "n_voxels": 260,
+   "src_value": 18
+  },
+  {
+   "id": 213,
+   "name": "Right Hippocampus",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "RH",
+   "n_voxels": 686,
+   "src_value": 19
+  },
+  {
+   "id": 214,
+   "name": "Right Amygdala",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "RH",
+   "n_voxels": 354,
+   "src_value": 20
+  },
+  {
+   "id": 215,
+   "name": "Right Accumbens",
+   "source": "HarvardOxford-sub",
+   "network": "Subcortex",
+   "hemi": "RH",
+   "n_voxels": 83,
+   "src_value": 21
+  },
+  {
+   "id": 216,
+   "name": "Cerebellum_Crus1_L",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "LH",
+   "n_voxels": 2477,
+   "src_value": 95
+  },
+  {
+   "id": 217,
+   "name": "Cerebellum_Crus1_R",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "RH",
+   "n_voxels": 2608,
+   "src_value": 96
+  },
+  {
+   "id": 218,
+   "name": "Cerebellum_Crus2_L",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "LH",
+   "n_voxels": 1894,
+   "src_value": 97
+  },
+  {
+   "id": 219,
+   "name": "Cerebellum_Crus2_R",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "RH",
+   "n_voxels": 2117,
+   "src_value": 98
+  },
+  {
+   "id": 220,
+   "name": "Cerebellum_3_L",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "LH",
+   "n_voxels": 51,
+   "src_value": 99
+  },
+  {
+   "id": 221,
+   "name": "Cerebellum_3_R",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "RH",
+   "n_voxels": 126,
+   "src_value": 100
+  },
+  {
+   "id": 222,
+   "name": "Cerebellum_4_5_L",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "LH",
+   "n_voxels": 1039,
+   "src_value": 101
+  },
+  {
+   "id": 223,
+   "name": "Cerebellum_4_5_R",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "RH",
+   "n_voxels": 723,
+   "src_value": 102
+  },
+  {
+   "id": 224,
+   "name": "Cerebellum_6_L",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "LH",
+   "n_voxels": 1575,
+   "src_value": 103
+  },
+  {
+   "id": 225,
+   "name": "Cerebellum_6_R",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "RH",
+   "n_voxels": 1695,
+   "src_value": 104
+  },
+  {
+   "id": 226,
+   "name": "Cerebellum_7b_L",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "LH",
+   "n_voxels": 585,
+   "src_value": 105
+  },
+  {
+   "id": 227,
+   "name": "Cerebellum_7b_R",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "RH",
+   "n_voxels": 534,
+   "src_value": 106
+  },
+  {
+   "id": 228,
+   "name": "Cerebellum_8_L",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "LH",
+   "n_voxels": 1887,
+   "src_value": 107
+  },
+  {
+   "id": 229,
+   "name": "Cerebellum_8_R",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "RH",
+   "n_voxels": 2308,
+   "src_value": 108
+  },
+  {
+   "id": 230,
+   "name": "Cerebellum_9_L",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "LH",
+   "n_voxels": 774,
+   "src_value": 109
+  },
+  {
+   "id": 231,
+   "name": "Cerebellum_9_R",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "RH",
+   "n_voxels": 717,
+   "src_value": 110
+  },
+  {
+   "id": 232,
+   "name": "Cerebellum_10_L",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "LH",
+   "n_voxels": 134,
+   "src_value": 111
+  },
+  {
+   "id": 233,
+   "name": "Cerebellum_10_R",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "RH",
+   "n_voxels": 158,
+   "src_value": 112
+  },
+  {
+   "id": 234,
+   "name": "Vermis_1_2",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "NA",
+   "n_voxels": 17,
+   "src_value": 113
+  },
+  {
+   "id": 235,
+   "name": "Vermis_3",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "NA",
+   "n_voxels": 139,
+   "src_value": 114
+  },
+  {
+   "id": 236,
+   "name": "Vermis_4_5",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "NA",
+   "n_voxels": 657,
+   "src_value": 115
+  },
+  {
+   "id": 237,
+   "name": "Vermis_6",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "NA",
+   "n_voxels": 365,
+   "src_value": 116
+  },
+  {
+   "id": 238,
+   "name": "Vermis_7",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "NA",
+   "n_voxels": 194,
+   "src_value": 117
+  },
+  {
+   "id": 239,
+   "name": "Vermis_8",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "NA",
+   "n_voxels": 243,
+   "src_value": 118
+  },
+  {
+   "id": 240,
+   "name": "Vermis_9",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "NA",
+   "n_voxels": 174,
+   "src_value": 119
+  },
+  {
+   "id": 241,
+   "name": "Vermis_10",
+   "source": "AAL",
+   "network": "Cerebellum",
+   "hemi": "NA",
+   "n_voxels": 91,
+   "src_value": 120
+  }
+ ]
+}

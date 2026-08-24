@@ -1,0 +1,21 @@
+# environments and caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.templateflow/
+.nilearn_data/
+.antstmp/
+
+# scratch
+logs/
+subjects_*.txt
+
+# derivatives: large per-subject arrays are regenerable from OpenNeuro.
+# The manifest, atlas definition and QC summaries are kept.
+derivatives/*
+!derivatives/MANIFEST.json
+!derivatives/reaped.jsonl
+!derivatives/atlas-schaefer200/
+derivatives/atlas-schaefer200/*
+!derivatives/atlas-schaefer200/atlas.json
