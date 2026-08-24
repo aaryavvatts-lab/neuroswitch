@@ -12,6 +12,30 @@ from .site_build import (DS_DOI, PREPRINT, bars, e, fmt_auc, fmt_ci, fmt_p, load
 NULL_PREFIX = "NULL "
 
 
+def progress_banner() -> str:
+    """Shown while preprocessing is still working through the 66 people.
+
+    Without it a page reporting three participants looks broken rather than
+    unfinished.
+    """
+    coh = load("cohort") or {}
+    su = coh.get("summary", {})
+    done = su.get("n_included")
+    if done is None:
+        return ""
+    target = 66
+    if done >= target - 2:
+        return ""
+    pct = min(100, round(100 * done / target))
+    return (f'<div class="note warn"><p><strong>Still running.</strong> '
+            f'The scans are being processed one person at a time, and '
+            f'{done} of about {target} are done so far ({pct}%). Numbers on this '
+            f'page come from those {done} and will change. Anything not worked out '
+            f'yet says so instead of showing a placeholder.</p>'
+            f'<div class="progress" role="img" aria-label="{pct} percent processed">'
+            f'<span style="width:{pct}%"></span></div></div>')
+
+
 def figure(name: str, caption: str) -> str:
     """Embed a generated figure, or nothing if it has not been made yet."""
     from .site_build import SITE
@@ -82,6 +106,7 @@ def build_index() -> None:
 
     body = f"""
 <h1>Does the brain rewire after a hand injury?</h1>
+{progress_banner()}
 <p class="lede">When nerve damage takes your right hand out of action, you start
 doing everything with the left. This project looks at brain scans taken while
 people were drawing, and asks whether their brain networks really look different.
@@ -466,6 +491,7 @@ def build_results() -> None:
 
     body = f"""
 <h1>Does the graph network beat the simple method?</h1>
+{progress_banner()}
 <p class="lede">Every model was scored the same way. 10 repeats of five-fold
 cross-validation, grouped by person, with shuffled-label tests on the headline
 numbers.</p>
@@ -761,6 +787,7 @@ after taking drawing quality out is
 
     body = f"""
 <h1>Could this be wrong?</h1>
+{progress_banner()}
 <p class="lede">Getting a model to tell patients from controls is easy. Working out
 whether it did so for the reason you hoped is the hard part. Here are four ways
 this could be an artefact, each one turned into a test.</p>

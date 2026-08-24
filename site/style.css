@@ -179,3 +179,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent);
 .refs li:last-child { border-bottom: 0; }
 .refs .why { color: var(--fg-mut); font-size: .9rem; margin-top: .3rem; }
 .refs .meta { font-size: .86rem; color: var(--fg-faint); }
+
+/* build progress indicator, shown only while the pipeline is still working */
+.progress { display: block; height: 6px; background: var(--bg-inset);
+            border-radius: 3px; overflow: hidden; margin-top: .75rem; }
+.progress span { display: block; height: 100%; background: var(--warn);
+                 border-radius: 3px; }
