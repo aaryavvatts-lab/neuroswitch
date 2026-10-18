@@ -19,3 +19,6 @@ derivatives/*
 !derivatives/atlas-schaefer200/
 derivatives/atlas-schaefer200/*
 !derivatives/atlas-schaefer200/atlas.json
+
+# vercel cli scratch (project link is committed below it)
+.vercel/README.txt

@@ -1,0 +1,6 @@
+# Only the built site is uploaded. The repository root also holds a 1.4 GB
+# virtual environment, imaging derivatives and template caches; without this
+# every deploy would try to push all of it.
+/*
+!/site
+!/vercel.json
