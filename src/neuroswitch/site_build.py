@@ -185,7 +185,7 @@ def page(fname: str, title: str, body: str, lede: str = "",
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{desc}">
 <meta property="og:type" content="article">
-<meta property="og:image" content="https://neuroswitch.vercel.app/img/bell-nerves-1818.jpg">
+<meta property="og:image" content="https://hand-injury-brain-rewiring.vercel.app/img/bell-nerves-1818.jpg">
 <script src="theme-head.js"></script>
 <link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="tokens.css">

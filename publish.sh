@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Publish site/ to Vercel, which serves it at https://neuroswitch.vercel.app
+# Publish site/ to Vercel, which serves it at https://hand-injury-brain-rewiring.vercel.app
 #
 # The site used to go to the gh-pages branch because deploys to the old Vercel
 # project returned 403. That project no longer exists; the site is now a plain
@@ -12,7 +12,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 
 SCOPE=scholarly-work-projects
-URL=https://neuroswitch.vercel.app
+URL=https://hand-injury-brain-rewiring.vercel.app
 
 # Refuse to publish a build with any of the bugs that actually shipped.
 grep -q '<svg xmlns' site/index.html \
