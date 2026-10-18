@@ -172,7 +172,8 @@ def test_inlined_svg_figures_use_current_theme_variables():
     every colour resolved to nothing.
     """
     import re
-    current_vars = set(re.findall(r"--[a-z0-9-]+(?=\s*:)", (SITE / "style.css").read_text()))
+    css = "\n".join(c.read_text() for c in sorted(SITE.glob("*.css")))
+    current_vars = set(re.findall(r"--[a-z0-9-]+(?=\s*:)", css))
     for svg_path in (SITE / "figures").glob("*.svg"):
         used = set(re.findall(r"var\((--[a-z0-9-]+)\)", svg_path.read_text()))
         stale = used - current_vars

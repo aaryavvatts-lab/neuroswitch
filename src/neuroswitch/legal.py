@@ -8,16 +8,27 @@ from __future__ import annotations
 
 from datetime import date
 
-from .site_build import DS_DOI, write
+from .site_build import DS_DOI, LEGAL_PAGES, write as _write
 
 UPDATED = date.today().isoformat()
 REPO = "https://github.com/aaryavvatts-lab/neuroswitch"
 
 
+def write(fname: str, title: str, body: str, lede: str = "") -> None:
+    """Lay a legal page out on the article's axis: side notes left, text right."""
+    others = "".join(f'<li><a href="{h}">{t}</a></li>' for h, t in LEGAL_PAGES if h != fname)
+    side = (f'<p class="contents__title">Also</p><ol class="contents">{others}</ol>'
+            f'<p>Last updated {UPDATED}. The history of every version is in the '
+            f'<a href="{REPO}">repository</a>.</p>')
+    _write(fname, title,
+           f'<section class="wrap page legal-page"><div class="side">{side}</div>'
+           f'<div class="text">{body}</div></section>', lede)
+
+
 def build_privacy() -> None:
     body = f"""
-<h1>Privacy</h1>
-<p class="lede">The short version: this site does not collect anything about you.
+<h1 class="head">Privacy</h1>
+<p class="lead">The short version: this site does not collect anything about you.
 There is no analytics, no tracking, no account, and no database. The long version
 explains what that means in practice and what the host can still see.</p>
 
@@ -45,23 +56,27 @@ tag and no advertising script of any kind.</li>
 <li><strong>No cookies.</strong> The site sets none. See the
 <a href="cookies.html">cookies page</a> for how to check this yourself in about
 twenty seconds.</li>
-<li><strong>No local storage.</strong> Nothing is written to localStorage,
-sessionStorage or IndexedDB. Close the tab and no trace remains.</li>
+<li><strong>One item in local storage, and only if you ask for it.</strong> If you
+press the Light or Dark control in the header, the word you chose is saved under the
+name <code>theme</code> so the next page keeps it. Nothing else is written, nothing is
+written to sessionStorage or IndexedDB, and clearing your browser's site data removes
+it. If you never press the control, nothing is stored at all.</li>
 <li><strong>No fingerprinting.</strong> No canvas fingerprinting, no font
 enumeration, no device probing.</li>
 <li><strong>No third-party requests.</strong> Every file a page loads comes from
-this same site. There are no web fonts from Google, no scripts from a CDN, no
-embedded videos and no iframes. That matters because a request to another company's
+this same site. The typeface is served from here under its own licence rather than
+from Google, there are no scripts from a CDN, no embedded videos and no iframes. That matters because a request to another company's
 server tells that company your IP address and which page you were reading, even if
 this site never sees it.</li>
 <li><strong>No accounts.</strong> There is nothing to sign up for, so there is no
 email address, name or password to lose.</li>
 </ul>
 <div class="measure">
-<p>There are automated tests in the repository that check the built pages for
-analytics scripts, third-party resources, cookie calls and storage calls. If someone
-later adds a web font or a tracking tag, those tests fail and the claim on this page
-stops being quietly false. That is the only way a promise like this stays true over
+<p>There are automated tests in the repository that check the built pages and
+scripts for analytics code, third-party resources and cookie calls, and that the only
+thing ever written to storage is that one theme preference. If someone later adds a
+tracking tag or a font from another company, those tests fail and the claim on this
+page stops being quietly false. That is the only way a promise like this stays true over
 time.</p>
 </div>
 </section>
@@ -179,8 +194,8 @@ can check what it said on any past date rather than taking my word for it.</p>
 
 def build_terms() -> None:
     body = f"""
-<h1>Terms of use</h1>
-<p class="lede">A student project, shared as it is. Read it, learn from it, reuse the
+<h1 class="head">Terms of use</h1>
+<p class="lead">A student project, shared as it is. Read it, learn from it, reuse the
 code. Do not treat it as medical advice and do not present it as something it is
 not.</p>
 
@@ -290,10 +305,10 @@ unenforceable, the rest continues to apply.</p>
 
 def build_cookies() -> None:
     body = f"""
-<h1>Cookies</h1>
-<p class="lede">This site sets no cookies at all. That is why you never saw a banner
-asking about them, and this page explains how to confirm that for yourself rather
-than trusting the claim.</p>
+<h1 class="head">Cookies</h1>
+<p class="lead">This site sets no cookies at all, and the only thing it ever stores is
+the theme you pick. That is why you never saw a banner asking about them, and this page
+explains how to confirm that for yourself rather than trusting the claim.</p>
 
 <section>
 <h2>Why there is no banner</h2>
@@ -303,20 +318,25 @@ them to recognise you across pages, sessions and sometimes other websites entire
 Under the EU ePrivacy Directive and the GDPR, and under similar rules elsewhere,
 consent is required before storing or reading information on your device unless it is
 strictly necessary to provide the thing you asked for.</p>
-<p>This site stores nothing and reads nothing. There is no consent to collect, so a
-banner would be pure theatre. Showing one anyway would train you to click through
+<p>This site stores one word, and only when you ask it to: the theme you picked with
+the Light or Dark control, so the next page matches. That is strictly necessary to do
+the thing you asked for, which is the one case where the rules need no consent. Nothing
+identifies you and nothing is read back for any other purpose. There is no consent to
+collect, so a banner would be pure theatre. Showing one anyway would train you to click through
 consent dialogs without reading them, which makes the web slightly worse.</p>
 </div>
 </section>
 
 <section>
 <h2>What is actually stored</h2>
-<div class="tablewrap"><table>
+<div class="table-scroll"><table>
 <caption>Every storage mechanism a browser offers, and what this site puts in it</caption>
 <thead><tr><th>Mechanism</th><th>What this site stores</th></tr></thead>
 <tbody>
 <tr><td>Cookies</td><td>Nothing</td></tr>
-<tr><td>Local storage</td><td>Nothing</td></tr>
+<tr><td>Local storage</td><td>One entry named <code>theme</code>, holding the word
+light or dark, written only when you press the theme control. Clear it and the site
+follows your system setting again</td></tr>
 <tr><td>Session storage</td><td>Nothing</td></tr>
 <tr><td>IndexedDB</td><td>Nothing</td></tr>
 <tr><td>Cache storage / service workers</td><td>Nothing. There is no service worker</td></tr>
@@ -332,9 +352,10 @@ it holds no identifier, and clearing your browser cache removes it.</p>
 <section>
 <h2>What each page loads</h2>
 <div class="measure">
-<p>Every page loads one stylesheet and one small icon, both from this same site. The
-study page also loads two chart images, again from here. The tools page loads one
-JSON file listing the coordinates and names of the 241 brain regions.</p>
+<p>Every page loads four small stylesheets, the typeface in four weights, two small
+scripts, one icon and its pictures, all from this same site. The study page's charts
+are drawn into the page itself. The tools page also loads one script for the tools
+and one JSON file listing the coordinates and names of the 241 brain regions.</p>
 <p>That is the complete list. No fonts from Google, no scripts from a CDN, no
 analytics beacon, no embedded video, no iframe, no social widget, no image from
 another domain. Nothing on any page causes a request to a server I do not control,
@@ -345,8 +366,9 @@ which means no other company learns that you visited.</p>
 <section>
 <h2>The JavaScript that does run</h2>
 <div class="measure">
-<p>The tools page runs three small scripts, all written for this project and served
-from here.</p>
+<p>Every page runs one small script, written for this project and served from here.
+It switches the theme when you ask, opens the menu on a phone, and fades sections in
+as you scroll. The tools page runs three more.</p>
 <p>One simulates study designs so you can see how often a study of a given size would
 find a given effect. One lets you step through the analysis choices and see the
 result each combination gives. One draws the brain map and handles clicking and
@@ -354,8 +376,8 @@ filtering.</p>
 <p>All three run entirely inside your browser. None of them sends anything anywhere,
 and none of them remembers anything after you close the tab. Every number they show
 is computed on your own machine from data already delivered with the page. If you
-block JavaScript, the study page is completely unaffected and the tools page shows
-plain text instead of the interactive parts.</p>
+block JavaScript, every page still reads in full, the theme simply follows your system
+setting, and the tools page shows plain text instead of the interactive parts.</p>
 </div>
 </section>
 
@@ -365,14 +387,16 @@ plain text instead of the interactive parts.</p>
 <p>You do not have to believe any of this.</p>
 <p>Open your browser's developer tools, usually with F12 or Command-Option-I. Go to
 the Application tab in Chrome or Edge, or Storage in Firefox and Safari, and look at
-Cookies for this domain. It will be empty. Look at Local Storage and Session Storage
-in the same panel. Also empty.</p>
+Cookies for this domain. It will be empty. Look at Session Storage. Also empty. Local
+Storage holds the single theme entry if you have pressed the control, and nothing
+otherwise.</p>
 <p>Then open the Network tab and reload the page. Every request listed will be to
 this domain. If you ever see one that is not, something has gone wrong and I would
 like to know about it through the <a href="{REPO}">repository</a>.</p>
 <p>There is also an automated test in that repository which scans every built page
-for cookie calls, storage calls, analytics scripts and off-site resources. It fails
-the build rather than letting this page become untrue.</p>
+and script for cookie calls, analytics code and off-site resources, and checks that the
+only storage call is the theme preference. It fails the build rather than letting this
+page become untrue.</p>
 <p class="small">Last updated {UPDATED}.</p>
 </div>
 </section>
@@ -384,8 +408,8 @@ the build rather than letting this page become untrue.</p>
 
 def build_accessibility() -> None:
     body = f"""
-<h1>Accessibility</h1>
-<p class="lede">The target is WCAG 2.1 level AA. This page says what has been done,
+<h1 class="head">Accessibility</h1>
+<p class="lead">The target is WCAG 2.1 level AA. This page says what has been done,
 and is honest about the places where the site still falls short, because an
 accessibility statement that only lists successes is not much use to anyone.</p>
 
@@ -397,10 +421,11 @@ keyboard or screen reader user does not have to walk through the navigation on e
 page.</p>
 <p>Headings are real headings and run in order without skipping levels, so a screen
 reader can jump through the structure and build an outline. The main article is one
-long page with a section jump bar, which means fewer navigation steps than the eight
-separate pages this site used to have.</p>
+long page with a contents list beside the title, which means fewer navigation steps
+than the eight separate pages this site used to have.</p>
 <p>Navigation is marked as navigation, the current page is flagged with
-<code>aria-current</code>, and every page declares its language. Tables use real
+<code>aria-current</code>, the phone menu traps focus while open and closes on Escape,
+the theme control reports its state, and every page declares its language. Tables use real
 header cells and carry captions describing what they show.</p>
 <p>Everything works with a keyboard alone. Focus is visible at all times, with a
 two-pixel outline rather than a faint colour shift, and focus order follows reading
@@ -411,24 +436,26 @@ order.</p>
 <section>
 <h2>Reading and text</h2>
 <div class="measure">
-<p>Body text is 19 pixels with a line height of about 1.6 and a measure of roughly 34
-rem, which keeps lines at a comfortable length rather than running the full width of a
-monitor.</p>
+<p>Body text is 17 to 19 pixels depending on the screen, with a line height of 1.5
+and a measure of about 62 characters, which keeps lines at a comfortable length rather
+than running the full width of a monitor.</p>
 <p>Nothing is sized in fixed pixels in a way that breaks zoom. The page reflows down
 to a 320 pixel screen without a horizontal scroll bar. Wide tables scroll inside their
 own container rather than pushing the whole page sideways.</p>
 <p>Colours were chosen to meet the AA contrast ratio in both the light and dark
-themes. The site follows whatever theme your system is set to rather than forcing
-one, and it does not override your browser's font size.</p>
+themes. The site follows whatever theme your system is set to, a text control in the
+header switches it if you prefer the other one, and that choice is remembered in your
+browser. It does not override your browser's font size.</p>
 </div>
 </section>
 
 <section>
 <h2>Colour and meaning</h2>
 <div class="measure">
-<p>Only two colours carry meaning anywhere on the site: one for the right side of the
-brain and patients, one for the left side and controls. Everything else is ink on
-paper.</p>
+<p>Two colours carry meaning in the charts: one for the right side of the brain and
+patients, one for the left side and controls. The brain map on the tools page colours
+regions by network, and every region also carries its network name in text. Everything
+else is ink on paper, with one gold used for the main action.</p>
 <p>Colour is never the only signal. Control models in the results table are labelled
 in text as well as shown in grey. The lateralisation figure labels each bar with the
 side it belongs to. Every chart states its values in a table or in the surrounding
@@ -439,9 +466,11 @@ text.</p>
 <section>
 <h2>Motion</h2>
 <div class="measure">
-<p>There is no animation, no autoplay, no parallax, no carousel and nothing that
-moves on its own. Smooth scrolling for the section links is disabled automatically if
-your system asks for reduced motion.</p>
+<p>Sections fade in once as they come into view, the title rises once when the page
+loads, and the engraving at the top drifts slowly. Nothing flashes, nothing loops
+apart from that drift, and there is no autoplay, parallax or carousel. If your system
+asks for reduced motion, all of it is switched off, including smooth scrolling for the
+section links, and nothing is ever hidden while waiting for a script.</p>
 </div>
 </section>
 
@@ -451,7 +480,8 @@ your system asks for reduced motion.</p>
 <p>These are the hardest parts to make accessible and they are handled differently
 from one another.</p>
 <p>The replication calculator uses two standard range sliders, which are keyboard
-operable by default with arrow keys. Every number it produces is written out as text
+operable by default with arrow keys. Its readout is announced to screen readers when
+it changes. Every number it produces is written out as text
 next to the chart, and the verdict below it is a plain sentence. You can use the whole
 tool without seeing the chart at all.</p>
 <p>The pipeline explorer uses standard dropdown menus, which work with a keyboard and

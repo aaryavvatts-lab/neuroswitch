@@ -24,7 +24,10 @@ TRACKER_PATTERNS = [
 ALLOWED_LINK_HOSTS = ("doi.org", "openneuro.org", "vercel.com", "github.com",
                       "en.wikipedia.org", "arxiv.org", "nature.com",
                       "academic.oup.com", "sciencedirect.com", "jneurosci.org",
-                      "pnas.org", "ieeexplore.ieee.org", "s3.amazonaws.com")
+                      "pnas.org", "ieeexplore.ieee.org", "s3.amazonaws.com",
+                      # picture and font credits in the footer
+                      "commons.wikimedia.org", "creativecommons.org",
+                      "rawpixel.com", "fontshare.com")
 
 
 def html_files():
@@ -67,18 +70,33 @@ def test_outbound_links_go_where_we_say(path):
             f"{path.name} links to unexpected host {host}"
 
 
-@pytest.mark.parametrize("path", html_files(), ids=lambda p: p.name)
-def test_no_cookie_or_storage_calls(path):
-    """Look inside <script> only.
+def script_sources():
+    """Inline <script> bodies on every page, plus the site's own script files."""
+    out = []
+    for path in html_files():
+        for body in re.findall(r"<script[^>]*>(.*?)</script>", path.read_text(), re.S | re.I):
+            out.append((path.name, body))
+    for js in sorted(SITE.glob("*.js")):
+        out.append((js.name, js.read_text()))
+    return out
+
+
+@pytest.mark.parametrize("name,code", script_sources(), ids=lambda x: x if isinstance(x, str) and x.endswith((".js", ".html")) else "")
+def test_no_cookie_or_storage_calls(name, code):
+    """The cookies page promises no cookies and exactly one stored value.
 
     The privacy and cookie pages name these APIs in prose to say they are not
-    used. Scanning the whole document would flag the very sentences that make
-    the promise.
+    used, so only executable code is scanned. localStorage may appear only to
+    read or write the single `theme` preference the cookies page describes.
     """
-    scripts = re.findall(r"<script[^>]*>(.*?)</script>", path.read_text(), re.S | re.I)
-    code = "\n".join(s for s in scripts if "application/json" not in s[:0])
-    for bad in ("document.cookie", "localStorage", "sessionStorage", "indexedDB"):
-        assert bad not in code, f"{path.name} script uses {bad}"
+    for bad in ("document.cookie", "sessionStorage", "indexedDB"):
+        assert bad not in code, f"{name} script uses {bad}"
+    for use in re.findall(r"localStorage\s*\.\s*(\w+)\s*\(\s*([^)]*)\)", code):
+        method, args = use
+        assert method in ("getItem", "setItem"), f"{name} calls localStorage.{method}"
+        assert args.strip().startswith(("'theme'", '"theme"')), \
+            f"{name} touches a storage key other than theme: {args!r}"
+    assert "localStorage[" not in code, f"{name} indexes localStorage directly"
 
 
 @pytest.mark.parametrize("path", html_files(), ids=lambda p: p.name)

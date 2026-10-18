@@ -9,8 +9,8 @@ from __future__ import annotations
 import json
 
 from .references import REFERENCES, cite
-from .site_build import (DS_DOI, PREPRINT, SITE, bars, e, fmt_auc, fmt_ci, fmt_p,
-                         load, pending, stats, write)
+from .site_build import (ANCHORS, DS_DOI, PREPRINT, SITE, bars, e, fmt_auc, fmt_ci,
+                         fmt_p, load, pending, picture, stats, write)
 
 NULL_PREFIX = "NULL "
 
@@ -36,7 +36,7 @@ def figure(name: str, caption: str, number: int | None = None) -> str:
     if svg.lstrip().startswith("<?xml"):
         svg = svg.split("?>", 1)[1]
     lab = f"<strong>Figure {number}.</strong> " if number else ""
-    return (f'<figure role="img" aria-label="{e(caption)}">{svg}'
+    return (f'<figure class="wide" role="img" aria-label="{e(caption)}">{svg}'
             f'<figcaption>{lab}{caption}</figcaption></figure>')
 
 
@@ -46,7 +46,7 @@ def progress_banner() -> str:
     if done is None or done >= 64:
         return ""
     pct = min(100, round(100 * done / 66))
-    return (f'<div class="note warn"><p><strong>Still running.</strong> The scans are '
+    return (f'<div class="note warn panel"><p><strong>Still running.</strong> The scans are '
             f'being processed one person at a time and {done} of about 66 are done '
             f'({pct}%). Every number below comes from those {done} and will change. '
             f'Anything not worked out yet says so.</p>'
@@ -75,7 +75,7 @@ def _model_table(models: dict) -> str:
             f"<td class='num'>{fmt_auc(agg.get('balanced_acc'))}</td>"
             f"<td class='num'>{fmt_auc(agg.get('sensitivity'))}</td>"
             f"<td class='num'>{fmt_p(perm.get('p_value')) if perm else 'n/a'}</td></tr>")
-    return f"""<div class="tablewrap"><table>
+    return f"""<div class="table-scroll"><table>
 <caption>Every model, scored the same way</caption>
 <thead><tr><th>Model</th><th class="num">AUC</th><th class="num">95% range</th>
 <th class="num">Balanced accuracy</th><th class="num">Catch rate</th>
@@ -108,16 +108,8 @@ def build_index() -> None:
     mot, bhv = auc(NULL_PREFIX + "motion-only"), auc(NULL_PREFIX + "behaviour-only")
     dem = auc(NULL_PREFIX + "demographics-only")
 
-    hero = stats([
-        (n_inc if n_inc is not None else "n/a", "people analysed"),
-        (f"{n_pat}/{n_ctl}" if n_pat is not None else "n/a", "patients / controls"),
-        ("241", "brain regions"),
-        ("6", "scans each"),
-        ("2,868", "brain images per person"),
-        ("0.66 s", "per image"),
-    ])
-
     # ---- the answer -------------------------------------------------------
+    best = None
     if lin is None or gcn is None:
         answer = pending()
         headline = pending()
@@ -169,22 +161,21 @@ def build_index() -> None:
             f"<td>{'right' if r['hemi'] == 'RH' else 'left' if r['hemi'] == 'LH' else 'middle'}</td>"
             f"<td class='num'>{r['value']:+.3f}</td></tr>"
             for r in san.get("top_left_hand", [])[:8])
-        sanity = f"""
-<div class="stats">
-<div class="stat"><div class="n">{san['interaction_mean']:+.3f}</div>
-<div class="k">size of the hand by side effect</div></div>
-<div class="stat"><div class="n">{san['subjects_correct']}/{san['n_subjects']}</div>
-<div class="k">people showing the right pattern</div></div>
-<div class="stat"><div class="n">{san.get('top10_left_hand_in_right_hemisphere', 'n/a')}/10</div>
-<div class="k">top left-hand regions on the right</div></div>
-</div>
-<div class="tablewrap"><table>
+        sanity = stats([
+            (f"{san['interaction_mean']:+.3f}", "size of the hand by side effect"),
+            (f"{san['subjects_correct']}/{san['n_subjects']}", "people showing the right pattern"),
+            (f"{san.get('top10_left_hand_in_right_hemisphere', 'n/a')}/10", "top left-hand regions on the right"),
+        ]) + f"""
+<div class="table-scroll"><table>
 <caption>The eight regions most engaged by left-hand drawing</caption>
 <thead><tr><th>Region</th><th>Network</th><th>Side of brain</th>
 <th class="num">Left minus right</th></tr></thead>
 <tbody>{rows}</tbody></table></div>"""
     else:
         sanity = pending()
+    sanity_side = ""
+    if san.get("n_subjects"):
+        sanity_side, sanity = sanity.split('</ul>', 1)[0] + '</ul>', sanity.split('</ul>', 1)[1]
 
     # ---- controls ---------------------------------------------------------
     if hand.get("difference_graph"):
@@ -205,7 +196,7 @@ def build_index() -> None:
             extra = (f"<tr><td>Brain, patients and controls matched on how well they "
                      f"drew (n={beh.get('matched_n', 'n/a')})</td><td class='num'>"
                      f"{fmt_auc(beh['brain_performance_matched']['auc_mean'])}</td></tr>")
-        c2 = f"""<div class="tablewrap"><table>
+        c2 = f"""<div class="table-scroll"><table>
 <caption>Brain against behaviour</caption>
 <thead><tr><th>Model</th><th class="num">AUC</th></tr></thead><tbody>
 <tr><td>Brain connections</td>
@@ -236,7 +227,7 @@ after drawing quality is removed:
                 rr += (f"<tr><td>{e(lab)}</td><td class='num'>{v.get('n', 'n/a')}</td>"
                        f"<td class='num'>{v.get('spearman_rho', float('nan')):+.3f}</td>"
                        f"<td class='num'>{fmt_p(v.get('p_value'))}</td></tr>")
-        c3 = (f'<div class="tablewrap"><table><caption>Inside the patient group only'
+        c3 = (f'<div class="table-scroll"><table><caption>Inside the patient group only'
               f'</caption><thead><tr><th>Predicting</th><th class="num">n</th>'
               f'<th class="num">Correlation</th><th class="num">p</th></tr></thead>'
               f'<tbody>{rr}</tbody></table></div>')
@@ -244,23 +235,19 @@ after drawing quality is removed:
         c3 = pending()
 
     if rest.get("REST") and not (rest.get("REST") or {}).get("error"):
-        c4 = f"""<div class="stats">
-<div class="stat"><div class="n">{fmt_auc((rest.get('LH') or {}).get('auc_mean'))}</div>
-<div class="k">while drawing left-handed</div></div>
-<div class="stat"><div class="n">{fmt_auc((rest.get('REST') or {}).get('auc_mean'))}</div>
-<div class="k">lying still, doing nothing</div></div>
-</div>"""
+        c4 = stats([
+            (fmt_auc((rest.get('LH') or {}).get('auc_mean')), "while drawing left-handed"),
+            (fmt_auc((rest.get('REST') or {}).get('auc_mean')), "lying still, doing nothing"),
+        ])
     else:
         c4 = pending("The resting scans run in a second pass. This shows up when "
                      "that finishes.")
 
     if diff.get("LHeasy") and not (diff.get("LHeasy") or {}).get("error"):
-        c5 = f"""<div class="stats">
-<div class="stat"><div class="n">{fmt_auc((diff.get('LHeasy') or {}).get('auc_mean'))}</div>
-<div class="k">easy blocks only</div></div>
-<div class="stat"><div class="n">{fmt_auc((diff.get('LHhard') or {}).get('auc_mean'))}</div>
-<div class="k">hard blocks only</div></div>
-</div>"""
+        c5 = stats([
+            (fmt_auc((diff.get('LHeasy') or {}).get('auc_mean')), "easy blocks only"),
+            (fmt_auc((diff.get('LHhard') or {}).get('auc_mean')), "hard blocks only"),
+        ])
     else:
         c5 = pending()
 
@@ -272,7 +259,7 @@ after drawing quality is removed:
             f"<td>{'right' if t['hemi']=='RH' else 'left' if t['hemi']=='LH' else 'middle'}</td>"
             f"<td class='num'>{t['selection_frequency']:.2f}</td></tr>"
             for i, t in enumerate(imp["top_nodes"][:12]))
-        learned = (f"<div class='tablewrap'><table><caption>Regions the model leaned "
+        learned = (f"<div class='table-scroll'><table><caption>Regions the model leaned "
                    f"on most, and how often each one came out near the top across "
                    f"{imp.get('n_folds','n/a')} splits</caption>"
                    f"<thead><tr><th class='num'>#</th><th>Region</th><th>Network</th>"
@@ -286,36 +273,112 @@ after drawing quality is removed:
 
     # ---- multiverse -------------------------------------------------------
     if mv.get("n_specifications"):
-        multi = (f"<div class='stats'>"
-                 f"<div class='stat'><div class='n'>{mv['n_specifications']}</div>"
-                 f"<div class='k'>pipelines run</div></div>"
-                 f"<div class='stat'><div class='n'>{mv['auc_min']:.3f}</div>"
-                 f"<div class='k'>worst</div></div>"
-                 f"<div class='stat'><div class='n'>{mv['auc_median']:.3f}</div>"
-                 f"<div class='k'>middle</div></div>"
-                 f"<div class='stat'><div class='n'>{mv['auc_max']:.3f}</div>"
-                 f"<div class='k'>best</div></div></div>"
-                 f"<p>The gap between the worst and best defensible pipeline is "
+        multi_figs = stats([
+            (mv['n_specifications'], "pipelines run"),
+            (f"{mv['auc_min']:.3f}", "worst"),
+            (f"{mv['auc_median']:.3f}", "middle"),
+            (f"{mv['auc_max']:.3f}", "best"),
+        ])
+        multi = (f"<p>The gap between the worst and best defensible pipeline is "
                  f"{mv['auc_max'] - mv['auc_min']:.3f} AUC. A researcher who tried a "
                  f"few combinations and reported the one that worked could publish "
                  f"anywhere in that range. You can walk the whole grid on the "
                  f"<a href='explore.html'>tools page</a>.</p>")
     else:
+        multi_figs = ""
         multi = pending("The pipeline grid runs after the main analysis.")
 
+    # ---- the four facts beside the opening ---------------------------------
+    if n_inc is not None:
+        who = (f"<p><strong>{n_inc} people so far,</strong> {n_pat} with a nerve injury and "
+               f"{n_ctl} healthy adults, out of 71 who took part. The scans are processed one "
+               f"person at a time and the count rises as the run continues.</p>")
+    else:
+        who = ("<p><strong>71 people took part,</strong> 25 with a nerve injury to the right "
+               "hand or arm. The scans are being processed one person at a time and the "
+               "count appears here once the first are through.</p>")
+    cols = f"""<div class="cols4">
+{who}
+<p><strong>Six drawing runs each,</strong> three with the left hand and three with the
+right. The scanner took a whole-brain picture every 0.66 seconds, 488 per run, about
+2,868 per person.</p>
+<p><strong>241 brain regions:</strong> 200 in the cortex, 15 deeper in the brain and 26
+in the cerebellum, each one a point in a network built for every person.</p>
+<p><strong>One laptop, no GPU.</strong> Public data from OpenNeuro, open-source packages,
+and a pipeline that fits in about 3 GB of disk at any one time.</p>
+</div>"""
+
+    # ---- one figure owns the screen -----------------------------------------
+    if n_inc is not None and n_inc < 64:
+        pct = min(100, round(100 * n_inc / 66))
+        figurepage = f"""<section class="wrap figurepage" aria-label="Progress" data-reveal>
+<h2 class="claim">Still being processed</h2>
+<p class="src">{pct}% of the expected cohort. The count comes from results/cohort.json and
+changes every time the pipeline finishes another person.</p>
+<div><p class="giant">{n_inc}<sup>of 66</sup></p>
+<p class="cap">people through the pipeline so far, out of about 66 expected to pass the
+quality checks. Every number on this page comes from those {n_inc} and will change.</p></div>
+</section>"""
+    elif lin is not None and gcn is not None:
+        figurepage = f"""<section class="wrap figurepage" aria-label="Headline result" data-reveal>
+<h2 class="claim">Better than a coin flip</h2>
+<p class="src">Area under the curve for the best brain model, averaged over 10 repeats of
+five-fold cross-validation grouped by person.</p>
+<div><p class="giant">{fmt_auc(best)}<sup>AUC</sup></p>
+<p class="cap">how well the best brain model separates patients from healthy adults.
+Whether that means the brain has reorganised is the question the rest of the page is about.</p></div>
+</section>"""
+    else:
+        figurepage = ""
+
+    contents = "".join(f'<li><a href="{h}">{e(t)}</a></li>' for h, t in ANCHORS)
+
     body = f"""
-<h1>Does the brain rewire itself after a hand injury?</h1>
-<p class="lede">Twenty-five adults lost the use of their right hand to nerve damage
+<div class="mast" aria-label="Pictures of the subject">
+<div class="m-bell" style="--i:0"><img src="img/bell-nerves-1818.jpg" width="1920" height="2676"
+  alt="Engraving of the nerves of the arm and hand from Charles Bell, 1818" decoding="async"></div>
+<div class="m-gray" style="--i:1"><img src="img/gray-arm-nerves-1887.jpg" width="1354" height="3108"
+  alt="The median, ulnar and radial nerves of the right arm, from Gray's Anatomy, 1887" decoding="async"></div>
+<div class="m-scan" style="--i:2"><img src="img/mri-scanner.jpg" width="1920" height="1751"
+  alt="An MRI scanner in a hospital room" decoding="async"></div>
+<div class="m-gold" style="--i:3"><p class="n">{n_inc if n_inc is not None else 71}</p>
+<p class="k">{"people through the pipeline so far" if n_inc is not None else "adults in the dataset"}</p></div>
+<div class="m-above" style="--i:4">{picture("regions-above", "The 241 brain regions seen from above, coloured by network", 1200, 900)}</div>
+<div class="m-body" style="--i:5"><img src="img/hand-nerves-plate.webp" width="1024" height="1024"
+  alt="Nineteenth century engraving of the human nervous system" loading="lazy" decoding="async"></div>
+<div class="m-flat" style="--i:6">{picture("regions-side", "The 241 brain regions seen from the side", 1200, 900)}</div>
+</div>
+
+<section class="wrap page hero">
+<div class="side">
+<p class="contents__title">On this page</p>
+<ol class="contents">{contents}</ol>
+{progress_banner()}
+</div>
+<div class="text">
+<h1 class="display lines"><span class="line"><span data-line style="--i:0">Rewiring after</span></span><span class="line"><span data-line style="--i:1">a hand injury</span></span></h1>
+<p class="lead" data-rise style="--i:2">Does the brain rewire itself after a hand injury?
+Twenty-five adults lost the use of their right hand to nerve damage
 and had to start doing everything left-handed. I took brain scans recorded while
 they drew, built a network for each person, and trained models to pick them out of
 a crowd of healthy adults. Then I spent most of the project trying to break my own
 result.</p>
+<div class="acts" data-rise style="--i:3"><a class="button" href="explore.html">Try the tools</a>
+<a class="textbtn" href="#answer">Skip to the answer</a></div>
+</div>
+</section>
 
-{progress_banner()}
-{hero}
+<section class="wrap intro" aria-label="The study in four facts" data-reveal>
+{cols}
+</section>
 
-<section id="built">
-<h2>What I built</h2>
+{figurepage}
+
+<section class="wrap page" id="built" data-reveal>
+<div class="side"><p>The first half builds the thing the video describes. The second
+half tries to knock it down.</p></div>
+<div class="text">
+<h2 class="head">What I built</h2>
 <div class="measure">
 <p>The starting idea came from a video that went roughly: get the scans, pull out
 the blood flow signals, build a graph neural network to sort patients from healthy
@@ -334,10 +397,17 @@ where you can walk through the analysis choices yourself and see how much the
 answer depends on them.</p>
 </div>
 {headline}
+</div>
 </section>
 
-<section id="data">
-<h2>The data</h2>
+<section class="wrap page" id="data" data-reveal>
+<div class="side">
+<figure><img src="img/mri-scanner.jpg" width="1920" height="1751" loading="lazy" decoding="async"
+  alt="An MRI scanner with the patient bed pulled out"><figcaption>An MRI scanner. Not the
+one used for this dataset, which was collected at Washington University in St. Louis.</figcaption></figure>
+</div>
+<div class="text">
+<h2 class="head">The data</h2>
 <div class="measure">
 <p>Everything comes from <a href="{DS_DOI}">OpenNeuro ds008162</a>, collected at
 Washington University in St. Louis School of Medicine by Kapil, Kim, McAvoy and
@@ -393,15 +463,18 @@ with the template well enough. A person needed at least two surviving left-hand 
 to be used at all. Three patients could not draw with the injured hand at all, so
 they appear in the left-hand analysis but not in the left-minus-right comparison.</p>
 </div>
-{figure("motion", "Head movement for every person who made it through, split by "
+{figure("motion", "Head movement for every person processed so far, split by "
                   "group. The red line is the cut-off. If patients sat well to the "
                   "right of controls here, movement alone could explain a group "
                   "difference, which is why one of the models below uses movement "
                   "and nothing else.", 1)}
+</div>
 </section>
 
-<section id="signal">
-<h2>First I checked the signal was really there</h2>
+<section class="wrap page" id="signal" data-reveal>
+<div class="side">{sanity_side}</div>
+<div class="text">
+<h2 class="head">Is the signal real?</h2>
 <div class="measure">
 <p>Before believing anything about groups, the pipeline has to reproduce a fact that
 cannot be wrong. Moving your left hand drives the right side of the brain. Moving
@@ -432,10 +505,14 @@ barely uses. Comparing across people rather than within them puts back every
 difference the paired version removes. Both were too blunt to tell me anything, and
 one of them reported a failure that was not real.</p>
 </div>
+</div>
 </section>
 
-<section id="pipeline">
-<h2>Getting from scans to networks</h2>
+<section class="wrap page" id="pipeline" data-reveal>
+<div class="side"><p><strong>Days to hours.</strong> The region map is moved into each
+run's own space instead of pushing every image into a shared template.</p></div>
+<div class="text">
+<h2 class="head">From scans to networks</h2>
 <div class="measure">
 <p>The usual route is fMRIPrep inside Docker. There was no Docker on this machine,
 and no FSL, FreeSurfer or AFNI either. Running fMRIPrep on 71 people would also have
@@ -491,10 +568,27 @@ half. Splits are grouped by person, so nobody appears on both sides of a fold. O
 of the tests shuffles the labels and checks the score lands near 0.50, which is what
 catches a leak if one ever gets introduced.</p>
 </div>
+</div>
 </section>
 
-<section id="models">
-<h2>How the models work</h2>
+<section class="plate" aria-label="The 241 regions" data-reveal>
+<div class="wrap">
+<div class="pair">
+<figure>{picture("regions-above", "The 241 brain regions seen from above, coloured by network. The dashed line is the middle of the brain.", 1200, 900)}
+<figcaption>The 241 regions seen from above. Left of the picture is the left side of the brain.</figcaption></figure>
+<figure>{picture("regions-side", "The 241 brain regions seen from the side, coloured by network", 1200, 900)}
+<figcaption>The same regions seen from the side, with the front of the head on the right. Gold is
+the sensorimotor cortex. Larger dots are larger regions. You can click any of them on the
+<a href="explore.html#tool-brain">tools page</a>.</figcaption></figure>
+</div>
+</div>
+</section>
+
+<section class="wrap page" id="models" data-reveal>
+<div class="side"><p><strong>Three models built to be dangerous.</strong> Head movement
+only. Drawing quality only. Age and sex only.</p></div>
+<div class="text">
+<h2 class="head">How the models work</h2>
 <div class="measure">
 <p>The graph neural network the original idea calls for is here, along with two
 other kinds. A graph network passes information between connected regions and
@@ -518,10 +612,14 @@ see what scores are reachable with no real difference in the data.
 {cite('eklund2016')} showed permutation tests behaving correctly in fMRI where the
 standard maths did not.</p>
 </div>
+</div>
 </section>
 
-<section id="answer">
-<h2>Does the graph network beat the simple method?</h2>
+<section class="wrap page" id="answer" data-reveal>
+<div class="side"><p>The grey rows use no brain data. The most important number in
+the table is what the drawing quality model scores.</p></div>
+<div class="text">
+<h2 class="head">Does the graph network win?</h2>
 <div class="measure">{answer}</div>
 {scoreboard}
 {_model_table(models)}
@@ -529,10 +627,18 @@ standard maths did not.</p>
 <p>The grey rows use no brain data. They exist to be compared against, and the most
 important number in the whole table is what the drawing quality model scores.</p>
 </div>
+</div>
 </section>
 
-<section id="wrong">
-<h2>Four ways this could be wrong</h2>
+<section class="wrap page" id="wrong" data-reveal>
+<div class="side">
+<figure><img src="img/gray-arm-nerves-1887.jpg" width="1354" height="3108" loading="lazy" decoding="async"
+  alt="The nerves of the right arm from the shoulder to the fingers, Gray's Anatomy, 1887"><figcaption>The nerves
+of the right arm, from the 1887 edition of Gray's Anatomy. Damage to these, not to the brain, is what the
+patients have.</figcaption></figure>
+</div>
+<div class="text">
+<h2 class="head">Four ways this could be wrong</h2>
 <div class="measure">
 <p>Getting a model to tell patients from controls is easy. Working out whether it
 did so for the reason you hoped is the hard part. {cite('makin2015')} is the
@@ -540,7 +646,7 @@ cautionary case here: a well-known story about brain remapping after arm amputat
 that did not survive once someone measured the other explanations properly.</p>
 </div>
 
-<h3>1. Is it the hand, or is it just these people?</h3>
+<h3>Is it the hand, or is it just these people?</h3>
 <div class="measure">
 <p>Patients and controls differ in fixed ways with nothing to do with drawing. Head
 size, blood vessels, how still someone lies, whatever else has happened to them.
@@ -552,7 +658,7 @@ specific to using the weaker hand.</p>
 </div>
 {c1}
 
-<h3>2. Is it the brain, or do they simply draw worse?</h3>
+<h3>Is it the brain, or do they simply draw worse?</h3>
 <div class="measure">
 <p>This is the one that matters most. Drawing left-handed is genuinely harder for
 someone whose dominant hand no longer works, and the dataset records exactly how
@@ -565,7 +671,7 @@ drew?</p>
 </div>
 {c2}
 
-<h3>3. Does it track how badly someone is affected?</h3>
+<h3>Does it track how badly someone is affected?</h3>
 <div class="measure">
 <p>A yes-or-no label is blunt. If networks really do reorganise after losing the use
 of a hand, the effect should be graded: stronger in people who struggle more, who
@@ -577,7 +683,7 @@ patient group alone, where there is no healthy comparison to lean on.</p>
 </div>
 {c3}
 
-<h3>4. Is it about drawing at all?</h3>
+<h3>Is it about drawing at all?</h3>
 <div class="measure">
 <p>Everyone also lay in the scanner doing nothing. If the same model works on those
 scans, the difference is something people carry around all the time rather than
@@ -594,10 +700,17 @@ easier or harder. If patients are working flat out throughout, their easy blocks
 should already look like everyone else's hard ones.</p>
 </div>
 {c5}
+</div>
 </section>
 
-<section id="learned">
-<h2>What the model learned</h2>
+<section class="wrap page" id="learned" data-reveal>
+<div class="side">
+<figure>{picture("regions-above", "The 241 brain regions seen from above", 1200, 900)}
+<figcaption>All 241 regions. You can filter them by network and click any of them on the
+<a href="explore.html#tool-brain">tools page</a>.</figcaption></figure>
+</div>
+<div class="text">
+<h2 class="head">What the model learned</h2>
 <div class="measure">
 <p>Reading a model's internals is the part most likely to produce a confident
 picture of nothing. A saliency map from a single fit at this sample size is close to
@@ -617,10 +730,13 @@ region can score low simply because a neighbour already covered it.</p>
 <p>You can look at all 241 regions, filter by network and click any of them on the
 <a href="explore.html">tools page</a>.</p>
 </div>
+</div>
 </section>
 
-<section id="multiverse">
-<h2>The same data, ninety different ways</h2>
+<section class="wrap page" id="multiverse" data-reveal>
+<div class="side">{multi_figs}</div>
+<div class="text">
+<h2 class="head">The same data, ninety ways</h2>
 <div class="measure">
 <p>Everything above reports one pipeline. But the pipeline had choices in it, and
 every one of them was defensible: which confounds to remove, which frequency band to
@@ -637,10 +753,17 @@ results elsewhere. When you see one number reported from a small study, the hone
 question is not whether that number is real. It is how many other numbers the same
 data could have produced.</p>
 </div>
+</div>
 </section>
 
-<section id="limits">
-<h2>What is wrong with this</h2>
+<section class="wrap page" id="limits" data-reveal>
+<div class="side">
+<figure><img class="crop" src="img/bell-nerves-1818.jpg" width="1920" height="2676" loading="lazy" decoding="async"
+  alt="Detail of the Bell engraving: the nerves running into the hand"><figcaption>The nerves running into
+the hand, from Charles Bell's engravings of 1818.</figcaption></figure>
+</div>
+<div class="text">
+<h2 class="head">What is wrong with this</h2>
 <div class="measure">
 <p>Being specific about the weaknesses, because a list of caveats written in general
 terms is worth nothing:</p>
@@ -673,10 +796,14 @@ tested on data collected anywhere else.</li>
 pieces is a choice, and a region that does not match the real functional boundary
 mixes signals that should be kept apart.</li>
 </ul>
+</div>
 </section>
 
-<section id="run">
-<h2>Run it yourself</h2>
+<section class="wrap page" id="run" data-reveal>
+<div class="side"><p><strong>Budget roughly twenty minutes a person.</strong> Aligning head
+movement is the slow step and already uses every core.</p></div>
+<div class="text">
+<h2 class="head">Run it yourself</h2>
 <div class="measure">
 <p>Public data, open-source packages, no licence keys, no GPU. This ran on an Apple
 M4 laptop with 10 cores and 24 GB of memory. Aligning head movement is the slow step
@@ -699,13 +826,16 @@ shift, head movement against a hand-worked example, region averaging on a made-u
 brain, and a full dry run of the model chain on data where the answer is known in
 advance.</p>
 </div>
+</div>
 </section>
 
-<section id="refs">
-<h2>References</h2>
+<section class="wrap page" id="refs" data-reveal>
+<div class="side"><p>Every paper below was looked up in a live literature index and has
+a working DOI.</p></div>
+<div class="text">
+<h2 class="head">References</h2>
 <div class="measure">
-<p>Every paper below was looked up in a live literature index and has a working DOI.
-All credit for collecting the data belongs to the Washington University team. This
+<p>All credit for collecting the data belongs to the Washington University team. This
 is an independent student reanalysis and they have not reviewed it.</p>
 </div>
 <ul class="refs">
@@ -714,63 +844,16 @@ is an independent student reanalysis and they have not reviewed it.</p>
          f'doi:{e(r["doi"])}</div>'
          f'<div class="why">{e(r["note"])}</div></li>' for r in REFERENCES)}
 </ul>
+</div>
 </section>
 """
     write("index.html", "Does the brain rewire after a hand injury?", body,
           "A student reanalysis of brain scans from adults with long-term right hand "
           "nerve injury drawing with their left hand, and four tests of whether the "
-          "result means what it looks like.", anchors=True)
+          "result means what it looks like.")
 
 
 # ------------------------------------------------------------------ explore
-EXPLORE_CSS = """
-.tool { border-top: 1px solid var(--ink); padding-top: 1.4rem; margin: 2.6rem 0 0;
-        max-width: var(--bleed); }
-.controls { display: grid; gap: 1rem 1.6rem; margin: 1.3rem 0;
-            grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); }
-.ctl label { display: block; font-family: var(--sans); font-size: .74rem;
-             text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2);
-             margin-bottom: .35rem; }
-.ctl select, .ctl input[type=range] { width: 100%; font-family: var(--sans);
-                                      font-size: .85rem; }
-.ctl select { padding: .35rem .4rem; border: 1px solid var(--rule-2);
-              background: var(--paper); color: var(--ink); border-radius: 2px; }
-.ctl .v { font-family: var(--sans); font-size: .8rem; color: var(--ink);
-          font-variant-numeric: tabular-nums; margin-top: .25rem; }
-.readout { display: flex; flex-wrap: wrap; gap: 0; margin: 1.3rem 0;
-           border-top: 1px solid var(--ink); border-bottom: 1px solid var(--rule); }
-.readout div { flex: 1 1 0; min-width: 7rem; padding: .85rem .9rem .85rem 0;
-               border-right: 1px solid var(--rule); }
-.readout div:last-child { border-right: 0; }
-.readout .n { font-family: var(--sans); font-size: 1.45rem; font-weight: 600;
-              letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-.readout .k { font-family: var(--sans); font-size: .72rem; color: var(--ink-2);
-              margin-top: .3rem; line-height: 1.35; }
-.chart svg { max-width: 100%; height: auto; display: block; }
-.verdict { border-left: 2px solid var(--ink); padding: .15rem 0 .15rem 1.1rem;
-           margin: 1.2rem 0; max-width: var(--measure); }
-.verdict.good { border-left-color: var(--right); }
-.verdict.bad { border-left-color: var(--stop); }
-.bgrid { display: grid; gap: 1.1rem; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-         margin: 1.2rem 0; }
-.bview { margin: 0; border-top: 1px solid var(--rule-2); padding-top: .5rem; }
-.bviewhead { font-family: var(--sans); font-size: .72rem; color: var(--ink-2);
-             margin-bottom: .4rem; text-transform: uppercase; letter-spacing: .06em; }
-.bviewhead span { text-transform: none; letter-spacing: 0; color: var(--ink-3); }
-.bnode { cursor: pointer; }
-.legend { display: flex; flex-wrap: wrap; gap: .3rem; margin: 1rem 0; }
-.lg { display: inline-flex; align-items: center; gap: .35rem; font-family: var(--sans);
-      font-size: .73rem; padding: .18rem .48rem; border: 1px solid var(--rule);
-      background: var(--paper); color: var(--ink-3); cursor: pointer; border-radius: 2px; }
-.lg.on { color: var(--ink); border-color: var(--rule-2); }
-.lg .sw { width: .58rem; height: .58rem; border-radius: 50%; opacity: .3; }
-.lg.on .sw { opacity: 1; }
-.bpick { border-left: 2px solid var(--ink); padding: .1rem 0 .1rem 1rem; }
-.bpick h3 { margin: 0 0 .3rem; }
-.bpick p { margin: 0; }
-#bdetail { margin: 1rem 0; min-height: 3rem; }
-"""
-
 REPLICATION_JS = r"""
 (function () {
   const host = document.getElementById('repl');
@@ -853,19 +936,19 @@ REPLICATION_JS = r"""
     const tx = sx(Math.abs(rTrue));
     s+=`<line x1="${tx.toFixed(1)}" y1="${pt-4}" x2="${tx.toFixed(1)}" y2="${h-pb}"
          stroke="var(--right)" stroke-width="2"/>`;
-    s+=`<text x="${tx.toFixed(1)}" y="${pt-6}" font-size="10.5" text-anchor="middle"
+    s+=`<text x="${tx.toFixed(1)}" y="${pt-6}" font-size="13" text-anchor="middle"
          fill="var(--right)" font-family="var(--sans)" font-weight="600">the truth</text>`;
     if (sig){
       const px = sx(published);
       s+=`<line x1="${px.toFixed(1)}" y1="${pt-4}" x2="${px.toFixed(1)}" y2="${h-pb}"
            stroke="var(--left)" stroke-width="2" stroke-dasharray="4 3"/>`;
-      s+=`<text x="${px.toFixed(1)}" y="${h-pb+26}" font-size="10.5" text-anchor="middle"
+      s+=`<text x="${px.toFixed(1)}" y="${h-pb+26}" font-size="13" text-anchor="middle"
            fill="var(--left)" font-family="var(--sans)" font-weight="600">what gets published</text>`;
     }
     s+=`<line x1="${pl}" y1="${h-pb}" x2="${w-pr}" y2="${h-pb}" stroke="var(--ink)"/>`;
     for (const t of [0,0.2,0.4,0.6,0.8,1.0]){
       s+=`<line x1="${sx(t)}" y1="${h-pb}" x2="${sx(t)}" y2="${h-pb+4}" stroke="var(--ink)"/>`;
-      s+=`<text x="${sx(t)}" y="${h-pb+15}" font-size="10.5" text-anchor="middle"
+      s+=`<text x="${sx(t)}" y="${h-pb+15}" font-size="13" text-anchor="middle"
            fill="var(--ink-2)" font-family="var(--sans)">${t.toFixed(1)}</text>`;
     }
     s+=`</svg>`;
@@ -934,7 +1017,7 @@ SPEC_JS = r"""
     // chance line
     s+=`<line x1="${pl}" y1="${sy(0.5)}" x2="${w-pr}" y2="${sy(0.5)}"
          stroke="var(--ink-3)" stroke-dasharray="3 3"/>`;
-    s+=`<text x="${w-pr}" y="${sy(0.5)-5}" font-size="10.5" text-anchor="end"
+    s+=`<text x="${w-pr}" y="${sy(0.5)-5}" font-size="13" text-anchor="end"
          fill="var(--ink-3)" font-family="var(--sans)">chance</text>`;
     for (let i=0;i<sorted.length;i++){
       const isPick = chosen && sorted[i] === chosen;
@@ -946,17 +1029,17 @@ SPEC_JS = r"""
     s+=`<line x1="${pl}" y1="${pt}" x2="${pl}" y2="${h-pb}" stroke="var(--ink)"/>`;
     for (const t of [0.4,0.5,0.6,0.7,0.8,0.9]){
       if (t<lo||t>hi) continue;
-      s+=`<text x="${pl-6}" y="${sy(t)+3.5}" font-size="10.5" text-anchor="end"
+      s+=`<text x="${pl-6}" y="${sy(t)+3.5}" font-size="13" text-anchor="end"
            fill="var(--ink-2)" font-family="var(--sans)">${t.toFixed(1)}</text>`;
     }
-    s+=`<text x="${(pl+w-pr)/2}" y="${h-8}" font-size="10.5" text-anchor="middle"
+    s+=`<text x="${(pl+w-pr)/2}" y="${h-8}" font-size="13" text-anchor="middle"
          fill="var(--ink-2)" font-family="var(--sans)">every pipeline, worst to best</text>`;
     s+=`</svg>`;
     el('sp-chart').innerHTML=s;
 
     if (!chosen){
       el('sp-read').innerHTML='';
-      el('sp-verdict').innerHTML='<p class="small">That combination was not run. '+
+      el('sp-verdict').innerHTML='<p>That combination was not run. '+
         'Some are skipped because they do not apply, such as a graph model on the '+
         'left-minus-right difference.</p>';
       return;
@@ -996,20 +1079,36 @@ def build_explore() -> None:
             f'<script type="application/json" id="specdata">'
             f'{json.dumps({k: mv[k] for k in ("specifications","auc_min","auc_max","auc_median")})}'
             f'</script>')
-        spec_wrap = f'<div id="spec">{spec_block}</div>'
+        spec_wrap = f'<div id="spec" data-ui data-reveal style="--i:2">{spec_block}</div>'
     else:
         spec_wrap = pending("The pipeline grid runs after the main analysis finishes. "
                             "It will appear here.")
 
     body = f"""
-<h1>Try it yourself</h1>
-<p class="lede">Three tools. The first is about brain imaging in general and is
+<section class="wrap page hero">
+<div class="side">
+<p class="contents__title">Three tools</p>
+<ol class="contents">
+<li><a href="#tool-repl">Would a study this size have found it?</a></li>
+<li><a href="#tool-spec">Walk every analysis choice</a></li>
+<li><a href="#tool-brain">The brain, region by region</a></li>
+</ol>
+</div>
+<div class="text">
+<h1 class="display lines"><span class="line"><span data-line style="--i:0">Try it</span></span><span class="line"><span data-line style="--i:1">yourself</span></span></h1>
+<p class="lead" data-rise style="--i:2">Three tools. The first is about brain imaging in general and is
 probably the most useful thing on this site. The second lets you walk every analysis
 choice this project made. The third is the brain itself.</p>
+</div>
+</section>
 
-<section class="tool" id="tool-repl">
-<h2>Would a study this size have found it?</h2>
-<div class="measure">
+<section class="wrap page tool" id="tool-repl">
+<div class="side" data-reveal style="--i:3"><p>Try 0.15, which is a realistic effect for brain measures against
+behaviour, at 66 people, which is this project. Then drag the sample size up and
+watch what changes. That is the honest context for everything on the study page.</p></div>
+<div class="text">
+<h2 class="head" data-reveal style="--i:0">Would a study this size have found it?</h2>
+<div class="measure" data-reveal style="--i:1">
 <p>This one is not about my data. It is about every brain imaging headline you have
 ever read.</p>
 <p>Set a true effect and a sample size. The tool simulates four thousand studies of
@@ -1023,7 +1122,7 @@ smaller the study, the worse it gets. That is why {cite('marek2022')} argues bra
 imaging needs thousands of people rather than dozens.</p>
 </div>
 
-<div id="repl">
+<div id="repl" data-ui data-reveal style="--i:2">
 <div class="controls">
 <div class="ctl"><label for="r-true">True effect (correlation)</label>
 <input type="range" id="r-true" min="0.05" max="0.6" step="0.01" value="0.15">
@@ -1032,7 +1131,7 @@ imaging needs thousands of people rather than dozens.</p>
 <input type="range" id="r-n" min="10" max="1000" step="5" value="66">
 <div class="v"><span id="r-n-v">66</span></div></div>
 </div>
-<div class="readout">
+<div class="readout" aria-live="polite">
 <div><div class="n" id="r-power">0%</div><div class="k">of studies would find it</div></div>
 <div><div class="n" id="r-pub">0</div><div class="k">effect they would report</div></div>
 <div><div class="n" id="r-infl">0x</div><div class="k">how inflated that is</div></div>
@@ -1041,16 +1140,17 @@ imaging needs thousands of people rather than dozens.</p>
 <div class="chart" id="r-chart"></div>
 <div id="r-verdict"></div>
 </div>
-<div class="measure">
-<p class="small">Try 0.15, which is a realistic effect for brain measures against
-behaviour, at 66 people, which is this project. Then drag the sample size up and
-watch what changes. That is the honest context for everything on the study page.</p>
 </div>
 </section>
 
-<section class="tool" id="tool-spec">
-<h2>Walk every analysis choice</h2>
-<div class="measure">
+<section class="wrap page tool" id="tool-spec">
+<div class="side" data-reveal style="--i:3"><p>If a set of choices you would consider reasonable gives a very
+different answer from another set you would also consider reasonable, then no single
+number from this dataset should be trusted on its own. That is the finding, not a
+caveat about it.</p></div>
+<div class="text">
+<h2 class="head" data-reveal style="--i:0">Walk every analysis choice</h2>
+<div class="measure" data-reveal style="--i:1">
 <p>Every pipeline has forks in it, and most of them are defensible. Which confounds
 to remove. Which frequency band to keep. How to measure the links between regions.
 Which model. Which hand.</p>
@@ -1058,17 +1158,17 @@ Which model. Which hand.</p>
 Choose any combination below and see where it lands among all the others.</p>
 </div>
 {spec_wrap}
-<div class="measure">
-<p class="small">If a set of choices you would consider reasonable gives a very
-different answer from another set you would also consider reasonable, then no single
-number from this dataset should be trusted on its own. That is the finding, not a
-caveat about it.</p>
 </div>
 </section>
 
-<section class="tool" id="tool-brain">
-<h2>The brain, region by region</h2>
-<div class="measure">
+<section class="wrap page tool" id="tool-brain">
+<div class="side" data-reveal="scale" style="--i:3">
+<figure>{picture("regions-side", "The 241 brain regions seen from the side", 1200, 900)}
+<figcaption>The same 241 regions as a still picture, seen from the side.</figcaption></figure>
+</div>
+<div class="text">
+<h2 class="head" data-reveal style="--i:0">The brain, region by region</h2>
+<div class="measure" data-reveal style="--i:1">
 <p>241 regions: 200 in the cortex, 15 deeper in the brain, 26 in the cerebellum.
 Filter by network, or click any region to see where it sits and how much the model
 leaned on it.</p>
@@ -1078,14 +1178,17 @@ leaned on it.</p>
  else '<p class="pending">Region importance appears once the models have been fitted. '
       'For now the map shows the regions themselves.</p>'}
 </div>
-<div id="brainapp"><p class="pending">Loading the map.</p></div>
+<div id="brainapp" data-reveal style="--i:2"><p class="pending">Loading the map.</p></div>
+</div>
 </section>
-
-<style>{EXPLORE_CSS}</style>
-<script>{REPLICATION_JS}</script>
-<script>{SPEC_JS}</script>
-<script>{BRAIN_JS}</script>
+<script src="explore.js" defer></script>
 """
+    SITE.mkdir(parents=True, exist_ok=True)
+    (SITE / "explore.js").write_text(
+        "/* The three tools on the Try it page. Built by neuroswitch.site_build; every\n"
+        "   number is computed in the browser from data delivered with the page. Nothing is\n"
+        "   sent anywhere and nothing is stored. */\n"
+        + REPLICATION_JS + "\n" + SPEC_JS + "\n" + BRAIN_JS)
     write("explore.html", "Try it", body,
           "Three tools: a replication calculator for any brain imaging claim, an "
           "explorer for every analysis choice this project made, and the brain map.")
@@ -1102,15 +1205,9 @@ BRAIN_JS = r"""
   const imp = D.importance || null;
   const nets = D.networks;
 
-  const PALETTE = {
-    SomMotA:'#b0521c', SomMotB:'#d08340', Cerebellum:'#4a6741', Subcortex:'#7a6a4f',
-    VisCent:'#3f6d7a', VisPeri:'#5f8f99', DorsAttnA:'#6b7f5c', DorsAttnB:'#8a9a76',
-    SalVentAttnA:'#8a6a17', SalVentAttnB:'#a98c47', ContA:'#1a5570', ContB:'#3d7591',
-    ContC:'#6997ad', DefaultA:'#7d5a52', DefaultB:'#9c7a70', DefaultC:'#b59a92',
-    LimbicA:'#6f5f7a', LimbicB:'#8f8199', TempPar:'#556b7d'
-  };
+  // one custom property per network, defined for both themes in style.css
   const palette = {};
-  nets.forEach(n => { palette[n] = PALETTE[n] || '#7c7a70'; });
+  nets.forEach(n => { palette[n] = 'var(--net-' + n.toLowerCase() + ')'; });
 
   let active = new Set(nets), selected = null;
   const impOf = n => (imp ? (imp[n.id - 1] ?? 0) : null);
@@ -1146,27 +1243,27 @@ BRAIN_JS = r"""
     return `<figure class="bview"><div class="bviewhead">${view.title} <span>${view.note}</span></div>${s}</figure>`;
   }
 
-  const legend = () => `<div class="legend">` + nets.map(n =>
-    `<button class="lg${active.has(n)?' on':''}" data-net="${n}" aria-pressed="${active.has(n)}"><span class="sw" style="background:${palette[n]}"></span>${n}</button>`).join('')
-    + `<button class="lg reset" data-net="__all">show all</button></div>`;
+  const legend = () => `<div class="legend" role="group" aria-label="Networks">` + nets.map(n =>
+    `<button type="button" class="chip" data-net="${n}" aria-pressed="${active.has(n)}"><span class="sw" style="background:${palette[n]}"></span>${n}</button>`).join('')
+    + `<button type="button" class="chip" data-net="__all">Show all</button></div>`;
 
   function detail() {
-    if (!selected) return `<p class="small">Pick a region, or use the buttons above to show one network at a time.${imp?' Bigger and more solid dots are regions the model used more.':''}</p>`;
+    if (!selected) return `<p>Pick a region, or use the buttons above to show one network at a time.${imp?' Bigger and more solid dots are regions the model used more.':''}</p>`;
     const n = selected;
     const side = n.hemi==='LH'?'left':n.hemi==='RH'?'right':'middle';
-    return `<div class="bpick"><h3>${n.label}</h3><p class="small">${n.network}, ${side} side, from ${n.source}, ${n.n_voxels} voxels<br>Position ${n.x}, ${n.y}, ${n.z}${imp?`<br><strong>importance ${impOf(n).toFixed(4)}</strong>`:''}</p></div>`;
+    return `<div class="bpick"><h3>${n.label}</h3><p>${n.network}, ${side} side, from ${n.source}, ${n.n_voxels} voxels<br>Position ${n.x}, ${n.y}, ${n.z}${imp?`<br><strong>importance ${impOf(n).toFixed(4)}</strong>`:''}</p></div>`;
   }
 
   function table() {
     if (!imp) return '';
     const rows = [...nodes].sort((a,b)=>impOf(b)-impOf(a)).slice(0,20).map((n,i) =>
       `<tr><td class="num">${i+1}</td><td>${n.label}</td><td>${n.network}</td><td>${n.hemi==='LH'?'left':n.hemi==='RH'?'right':'middle'}</td><td class="num">${impOf(n).toFixed(4)}</td></tr>`).join('');
-    return `<h3>Regions the model used most</h3><p class="small">The same information as the map, as a list, for anyone who cannot use the picture.</p><div class="tablewrap"><table><thead><tr><th class="num">#</th><th>Region</th><th>Network</th><th>Side</th><th class="num">Importance</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+    return `<h3>Regions the model used most</h3><p class="small">The same information as the map, as a list, for anyone who cannot use the picture.</p><div class="table-scroll"><table><thead><tr><th class="num">#</th><th>Region</th><th>Network</th><th>Side</th><th class="num">Importance</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }
 
   function render() {
     host.innerHTML = legend() + `<div class="bgrid">${VIEWS.map(v=>svgFor(v,340,300)).join('')}</div><div id="bdetail">${detail()}</div>` + table();
-    host.querySelectorAll('.lg').forEach(b => b.addEventListener('click', () => {
+    host.querySelectorAll('[data-net]').forEach(b => b.addEventListener('click', () => {
       const n = b.dataset.net;
       if (n === '__all') active = new Set(nets);
       else if (active.size === nets.length) active = new Set([n]);

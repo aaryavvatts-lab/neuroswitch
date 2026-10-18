@@ -36,7 +36,7 @@ def _svg(w: int, h: int, body: str, title: str, desc: str = "",
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
             f'width="{w}" height="{h}" '
             f'role="img" aria-labelledby="{tid} {did}" '
-            f'font-family="system-ui, sans-serif">'
+            f'font-family="Erode, Georgia, serif">'
             f'<title id="{tid}">{_esc(title)}</title>'
             f'<desc id="{did}">{_esc(desc)}</desc>'
             f'{body}</svg>')
@@ -60,9 +60,9 @@ def lateralisation_figure() -> str | None:
 
     parts = [f'<line x1="{mid}" y1="26" x2="{mid}" y2="{h-42}" '
              f'stroke="var(--rule)" stroke-width="1"/>']
-    parts.append(f'<text x="{mid - half}" y="18" font-size="11" fill="var(--ink-2)">'
+    parts.append(f'<text x="{mid - half}" y="18" font-size="13" fill="var(--ink-2)">'
                  f'more active drawing with the RIGHT hand</text>')
-    parts.append(f'<text x="{mid + 6}" y="18" font-size="11" fill="var(--ink-2)">'
+    parts.append(f'<text x="{mid + 6}" y="18" font-size="13" fill="var(--ink-2)">'
                  f'more active drawing with the LEFT hand</text>')
 
     for i, r in enumerate(rows):
@@ -72,17 +72,17 @@ def lateralisation_figure() -> str | None:
         colour = "var(--right)" if side == "RH" else "var(--left)"
         length = abs(r["value"]) / span * half
         x = mid if r["value"] >= 0 else mid - length
-        parts.append(f'<text x="{lab_w - 8}" y="{y + 12}" font-size="11.5" '
+        parts.append(f'<text x="{lab_w - 8}" y="{y + 12}" font-size="13" '
                      f'text-anchor="end" fill="var(--ink)">{_esc(name[:34])}</text>')
         parts.append(f'<rect x="{x:.1f}" y="{y + 3}" width="{length:.1f}" height="14" '
                      f'rx="2" fill="{colour}" fill-opacity="0.85"/>')
         tag = "R" if side == "RH" else "L" if side == "LH" else "mid"
         tx = mid + length + 6 if r["value"] >= 0 else mid - length - 6
         anchor = "start" if r["value"] >= 0 else "end"
-        parts.append(f'<text x="{tx:.1f}" y="{y + 14}" font-size="10" '
+        parts.append(f'<text x="{tx:.1f}" y="{y + 14}" font-size="13" '
                      f'text-anchor="{anchor}" fill="var(--ink-3)">{tag}</text>')
 
-    parts.append(f'<text x="{lab_w}" y="{h - 16}" font-size="11" fill="var(--ink-2)">'
+    parts.append(f'<text x="{lab_w}" y="{h - 16}" font-size="13" fill="var(--ink-2)">'
                  f'Blue bars sit in the right half of the brain, orange in the left. '
                  f'The sides swap with the drawing hand.</text>')
     return _svg(w, h, "".join(parts),
@@ -97,7 +97,8 @@ def motion_figure() -> str | None:
     coh = _load("cohort")
     if not coh:
         return None
-    subs = [s for s in coh.get("subjects", []) if s.get("mean_fd")]
+    subs = [s for s in coh.get("subjects", [])
+            if isinstance(s.get("mean_fd"), (int, float)) and s["mean_fd"] == s["mean_fd"]]
     if len(subs) < 4:
         return None
     pat = sorted(s["mean_fd"] for s in subs if s.get("is_patient") == 1)
@@ -106,7 +107,7 @@ def motion_figure() -> str | None:
         return None
 
     w, h = 720, 210
-    x0, x1 = 60, w - 30
+    x0, x1 = 150, w - 30
     hi = max(max(pat), max(ctl), 0.32) * 1.12
     sx = lambda v: x0 + (v / hi) * (x1 - x0)
 
@@ -117,18 +118,18 @@ def motion_figure() -> str | None:
         x = sx(frac)
         parts.append(f'<line x1="{x:.1f}" y1="34" x2="{x:.1f}" y2="150" '
                      f'stroke="var(--rule)" stroke-dasharray="2 4"/>')
-        parts.append(f'<text x="{x:.1f}" y="168" font-size="10.5" text-anchor="middle" '
+        parts.append(f'<text x="{x:.1f}" y="168" font-size="13" text-anchor="middle" '
                      f'fill="var(--ink-3)">{frac:.1f}</text>')
     xc = sx(0.30)
     parts.append(f'<line x1="{xc:.1f}" y1="28" x2="{xc:.1f}" y2="150" '
                  f'stroke="var(--stop)" stroke-width="1.5"/>')
-    parts.append(f'<text x="{xc + 5:.1f}" y="26" font-size="10.5" fill="var(--stop)">'
-                 f'runs above 0.30 mm are dropped</text>')
+    parts.append(f'<text x="{xc - 6:.1f}" y="26" font-size="13" text-anchor="end" '
+                 f'fill="var(--stop)">runs above 0.30 mm are dropped</text>')
 
     for row, (vals, name, colour, y) in enumerate((
             (pat, f"patients (n={len(pat)})", "var(--right)", 60),
             (ctl, f"controls (n={len(ctl)})", "var(--left)", 110))):
-        parts.append(f'<text x="{x0 - 10}" y="{y + 4}" font-size="11.5" '
+        parts.append(f'<text x="{x0 - 10}" y="{y + 4}" font-size="13" '
                      f'text-anchor="end" fill="var(--ink)">{_esc(name)}</text>')
         for v in vals:
             parts.append(f'<circle cx="{sx(v):.1f}" cy="{y}" r="4" fill="{colour}" '
@@ -137,7 +138,7 @@ def motion_figure() -> str | None:
         parts.append(f'<line x1="{sx(med):.1f}" y1="{y - 12}" x2="{sx(med):.1f}" '
                      f'y2="{y + 12}" stroke="var(--ink)" stroke-width="2"/>')
 
-    parts.append(f'<text x="{(x0 + x1) / 2:.0f}" y="192" font-size="11" '
+    parts.append(f'<text x="{(x0 + x1) / 2:.0f}" y="192" font-size="13" '
                  f'text-anchor="middle" fill="var(--ink-2)">'
                  f'average head movement per image (mm). '
                  f'The thick line is the middle value for each group.</text>')

@@ -3,26 +3,45 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f3ef">
 <title>Accessibility · neuroswitch</title>
 <meta name="description" content="Targeting WCAG 2.1 AA. What works, how the interactive tools behave, and six specific places the site still falls short.">
 <meta name="robots" content="index, follow">
 <meta property="og:title" content="Accessibility">
 <meta property="og:description" content="Targeting WCAG 2.1 AA. What works, how the interactive tools behave, and six specific places the site still falls short.">
 <meta property="og:type" content="article">
+<meta property="og:image" content="https://neuroswitch.vercel.app/img/bell-nerves-1818.jpg">
+<script src="theme-head.js"></script>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="kit.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to main content</a>
-<header class="site"><div class="wrap">
-<a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
-<nav class="site" aria-label="Main"><a href="index.html">The study</a><a href="explore.html">Try it</a></nav>
-</div></header>
-
-<main class="wrap" id="main">
-
-<h1>Accessibility</h1>
-<p class="lede">The target is WCAG 2.1 level AA. This page says what has been done,
+<header class="wrap bar">
+<a class="bar__mark" href="index.html">neuroswitch</a>
+<nav class="bar__links" aria-label="Site"><a href="index.html">The study</a><a href="explore.html">Try it</a>
+<button class="theme" type="button" data-theme-toggle aria-pressed="false">Light</button>
+</nav>
+<div class="bar__phone">
+<button class="theme" type="button" data-theme-toggle aria-pressed="false">Light</button>
+<button class="bar__menu textbtn" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu">Menu</button>
+</div>
+</header>
+<nav id="menu" class="sheet" hidden aria-label="Menu">
+<div class="sheet__top"><span class="bar__mark">neuroswitch</span>
+<button class="textbtn" type="button" data-menu-close>Close</button></div>
+<div class="sheet__links"><a href="index.html" style="--i:0">The study</a><a href="explore.html" style="--i:1">Try it</a><a href="privacy.html" style="--i:2">Privacy</a><a href="terms.html" style="--i:3">Terms</a><a href="cookies.html" style="--i:4">Cookies</a><a href="accessibility.html" aria-current="page" style="--i:5">Accessibility</a></div>
+<p class="small">Brain networks after nerve injury. A student reanalysis.</p>
+</nav>
+<main id="main">
+<section class="wrap page legal-page"><div class="side"><p class="contents__title">Also</p><ol class="contents"><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li><li><a href="cookies.html">Cookies</a></li></ol><p>Last updated 2026-10-18. The history of every version is in the <a href="https://github.com/aaryavvatts-lab/neuroswitch">repository</a>.</p></div><div class="text">
+<h1 class="head">Accessibility</h1>
+<p class="lead">The target is WCAG 2.1 level AA. This page says what has been done,
 and is honest about the places where the site still falls short, because an
 accessibility statement that only lists successes is not much use to anyone.</p>
 
@@ -34,10 +53,11 @@ keyboard or screen reader user does not have to walk through the navigation on e
 page.</p>
 <p>Headings are real headings and run in order without skipping levels, so a screen
 reader can jump through the structure and build an outline. The main article is one
-long page with a section jump bar, which means fewer navigation steps than the eight
-separate pages this site used to have.</p>
+long page with a contents list beside the title, which means fewer navigation steps
+than the eight separate pages this site used to have.</p>
 <p>Navigation is marked as navigation, the current page is flagged with
-<code>aria-current</code>, and every page declares its language. Tables use real
+<code>aria-current</code>, the phone menu traps focus while open and closes on Escape,
+the theme control reports its state, and every page declares its language. Tables use real
 header cells and carry captions describing what they show.</p>
 <p>Everything works with a keyboard alone. Focus is visible at all times, with a
 two-pixel outline rather than a faint colour shift, and focus order follows reading
@@ -48,24 +68,26 @@ order.</p>
 <section>
 <h2>Reading and text</h2>
 <div class="measure">
-<p>Body text is 19 pixels with a line height of about 1.6 and a measure of roughly 34
-rem, which keeps lines at a comfortable length rather than running the full width of a
-monitor.</p>
+<p>Body text is 17 to 19 pixels depending on the screen, with a line height of 1.5
+and a measure of about 62 characters, which keeps lines at a comfortable length rather
+than running the full width of a monitor.</p>
 <p>Nothing is sized in fixed pixels in a way that breaks zoom. The page reflows down
 to a 320 pixel screen without a horizontal scroll bar. Wide tables scroll inside their
 own container rather than pushing the whole page sideways.</p>
 <p>Colours were chosen to meet the AA contrast ratio in both the light and dark
-themes. The site follows whatever theme your system is set to rather than forcing
-one, and it does not override your browser's font size.</p>
+themes. The site follows whatever theme your system is set to, a text control in the
+header switches it if you prefer the other one, and that choice is remembered in your
+browser. It does not override your browser's font size.</p>
 </div>
 </section>
 
 <section>
 <h2>Colour and meaning</h2>
 <div class="measure">
-<p>Only two colours carry meaning anywhere on the site: one for the right side of the
-brain and patients, one for the left side and controls. Everything else is ink on
-paper.</p>
+<p>Two colours carry meaning in the charts: one for the right side of the brain and
+patients, one for the left side and controls. The brain map on the tools page colours
+regions by network, and every region also carries its network name in text. Everything
+else is ink on paper, with one gold used for the main action.</p>
 <p>Colour is never the only signal. Control models in the results table are labelled
 in text as well as shown in grey. The lateralisation figure labels each bar with the
 side it belongs to. Every chart states its values in a table or in the surrounding
@@ -76,9 +98,11 @@ text.</p>
 <section>
 <h2>Motion</h2>
 <div class="measure">
-<p>There is no animation, no autoplay, no parallax, no carousel and nothing that
-moves on its own. Smooth scrolling for the section links is disabled automatically if
-your system asks for reduced motion.</p>
+<p>Sections fade in once as they come into view, the title rises once when the page
+loads, and the engraving at the top drifts slowly. Nothing flashes, nothing loops
+apart from that drift, and there is no autoplay, parallax or carousel. If your system
+asks for reduced motion, all of it is switched off, including smooth scrolling for the
+section links, and nothing is ever hidden while waiting for a script.</p>
 </div>
 </section>
 
@@ -88,7 +112,8 @@ your system asks for reduced motion.</p>
 <p>These are the hardest parts to make accessible and they are handled differently
 from one another.</p>
 <p>The replication calculator uses two standard range sliders, which are keyboard
-operable by default with arrow keys. Every number it produces is written out as text
+operable by default with arrow keys. Its readout is announced to screen readers when
+it changes. Every number it produces is written out as text
 next to the chart, and the verdict below it is a plain sentence. You can use the whole
 tool without seeing the chart at all.</p>
 <p>The pipeline explorer uses standard dropdown menus, which work with a keyboard and
@@ -136,20 +161,23 @@ that easy reading.</li>
 <a href="https://github.com/aaryavvatts-lab/neuroswitch">project repository</a> and describe what happened and what you were
 using. That is the fastest route to a fix, and accessibility problems get priority
 over new features.</p>
-<p class="small">Last updated 2026-08-24. This statement describes the site as built on
+<p class="small">Last updated 2026-10-18. This statement describes the site as built on
 that date and is reviewed whenever the pages change.</p>
 </div>
 </section>
-
+</div></section>
 </main>
-<footer class="site"><div class="wrap">
+<footer class="wrap close">
+<p class="close__mark">neuroswitch</p>
 <p>Built from <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a>, released under CC0 by
 Kapil, Kim, McAvoy and Philip at Washington University in St. Louis. This is a
 student reanalysis. It is not connected to that group and they have not reviewed it.
-Page built 2026-08-24.</p>
+Page built 2026-10-18.</p>
 <p>This is a student project. It is not medical advice and it is not a medical
 device. If you have a hand or nerve problem, talk to a doctor.</p>
-<p class="legal"><a href="index.html">The study</a> · <a href="explore.html">Try it</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="cookies.html">Cookies</a> · <a href="accessibility.html" aria-current="page">Accessibility</a></p>
-</div></footer>
+<nav class="close__meta" aria-label="Legal and site"><a href="index.html">The study</a><a href="explore.html">Try it</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="cookies.html">Cookies</a><a href="accessibility.html" aria-current="page">Accessibility</a>
+<a href="https://github.com/aaryavvatts-lab/neuroswitch">Code</a></nav>
+<p class="small credits">Pictures: <a href="https://commons.wikimedia.org/wiki/File:A_series_of_engravings,_explaining_the_course_of_the_nerves_-_with_an_address_to_young_physicians_on_the_study_of_the_nerves_(1818)_(14774983314).jpg">nerves of the arm</a>, Charles Bell, 1818, no known copyright restrictions, via Wikimedia Commons; <a href="https://commons.wikimedia.org/wiki/File:Anatomy,_descriptive_and_surgical_(1887)_(14763598044).jpg">nerves of the right arm</a> from Gray's Anatomy, 1887 edition, no known copyright restrictions, via Wikimedia Commons; <a href="https://www.rawpixel.com/image/6261472/image-vintage-public-domain-art">the nervous system, 19th century engraving</a>, CC0, via rawpixel; <a href="https://commons.wikimedia.org/wiki/File:MRI-Philips.JPG">MRI scanner in Gothenburg</a> by Jan Ainali, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons. The brain region pictures are drawn from this project's own region file. Type is Erode by Indian Type Foundry, under the <a href="https://www.fontshare.com/licenses/itf-ffl">ITF Free Font License</a>.</p>
+</footer>
 </body>
 </html>

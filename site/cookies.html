@@ -3,28 +3,47 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f3ef">
 <title>Cookies · neuroswitch</title>
 <meta name="description" content="No cookies, no local storage, no service worker and no third-party requests, with instructions to verify it yourself.">
 <meta name="robots" content="index, follow">
 <meta property="og:title" content="Cookies">
 <meta property="og:description" content="No cookies, no local storage, no service worker and no third-party requests, with instructions to verify it yourself.">
 <meta property="og:type" content="article">
+<meta property="og:image" content="https://neuroswitch.vercel.app/img/bell-nerves-1818.jpg">
+<script src="theme-head.js"></script>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="kit.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to main content</a>
-<header class="site"><div class="wrap">
-<a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
-<nav class="site" aria-label="Main"><a href="index.html">The study</a><a href="explore.html">Try it</a></nav>
-</div></header>
-
-<main class="wrap" id="main">
-
-<h1>Cookies</h1>
-<p class="lede">This site sets no cookies at all. That is why you never saw a banner
-asking about them, and this page explains how to confirm that for yourself rather
-than trusting the claim.</p>
+<header class="wrap bar">
+<a class="bar__mark" href="index.html">neuroswitch</a>
+<nav class="bar__links" aria-label="Site"><a href="index.html">The study</a><a href="explore.html">Try it</a>
+<button class="theme" type="button" data-theme-toggle aria-pressed="false">Light</button>
+</nav>
+<div class="bar__phone">
+<button class="theme" type="button" data-theme-toggle aria-pressed="false">Light</button>
+<button class="bar__menu textbtn" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu">Menu</button>
+</div>
+</header>
+<nav id="menu" class="sheet" hidden aria-label="Menu">
+<div class="sheet__top"><span class="bar__mark">neuroswitch</span>
+<button class="textbtn" type="button" data-menu-close>Close</button></div>
+<div class="sheet__links"><a href="index.html" style="--i:0">The study</a><a href="explore.html" style="--i:1">Try it</a><a href="privacy.html" style="--i:2">Privacy</a><a href="terms.html" style="--i:3">Terms</a><a href="cookies.html" aria-current="page" style="--i:4">Cookies</a><a href="accessibility.html" style="--i:5">Accessibility</a></div>
+<p class="small">Brain networks after nerve injury. A student reanalysis.</p>
+</nav>
+<main id="main">
+<section class="wrap page legal-page"><div class="side"><p class="contents__title">Also</p><ol class="contents"><li><a href="privacy.html">Privacy</a></li><li><a href="terms.html">Terms</a></li><li><a href="accessibility.html">Accessibility</a></li></ol><p>Last updated 2026-10-18. The history of every version is in the <a href="https://github.com/aaryavvatts-lab/neuroswitch">repository</a>.</p></div><div class="text">
+<h1 class="head">Cookies</h1>
+<p class="lead">This site sets no cookies at all, and the only thing it ever stores is
+the theme you pick. That is why you never saw a banner asking about them, and this page
+explains how to confirm that for yourself rather than trusting the claim.</p>
 
 <section>
 <h2>Why there is no banner</h2>
@@ -34,20 +53,25 @@ them to recognise you across pages, sessions and sometimes other websites entire
 Under the EU ePrivacy Directive and the GDPR, and under similar rules elsewhere,
 consent is required before storing or reading information on your device unless it is
 strictly necessary to provide the thing you asked for.</p>
-<p>This site stores nothing and reads nothing. There is no consent to collect, so a
-banner would be pure theatre. Showing one anyway would train you to click through
+<p>This site stores one word, and only when you ask it to: the theme you picked with
+the Light or Dark control, so the next page matches. That is strictly necessary to do
+the thing you asked for, which is the one case where the rules need no consent. Nothing
+identifies you and nothing is read back for any other purpose. There is no consent to
+collect, so a banner would be pure theatre. Showing one anyway would train you to click through
 consent dialogs without reading them, which makes the web slightly worse.</p>
 </div>
 </section>
 
 <section>
 <h2>What is actually stored</h2>
-<div class="tablewrap"><table>
+<div class="table-scroll"><table>
 <caption>Every storage mechanism a browser offers, and what this site puts in it</caption>
 <thead><tr><th>Mechanism</th><th>What this site stores</th></tr></thead>
 <tbody>
 <tr><td>Cookies</td><td>Nothing</td></tr>
-<tr><td>Local storage</td><td>Nothing</td></tr>
+<tr><td>Local storage</td><td>One entry named <code>theme</code>, holding the word
+light or dark, written only when you press the theme control. Clear it and the site
+follows your system setting again</td></tr>
 <tr><td>Session storage</td><td>Nothing</td></tr>
 <tr><td>IndexedDB</td><td>Nothing</td></tr>
 <tr><td>Cache storage / service workers</td><td>Nothing. There is no service worker</td></tr>
@@ -63,9 +87,10 @@ it holds no identifier, and clearing your browser cache removes it.</p>
 <section>
 <h2>What each page loads</h2>
 <div class="measure">
-<p>Every page loads one stylesheet and one small icon, both from this same site. The
-study page also loads two chart images, again from here. The tools page loads one
-JSON file listing the coordinates and names of the 241 brain regions.</p>
+<p>Every page loads four small stylesheets, the typeface in four weights, two small
+scripts, one icon and its pictures, all from this same site. The study page's charts
+are drawn into the page itself. The tools page also loads one script for the tools
+and one JSON file listing the coordinates and names of the 241 brain regions.</p>
 <p>That is the complete list. No fonts from Google, no scripts from a CDN, no
 analytics beacon, no embedded video, no iframe, no social widget, no image from
 another domain. Nothing on any page causes a request to a server I do not control,
@@ -76,8 +101,9 @@ which means no other company learns that you visited.</p>
 <section>
 <h2>The JavaScript that does run</h2>
 <div class="measure">
-<p>The tools page runs three small scripts, all written for this project and served
-from here.</p>
+<p>Every page runs one small script, written for this project and served from here.
+It switches the theme when you ask, opens the menu on a phone, and fades sections in
+as you scroll. The tools page runs three more.</p>
 <p>One simulates study designs so you can see how often a study of a given size would
 find a given effect. One lets you step through the analysis choices and see the
 result each combination gives. One draws the brain map and handles clicking and
@@ -85,8 +111,8 @@ filtering.</p>
 <p>All three run entirely inside your browser. None of them sends anything anywhere,
 and none of them remembers anything after you close the tab. Every number they show
 is computed on your own machine from data already delivered with the page. If you
-block JavaScript, the study page is completely unaffected and the tools page shows
-plain text instead of the interactive parts.</p>
+block JavaScript, every page still reads in full, the theme simply follows your system
+setting, and the tools page shows plain text instead of the interactive parts.</p>
 </div>
 </section>
 
@@ -96,27 +122,32 @@ plain text instead of the interactive parts.</p>
 <p>You do not have to believe any of this.</p>
 <p>Open your browser's developer tools, usually with F12 or Command-Option-I. Go to
 the Application tab in Chrome or Edge, or Storage in Firefox and Safari, and look at
-Cookies for this domain. It will be empty. Look at Local Storage and Session Storage
-in the same panel. Also empty.</p>
+Cookies for this domain. It will be empty. Look at Session Storage. Also empty. Local
+Storage holds the single theme entry if you have pressed the control, and nothing
+otherwise.</p>
 <p>Then open the Network tab and reload the page. Every request listed will be to
 this domain. If you ever see one that is not, something has gone wrong and I would
 like to know about it through the <a href="https://github.com/aaryavvatts-lab/neuroswitch">repository</a>.</p>
 <p>There is also an automated test in that repository which scans every built page
-for cookie calls, storage calls, analytics scripts and off-site resources. It fails
-the build rather than letting this page become untrue.</p>
-<p class="small">Last updated 2026-08-24.</p>
+and script for cookie calls, analytics code and off-site resources, and checks that the
+only storage call is the theme preference. It fails the build rather than letting this
+page become untrue.</p>
+<p class="small">Last updated 2026-10-18.</p>
 </div>
 </section>
-
+</div></section>
 </main>
-<footer class="site"><div class="wrap">
+<footer class="wrap close">
+<p class="close__mark">neuroswitch</p>
 <p>Built from <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a>, released under CC0 by
 Kapil, Kim, McAvoy and Philip at Washington University in St. Louis. This is a
 student reanalysis. It is not connected to that group and they have not reviewed it.
-Page built 2026-08-24.</p>
+Page built 2026-10-18.</p>
 <p>This is a student project. It is not medical advice and it is not a medical
 device. If you have a hand or nerve problem, talk to a doctor.</p>
-<p class="legal"><a href="index.html">The study</a> · <a href="explore.html">Try it</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="cookies.html" aria-current="page">Cookies</a> · <a href="accessibility.html">Accessibility</a></p>
-</div></footer>
+<nav class="close__meta" aria-label="Legal and site"><a href="index.html">The study</a><a href="explore.html">Try it</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="cookies.html" aria-current="page">Cookies</a><a href="accessibility.html">Accessibility</a>
+<a href="https://github.com/aaryavvatts-lab/neuroswitch">Code</a></nav>
+<p class="small credits">Pictures: <a href="https://commons.wikimedia.org/wiki/File:A_series_of_engravings,_explaining_the_course_of_the_nerves_-_with_an_address_to_young_physicians_on_the_study_of_the_nerves_(1818)_(14774983314).jpg">nerves of the arm</a>, Charles Bell, 1818, no known copyright restrictions, via Wikimedia Commons; <a href="https://commons.wikimedia.org/wiki/File:Anatomy,_descriptive_and_surgical_(1887)_(14763598044).jpg">nerves of the right arm</a> from Gray's Anatomy, 1887 edition, no known copyright restrictions, via Wikimedia Commons; <a href="https://www.rawpixel.com/image/6261472/image-vintage-public-domain-art">the nervous system, 19th century engraving</a>, CC0, via rawpixel; <a href="https://commons.wikimedia.org/wiki/File:MRI-Philips.JPG">MRI scanner in Gothenburg</a> by Jan Ainali, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons. The brain region pictures are drawn from this project's own region file. Type is Erode by Indian Type Foundry, under the <a href="https://www.fontshare.com/licenses/itf-ffl">ITF Free Font License</a>.</p>
+</footer>
 </body>
 </html>

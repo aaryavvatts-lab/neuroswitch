@@ -3,26 +3,45 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f4f3ef">
 <title>Privacy · neuroswitch</title>
 <meta name="description" content="This site collects nothing. No analytics, no cookies, no accounts, and no third-party requests, with tests that keep it that way.">
 <meta name="robots" content="index, follow">
 <meta property="og:title" content="Privacy">
 <meta property="og:description" content="This site collects nothing. No analytics, no cookies, no accounts, and no third-party requests, with tests that keep it that way.">
 <meta property="og:type" content="article">
+<meta property="og:image" content="https://neuroswitch.vercel.app/img/bell-nerves-1818.jpg">
+<script src="theme-head.js"></script>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="style.css">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="kit.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to main content</a>
-<header class="site"><div class="wrap">
-<a class="brand" href="index.html">neuroswitch<span> · brain networks after nerve injury</span></a>
-<nav class="site" aria-label="Main"><a href="index.html">The study</a><a href="explore.html">Try it</a></nav>
-</div></header>
-
-<main class="wrap" id="main">
-
-<h1>Privacy</h1>
-<p class="lede">The short version: this site does not collect anything about you.
+<header class="wrap bar">
+<a class="bar__mark" href="index.html">neuroswitch</a>
+<nav class="bar__links" aria-label="Site"><a href="index.html">The study</a><a href="explore.html">Try it</a>
+<button class="theme" type="button" data-theme-toggle aria-pressed="false">Light</button>
+</nav>
+<div class="bar__phone">
+<button class="theme" type="button" data-theme-toggle aria-pressed="false">Light</button>
+<button class="bar__menu textbtn" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu">Menu</button>
+</div>
+</header>
+<nav id="menu" class="sheet" hidden aria-label="Menu">
+<div class="sheet__top"><span class="bar__mark">neuroswitch</span>
+<button class="textbtn" type="button" data-menu-close>Close</button></div>
+<div class="sheet__links"><a href="index.html" style="--i:0">The study</a><a href="explore.html" style="--i:1">Try it</a><a href="privacy.html" aria-current="page" style="--i:2">Privacy</a><a href="terms.html" style="--i:3">Terms</a><a href="cookies.html" style="--i:4">Cookies</a><a href="accessibility.html" style="--i:5">Accessibility</a></div>
+<p class="small">Brain networks after nerve injury. A student reanalysis.</p>
+</nav>
+<main id="main">
+<section class="wrap page legal-page"><div class="side"><p class="contents__title">Also</p><ol class="contents"><li><a href="terms.html">Terms</a></li><li><a href="cookies.html">Cookies</a></li><li><a href="accessibility.html">Accessibility</a></li></ol><p>Last updated 2026-10-18. The history of every version is in the <a href="https://github.com/aaryavvatts-lab/neuroswitch">repository</a>.</p></div><div class="text">
+<h1 class="head">Privacy</h1>
+<p class="lead">The short version: this site does not collect anything about you.
 There is no analytics, no tracking, no account, and no database. The long version
 explains what that means in practice and what the host can still see.</p>
 
@@ -50,23 +69,27 @@ tag and no advertising script of any kind.</li>
 <li><strong>No cookies.</strong> The site sets none. See the
 <a href="cookies.html">cookies page</a> for how to check this yourself in about
 twenty seconds.</li>
-<li><strong>No local storage.</strong> Nothing is written to localStorage,
-sessionStorage or IndexedDB. Close the tab and no trace remains.</li>
+<li><strong>One item in local storage, and only if you ask for it.</strong> If you
+press the Light or Dark control in the header, the word you chose is saved under the
+name <code>theme</code> so the next page keeps it. Nothing else is written, nothing is
+written to sessionStorage or IndexedDB, and clearing your browser's site data removes
+it. If you never press the control, nothing is stored at all.</li>
 <li><strong>No fingerprinting.</strong> No canvas fingerprinting, no font
 enumeration, no device probing.</li>
 <li><strong>No third-party requests.</strong> Every file a page loads comes from
-this same site. There are no web fonts from Google, no scripts from a CDN, no
-embedded videos and no iframes. That matters because a request to another company's
+this same site. The typeface is served from here under its own licence rather than
+from Google, there are no scripts from a CDN, no embedded videos and no iframes. That matters because a request to another company's
 server tells that company your IP address and which page you were reading, even if
 this site never sees it.</li>
 <li><strong>No accounts.</strong> There is nothing to sign up for, so there is no
 email address, name or password to lose.</li>
 </ul>
 <div class="measure">
-<p>There are automated tests in the repository that check the built pages for
-analytics scripts, third-party resources, cookie calls and storage calls. If someone
-later adds a web font or a tracking tag, those tests fail and the claim on this page
-stops being quietly false. That is the only way a promise like this stays true over
+<p>There are automated tests in the repository that check the built pages and
+scripts for analytics code, third-party resources and cookie calls, and that the only
+thing ever written to storage is that one theme preference. If someone later adds a
+tracking tag or a font from another company, those tests fail and the claim on this
+page stops being quietly false. That is the only way a promise like this stays true over
 time.</p>
 </div>
 </section>
@@ -173,19 +196,22 @@ by redeploying from the public repository.</p>
 below changes with it. Given that it is a static research write-up, that is unlikely.
 The full history of every version of this page is public in the repository, so you
 can check what it said on any past date rather than taking my word for it.</p>
-<p class="small">Last updated 2026-08-24.</p>
+<p class="small">Last updated 2026-10-18.</p>
 </div>
 </section>
-
+</div></section>
 </main>
-<footer class="site"><div class="wrap">
+<footer class="wrap close">
+<p class="close__mark">neuroswitch</p>
 <p>Built from <a href="https://doi.org/10.18112/openneuro.ds008162.v1.0.3">OpenNeuro ds008162</a>, released under CC0 by
 Kapil, Kim, McAvoy and Philip at Washington University in St. Louis. This is a
 student reanalysis. It is not connected to that group and they have not reviewed it.
-Page built 2026-08-24.</p>
+Page built 2026-10-18.</p>
 <p>This is a student project. It is not medical advice and it is not a medical
 device. If you have a hand or nerve problem, talk to a doctor.</p>
-<p class="legal"><a href="index.html">The study</a> · <a href="explore.html">Try it</a> · <a href="privacy.html" aria-current="page">Privacy</a> · <a href="terms.html">Terms</a> · <a href="cookies.html">Cookies</a> · <a href="accessibility.html">Accessibility</a></p>
-</div></footer>
+<nav class="close__meta" aria-label="Legal and site"><a href="index.html">The study</a><a href="explore.html">Try it</a><a href="privacy.html" aria-current="page">Privacy</a><a href="terms.html">Terms</a><a href="cookies.html">Cookies</a><a href="accessibility.html">Accessibility</a>
+<a href="https://github.com/aaryavvatts-lab/neuroswitch">Code</a></nav>
+<p class="small credits">Pictures: <a href="https://commons.wikimedia.org/wiki/File:A_series_of_engravings,_explaining_the_course_of_the_nerves_-_with_an_address_to_young_physicians_on_the_study_of_the_nerves_(1818)_(14774983314).jpg">nerves of the arm</a>, Charles Bell, 1818, no known copyright restrictions, via Wikimedia Commons; <a href="https://commons.wikimedia.org/wiki/File:Anatomy,_descriptive_and_surgical_(1887)_(14763598044).jpg">nerves of the right arm</a> from Gray's Anatomy, 1887 edition, no known copyright restrictions, via Wikimedia Commons; <a href="https://www.rawpixel.com/image/6261472/image-vintage-public-domain-art">the nervous system, 19th century engraving</a>, CC0, via rawpixel; <a href="https://commons.wikimedia.org/wiki/File:MRI-Philips.JPG">MRI scanner in Gothenburg</a> by Jan Ainali, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons. The brain region pictures are drawn from this project's own region file. Type is Erode by Indian Type Foundry, under the <a href="https://www.fontshare.com/licenses/itf-ffl">ITF Free Font License</a>.</p>
+</footer>
 </body>
 </html>
